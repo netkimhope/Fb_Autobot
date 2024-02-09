@@ -449,13 +449,14 @@ function createConfig() {
       listenEvents: true,
       logLevel: "silent",
       updatePresence: true,
-      selfListen: true,
+      selfListen: false,
       userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64",
       online: true,
       autoMarkDelivery: false,
       autoMarkRead: false
     }
   }];
+  
   const dataFolder = './data';
   if (!fs.existsSync(dataFolder)) fs.mkdirSync(dataFolder);
   fs.writeFileSync('./data/config.json', JSON.stringify(config, null, 2));
