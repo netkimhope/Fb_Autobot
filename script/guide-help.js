@@ -54,6 +54,7 @@ module.exports.run = async function({
           version,
           role,
           aliases = [],
+          info,
           type,
           description,
           usage,
