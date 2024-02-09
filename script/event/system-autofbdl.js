@@ -4,7 +4,7 @@ const { fbdl } = require('vihangayt-fbdl');
 
 module.exports.config = {
   name: "auto-fbdl",
-  type: "downloader",
+  type: "Downloader",
   info: "detects facebook video link and download",
   version: "2.0.0",
   credits: "Kenneth Panio",
