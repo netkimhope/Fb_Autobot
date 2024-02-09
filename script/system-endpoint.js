@@ -6,7 +6,7 @@ const { DateTime } = require("luxon");
 let endpoints = {};
 
 try {
-  const endpointPath = path.resolve(__dirname, '..', 'endpoint', 'endpoint.json');
+  const endpointPath = path.resolve(__dirname, 'endpoint.json');
   endpoints = require(endpointPath);
 } catch (readError) {
   console.error('Error reading endpoint.json:', readError);
@@ -82,7 +82,7 @@ module.exports.run = async function({ api, event, args }) {
   }
 
   function updateEndpointFile() {
-    const endpointPath = path.resolve(__dirname,  '..', 'endpoint', 'endpoint.json');
+    const endpointPath = path.resolve(__dirname, 'endpoint.json');
     fs.writeFileSync(endpointPath, JSON.stringify(endpoints, null, 2));
   }
 };
