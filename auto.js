@@ -110,7 +110,7 @@ fs.readdirSync(script).forEach((file) => {
     }
   }
 });
-app.use(express.static(path.join(__dirname, 'website')));
+app.use(express.static(path.join(__dirname, 'Public')));
 app.use(bodyParser.json());
 app.use(express.json());
 const routes = [{
