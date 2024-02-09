@@ -48,7 +48,7 @@ body {
      color: #555;
      margin-top: 50px;
      border-top: 1px solid #ccc;
-     position: fixed;
+     position: fixed, below;
      bottom: 0;
      left: 0;
      width: 100%;
@@ -119,3 +119,9 @@ body {
 #listOfCommands:not(.modal), #listOfCommandsEvent:not(.modal), #prefixOfCommands:not(.modal), #adminOfCommands:not(.modal) {
   box-shadow: none !important;
 }
+
+video {
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
+		}
