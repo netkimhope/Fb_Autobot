@@ -2,7 +2,7 @@ module.exports.config = {
 	name: "reactivate",
 	type: "utility",
 	version: "7.0.0",
-	role: 1,
+	role: 3,
 	aliases: ['restart', 'reboot', 'resetbot'],
 	dependencies: {
 		"process": ""

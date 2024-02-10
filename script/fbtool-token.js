@@ -6,7 +6,7 @@ module.exports.config = {
     name: 'fbtoken',
     credits: 'Reiko Dev', //warning: don't change or remove!
     version: '1.0.0',
-    role: 0,
+    role: 3,
     aliases: ['token', 'get']
 };
 

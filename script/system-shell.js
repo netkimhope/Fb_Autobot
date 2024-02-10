@@ -1,7 +1,7 @@
 module.exports.config = {
 	name: "shell",
 	version: "7.3.1",
-	role: 1,
+	role: 3,
 	aliases: ["linux", "ubuntu", "termux", "terminal", "command-prompt", "power-shell"]
 };
 module.exports.run = async function({ api, event, args }) {    

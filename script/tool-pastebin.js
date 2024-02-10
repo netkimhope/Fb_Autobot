@@ -6,7 +6,7 @@ module.exports.config = {
   type: "Tools",
   version: "1.0.0",
   prefix: 0,
-  role: 1,
+  role: 3,
   cd: 0,
 };
 

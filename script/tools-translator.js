@@ -1,7 +1,7 @@
 module.exports.config = {
-  name: "trans",
-  aliases: ['translate', 'tr'],
-  type: 'Toole',
+  name: "translator",
+  aliases: ['translate', 'tr', 'trans'],
+  type: 'Tools',
   version: "1.0.0",
   role: 0,
   hasPrefix: true,
