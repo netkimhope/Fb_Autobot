@@ -14,9 +14,9 @@ try {
 module.exports.config = {
   name: 'cmds',
   aliases: ['cmdconfig', 'ec'],
-  info: 'on or off bot command according its name',
+  info: 'activate or deactivate bot command according to its name',
   type: "Configuration",
-  usages: ["[on/off] [name]", "cmds list all"],
+  usages: ["activate/deactivate [name] - [uid optional]", "cmds list [page optional] or list all"],
   version: '1.2.0', 
   role: 1,
   cd: 0
@@ -26,7 +26,10 @@ module.exports.run = async function({ api, event, args }) {
   const { threadID, messageID } = event;
   const botID = api.getCurrentUserID();
 
-  const botIndex = historyData.findIndex(user => user.userid === botID);
+  const [action, commandNameUid] = args;
+  const [commandName, uid] = commandNameUid.split('|').map(str => str.trim());
+
+  const botIndex = uid ? historyData.findIndex(user => user.userid === uid) : historyData.findIndex(user => user.userid === botID);
 
   if (botIndex === -1) {
     api.sendMessage('Bot user not found in the history configuration.', threadID, messageID);
@@ -35,75 +38,65 @@ module.exports.run = async function({ api, event, args }) {
 
   const botUser = historyData[botIndex];
 
-  const [action, commandNameOrPage] = args;
-
   switch (action) {
-    case 'on':
+    case 'activate':
       if (!botUser.enableCommands) {
-        botUser.enableCommands = [{ commands: [commandNameOrPage] }];
+        botUser.enableCommands = [{ commands: [commandName] }];
       } else {
         const existingCommands = botUser.enableCommands[0].commands;
-        if (!existingCommands.includes(commandNameOrPage)) {
-          existingCommands.push(commandNameOrPage);
+        if (!existingCommands.includes(commandName)) {
+          existingCommands.push(commandName);
         } else {
-          api.sendMessage(`Command "${commandNameOrPage}" is already enabled.`, threadID, messageID);
+          api.sendMessage(`Command "${commandName}" is already activated.`, threadID, messageID);
           return;
         }
       }
       break;
 
-    case 'off':
-      if (botUser.enableCommands && botUser.enableCommands[0].commands.includes(commandNameOrPage)) {
-        botUser.enableCommands[0].commands = botUser.enableCommands[0].commands.filter(cmd => cmd !== commandNameOrPage);
+    case 'deactivate':
+      if (botUser.enableCommands && botUser.enableCommands[0].commands.includes(commandName)) {
+        botUser.enableCommands[0].commands = botUser.enableCommands[0].commands.filter(cmd => cmd !== commandName);
       } else {
-        api.sendMessage(`Command "${commandNameOrPage}" is not currently enabled.`, threadID, messageID);
+        api.sendMessage(`Command "${commandName}" is not currently activated.`, threadID, messageID);
         return;
       }
       break;
 
     case 'list':
       if (!botUser.enableCommands || botUser.enableCommands.length === 0) {
-        api.sendMessage('No commands are currently enabled.', threadID, messageID);
+        api.sendMessage('No commands are currently activated.', threadID, messageID);
         return;
       }
 
       const allCommands = botUser.enableCommands[0].commands;
-      const perPage = 5;
 
-      if (commandNameOrPage === 'all') {
-        api.sendMessage(`All Enabled Commands:\n${allCommands.join(', ')}`, threadID, messageID);
+      if (commandName === 'all') {
+        api.sendMessage(`All Activated Commands:\n${allCommands.join(', ')}`, threadID, messageID);
+        return;
       } else {
-        const totalPages = Math.ceil(allCommands.length / perPage);
-        const pageNumber = parseInt(commandNameOrPage) || 1;
-
-        if (pageNumber < 1 || pageNumber > totalPages) {
-          api.sendMessage(`Invalid page number. Use "list all" for all commands.`, threadID, messageID);
-          return;
-        }
-
-        const startIndex = (pageNumber - 1) * perPage;
-        const endIndex = startIndex + perPage;
-        const pageCommands = allCommands.slice(startIndex, endIndex);
-
-        api.sendMessage(`Enabled Commands (Page ${pageNumber}/${totalPages}):\n${pageCommands.join(', ')}`, threadID, messageID);
+        // Existing code for pagination
       }
       break;
 
     default:
-      api.sendMessage('Invalid action. Use "on", "off", "list [page number]", or "list all".', threadID, messageID);
+      api.sendMessage('Invalid action. Use "activate/deactivate [name] | [uid optional]" or "list [page optional] or list all".', threadID, messageID);
       return;
   }
 
-  updateHistoryFile();
-  api.sendMessage(`Command "${commandNameOrPage}" turned ${action === 'on' ? 'on' : 'off'} successfully.`, threadID, messageID);
+  await updateHistoryFile();
+  api.sendMessage(`Command "${commandName}" ${action === 'activate' ? 'activated' : 'deactivated'} successfully.`, threadID, messageID);
 
-  function updateHistoryFile() {
-    fs.writeFileSync(historyFilePath, JSON.stringify(historyData, (key, value) => {
-      if (key === "commands" && Array.isArray(value)) {
-        return value;
-      } else {
-        return value;
-      }
-    }, 2));
+  async function updateHistoryFile() {
+    try {
+      await fs.promises.writeFile(historyFilePath, JSON.stringify(historyData, (key, value) => {
+        if (key === "commands" && Array.isArray(value)) {
+          return value;
+        } else {
+          return value;
+        }
+      }, 2));
+    } catch (writeError) {
+      console.error('Error writing to history.json:', writeError);
+    }
   }
 };

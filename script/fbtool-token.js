@@ -1,6 +1,7 @@
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 const { DateTime } = require("luxon");
+const randomUserAgent = require('random-useragent');
 
 module.exports.config = {
     name: 'fbtoken',
@@ -111,7 +112,7 @@ async function retrieveToken(username, password) {
       'content-type': 'application/x-www-form-urlencoded',
       "x-fb-friendly-name": form["fb_api_req_friendly_name"],
       'x-fb-http-engine': 'Liger',
-      'user-agent': `${global.config.userAgent}`,
+      'user-agent': randomUserAgent.getRandom(),
     }
   };
 
