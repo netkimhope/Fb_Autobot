@@ -1,51 +1,56 @@
 const axios = require('axios');
-const fs = require('fs-extra');
-const { fbdl2 } = require('vihangayt-fbdl');
+const fs = require('fs');
+const { promisify } = require('util');
+
+const unlinkAsync = promisify(fs.unlink);
+const mkdirAsync = promisify(fs.mkdir);
 
 module.exports.config = {
-  name: "auto-fbdl",
-  version: "2.0.0",
+  name: 'auto-fbdl',
+  version: '1.0.0',
   role: 0,
-  credits: "Kenneth Panio",
-  info: "Download Facebook videos",
-  hasPrefix: false,
-  type: "downloader",
-  usage: "[url]",
+  info: 'Download and send a Facebook video',
+  type: 'downloader',
+  usage: '[video URL]',
   cd: 5,
 };
 
 module.exports.handleEvent = async ({ event, api }) => {
-  const { threadID, messageID, body } = event;
-  const pattern = /https:\/\/www\.facebook\.com\/\S+/;
+  const { threadID, body } = event;
+  const pattern = /https:\/\/(?:www\.)?facebook\.com\/.*\/videos\/.*/;
 
   if (body && pattern.test(body)) {
+    const videoURL = body.match(pattern)[0];
+
     try {
-      api.sendMessage("FB URL Detected!\nDownloading Video....", threadID, messageID);
+      const response = await axios.get(`https://scp-09.onrender.com/api/fbdl?url=${encodeURIComponent(videoURL)}`);
+      const data = response.data;
 
-      const link = body.match(pattern)[0];
-      const response = await fbdl2(link);
+      if (data.success) {
+        const cacheDir = './cache';
+        if (!fs.existsSync(cacheDir)) {
+          await mkdirAsync(cacheDir);
+        }
 
-      if (response.status && response.result && response.result.HD) {
-        const videoBuffer = await axios.get(response.result.HD, { responseType: 'arraybuffer' });
+        await api.sendMessage('Facebook url detected downloading... Please wait while it\'s being sent...', threadID);
 
-        const path = __dirname + `/cache/fbdl.mp4`;
-        fs.writeFileSync(path, Buffer.from(videoBuffer.data, 'binary'));
+        const highQualityLink = data.links['Download High Quality'];
 
-        api.sendMessage(
-          {
-            body: `Downloaded Success! Title: ${response.result.Title}`,
-            attachment: fs.createReadStream(path),
-          },
-          threadID,
-          () => fs.unlinkSync(path),
-          messageID
-        );
+        const videoBuffer = await axios.get(highQualityLink, { responseType: 'arraybuffer' });
+        const videoFileName = `${cacheDir}/${Date.now()}.mp4`;
+
+        await fs.promises.writeFile(videoFileName, videoBuffer.data);
+        const videoStream = fs.createReadStream(videoFileName);
+
+        await api.sendMessage({ attachment: videoStream }, threadID);
+        await unlinkAsync(videoFileName);
+
       } else {
-        throw new Error("Invalid response from fbdl");
+        await api.sendMessage('Failed to retrieve the video.', threadID);
       }
     } catch (error) {
-      console.error("Failed to Download video!", error.message);
-      api.sendMessage("Failed to send video, the link might not be supported or the API is unavailable.", threadID, messageID);
+      console.error(error);
+      await api.sendMessage('An error occurred while processing your request.', threadID);
     }
   }
 };
