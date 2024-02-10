@@ -6,7 +6,6 @@ const { DateTime } = require("luxon");
 module.exports.config = {
   name: "blackbox",
   version: "2.0.0",
-  hasPermssion: 0,
   role: 0,
   aliases: ['box', 'python']
 };
