@@ -2,7 +2,6 @@ const fs = require("fs");
 const path = require("path");
 
 const historyFilePath = path.resolve(__dirname, '..', 'data', 'history.json');
-const botID = api.getCurrentUserID();
 
 let historyData = [];
 
@@ -25,6 +24,7 @@ module.exports.config = {
 
 module.exports.run = async function({ api, event, args }) {
   const { threadID, messageID } = event;
+  const botID = api.getCurrentUserID();
 
   const botIndex = historyData.findIndex(user => user.userid === botID);
 

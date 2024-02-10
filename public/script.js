@@ -237,6 +237,7 @@ function selectAllEvents() {
 }
 commandList();
 
+
 farbbibliothek = new Array();
 farbbibliothek[0] = new Array("#FF0000","#FF1100","#FF2200","#FF3300","#FF4400","#FF5500","#FF6600","#FF7700","#FF8800","#FF9900","#FFaa00","#FFbb00","#FFcc00","#FFdd00","#FFee00","#FFff00","#FFee00","#FFdd00","#FFcc00","#FFbb00","#FFaa00","#FF9900","#FF8800","#FF7700","#FF6600","#FF5500","#FF4400","#FF3300","#FF2200","#FF1100");
 farbbibliothek[1] = new Array("#00FF00","#000000","#00FF00","#00FF00");
@@ -249,27 +250,8 @@ farben = farbbibliothek[4];
 function farbschrift(){for(var b=0;b<Buchstabe.length;b++){document.all["a"+b].style.color=farben[b]}farbverlauf()}function string2array(b){Buchstabe=new Array();while(farben.length<b.length){farben=farben.concat(farben)}k=0;while(k<=b.length){Buchstabe[k]=b.charAt(k);k++}}function divserzeugen(){for(var b=0;b<Buchstabe.length;b++){document.write("<span id='a"+b+"' class='a"+b+"'>"+Buchstabe[b]+"</span>")}farbschrift()}var a=1;function farbverlauf(){for(var b=0;b<farben.length;b++){farben[b-1]=farben[b]}farben[farben.length-1]=farben[-1];setTimeout("farbschrift()",30)}var farbsatz=1;function farbtauscher(){farben=farbbibliothek[farbsatz];while(farben.length<text.length){farben=farben.concat(farben)}farbsatz=Math.floor(Math.random()*(farbbibliothek.length-0.0001))}setInterval("farbtauscher()",5000);
 
 text=
-     "Guide Video"
+"DEVELOPED BY KENNETH PANIO"
 string2array(text);
 divserzeugen();
 //document.write(text);
 
-
-async function getRandomVideo() {
-    try {
-        const url = 'https://your-shoti-api.vercel.app/api/v1/get';
-        const rawResponse = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ apikey: "$shoti-1hg4gifgnlfdmeslom8" })
-        });
-        const content = await rawResponse.json();
-        document.getElementById('video').src = content.data.url;
-    } catch (e) {
-        console.error("Error fetching Shoti video", e);
-    }
-}
-
-getRandomVideo();

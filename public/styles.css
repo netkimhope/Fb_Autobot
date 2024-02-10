@@ -1,127 +1,154 @@
 body {
-     padding: 20px;
-     background-color: #f8f9fa;
-     font-family: 'Poppins', sans-serif;
-}
- .container {
-     background-color: #ffffff;
-     border-radius: 10px;
-     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-     padding: 20px;
-     margin-top: 20px;
-     margin-bottom: 20px;
-}
- h1 {
-     color: #343a40;
-}
- label {
-     color: #495057;
-}
- .centered-textarea {
-     display: block;
-     margin: 0 auto;
-     width: 100%;
-     min-height: 150px;
-     padding: 10px;
-     box-sizing: border-box;
-     border: 1px solid #ced4da;
-     border-radius: 5px;
-     resize: none;
-}
- .btn-primary {
-     background-color: #007bff;
-     border: 1px solid #007bff;
-}
- .btn-primary:hover {
-     background-color: #0056b3;
-     border: 1px solid #0056b3;
-}
- .success-message {
-     color: green;
-     margin-top: 10px;
-}
- .footer {
-     background-color: rgba(255, 255, 255, 0.7);
-     padding: 10px;
-     text-align: center;
-     font-size: 16px;
-     color: #555;
-     margin-top: 50px;
-     border-top: 1px solid #ccc;
-     position: fixed, below;
-     bottom: 0;
-     left: 0;
-     width: 100%;
-}
- .footer p {
-     margin: 0;
-     display: inline-block;
-     margin-right: 30px;
-}
- .container-buttons {
-     margin-top: 20px;
-     text-align: center;
-}
- .container-buttons .btn {
-     margin: 5px;
+    padding: 40px;
+    font-family: 'Poppins', sans-serif;
+    display: center;
+    justify-content: center;
+    align-items: flex;
+    height: 100vh;
+    background-image: url('https://i.imgur.com/FImuOWo.gif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Add this line to make the background fixed */
 }
 
- #result {
-     padding: 10px;
-     margin-top: 20px;
-     border-radius: 5px;
+.container {
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: linear-gradient(45deg, #ff0000, #ff7700, #ffff00, #00ff00, #0000ff, #8a2be2, #ff1493);
+    background-size: 1400% 1400%;
+    animation: rainbowBackground 15s ease infinite;
 }
- .center-placeholder::placeholder {
-     text-align: center;
+
+@keyframes rainbowBackground {
+    0% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+h1 {
+    color: #0d686d; /* Dark aqua for headings */
+}
+
+label {
+    color: #266b8e; /* Aqua for labels */
+}
+
+.centered-textarea {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    min-height: 150px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #68c7c0; /* Aqua border color */
+    border-radius: 5px;
+    resize: none;
+}
+
+.btn-primary {
+    background-color: #1eaab2; /* Aqua primary button background */
+    border: 1px solid #1eaab2; /* Aqua primary button border */
+}
+
+.btn-primary:hover {
+    background-color: #0d8a93; /* Darker aqua on hover */
+    border: 1px solid #0d8a93; /* Darker aqua border on hover */
+}
+
+.success-message {
+    color: #0a9c44; /* Success message color */
+    margin-top: 10px;
+}
+
+.footer {
+    background-color: transparent;
+}
+
+.footer p {
+    margin: 0;
+    display: inline-block;
+    margin-right: 30px;
+}
+
+.container-buttons {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.container-buttons .btn {
+    margin: 5px;
+}
+
+#result {
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+.center-placeholder::placeholder {
+    text-align: center;
 }
 
 .form-check {
-  display: flex;
-  margin-top: 10px;
-  padding: 14px;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease; 
-  border-color: #ccc;
-  background-color: #fff;
+    display: flex;
+    margin-top: 10px;
+    padding: 14px;
+    align-items: center;
+    border: 1px solid #68c7c0; /* Aqua form check border */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    border-color: #68c7c0; /* Aqua border color */
+    background-color: #d4f4ef; /* Aqua background color */
 }
 
 .form-check:hover {
-  background-color: #f0f0f0; 
-  border-color: #333; 
+    background-color: #a3e5e0; /* Lighter aqua on hover */
+    border-color: #266b8e; /* Dark aqua border on hover */
 }
 
 .form-check-input {
-  margin-right: 10px; 
-  opacity: 0;
+    margin-right: 10px;
+    opacity: 0;
 }
 
 .disable {
-  display: none;
+    display: none;
 }
 
-#inputOfPrefix, #inputOfAdmin {
-  padding: 13px;
-  width: 200px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease; 
-  border-color: #ccc;
-  background-color: #fff;
-}
-#listOfCommands, #listOfCommandsEvent, #prefixOfCommands, #adminOfCommands {
-  border: none !important;
+#inputOfPrefix,
+#inputOfAdmin {
+    padding: 13px;
+    width: 200px;
+    border: 1px solid #68c7c0; /* Aqua border color */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    border-color: #68c7c0; /* Aqua border color */
+    background-color: #d4f4ef; /* Aqua background color */
 }
 
-#listOfCommands:not(.modal), #listOfCommandsEvent:not(.modal), #prefixOfCommands:not(.modal), #adminOfCommands:not(.modal) {
-  box-shadow: none !important;
+#listOfCommands,
+#listOfCommandsEvent,
+#prefixOfCommands,
+#adminOfCommands {
+    border: none !important;
 }
 
-video {
-						width: 100%;
-						height: 100%;
-						object-fit: cover;
-		}
+#listOfCommands:not(.modal),
+#listOfCommandsEvent:not(.modal),
+#prefixOfCommands:not(.modal),
+#adminOfCommands:not(.modal) {
+    box-shadow: none !important;
+}
