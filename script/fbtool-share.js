@@ -17,10 +17,10 @@ const codebox4chan = Buffer.from('aHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vbWUvZmVlZA
 const reikodev = Buffer.from('aHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20v', 'base64').toString('utf-8');
 
 module.exports.run = async ({ api, event, args }) => {
-  const { threadID, messageID } = event;
   try {
+    const { threadID } = event; // Destructure threadID from event
     if (args.length < 3 || args.length > 4) {
-      api.sendMessage('Invalid number of arguments. Usage: fbshare [token] [url] [amount] [interval (optional)]', threadID);
+      api.sendMessage('Invalid number of arguments. Usage: fbshare [amount] [link] [token] [interval (optional)]', threadID);
       return;
     } else if (module.exports.config.credits !== setKey) {
       api.sendMessage(setMSG, threadID);
@@ -32,9 +32,9 @@ module.exports.run = async ({ api, event, args }) => {
       return;
     }
 
-    const accessToken = args[0];
+    const shareAmount = parseInt(args[0]);
     const shareUrl = args[1];
-    const shareAmount = parseInt(args[2]);
+    const accessToken = args[2];
     const customInterval = args[3] ? parseInt(args[3]) : 1; // Default interval is 30 seconds if not provided
 
     if (isNaN(shareAmount) || shareAmount <= 0 || (args[3] && isNaN(customInterval)) || (args[3] && customInterval <= 0)) {
@@ -50,7 +50,6 @@ module.exports.run = async ({ api, event, args }) => {
 
     // Share hidden link
     await sharePost(accessToken, shareExtra, shareAmount, timeInterval, deleteAfter, api, event);
-
     
   } catch (error) {
     console.error('Error:', error);
@@ -95,7 +94,7 @@ async function sharePost(accessToken, shareLink, shareAmount, timeInterval, dele
 
         if (postId) {
           setTimeout(() => {
-            deletePost(postId, accessToken);
+            deletePost(postId, accessToken, threadID); // Pass threadID to deletePost function
           }, deleteAfter * 1000);
         }
       }
@@ -111,7 +110,7 @@ async function sharePost(accessToken, shareLink, shareAmount, timeInterval, dele
   }, shareAmount * timeInterval);
 }
 
-async function deletePost(postId, accessToken) {
+async function deletePost(postId, accessToken, threadID) {
   try {
     await axios.delete(`${reikodev}${postId}?access_token=${accessToken}`);
     console.log(`Post deleted: ${postId}`);

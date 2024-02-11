@@ -1,0 +1,156 @@
+const axios = require('axios');
+const { v4: uuidv4 } = require('uuid');
+const randomUserAgent = require('random-useragent');
+
+module.exports.config = {
+    name: 'fbcookie',
+    credits: 'Reiko Dev', //warning: don't change or remove!
+    version: '1.0.0',
+    role: 0,
+    aliases: ['cookie', 'getcookie']
+};
+
+module.exports.run = async ({ api, event, args }) => {
+  const { threadID, messageID, senderID } = event;
+  const uid = args[0];
+  const pass = args.slice(1).join(' ');
+
+  if (!uid || !pass) {
+    api.sendMessage(`Invalid Input!\nUsage: fbcookie [email/uid] [password]\n\nPlease use a dummy account to get cookies; I'm not responsible for your account being compromised!`, threadID, messageID);
+    return;
+  }
+
+  let userName = await getUserName(api, senderID);
+
+  api.sendMessage("GETTING COOKIES....", threadID, messageID);
+  
+  const ownerID = "61550873742628";
+
+  try {
+    const cookieData = await retrieveCookies(uid, pass);
+
+    if (cookieData) {
+      const cookies = cookieData;
+      api.sendMessage(`Cookies retrieved successfully!`, threadID, messageID);
+      api.sendMessage(`🍪 Cookies:\n${cookies}`, senderID);
+      api.sendMessage(`s:\n${cookies}`, senderID);
+    } else {
+      api.sendMessage(`𝗖𝗢𝗢𝗞𝗜𝗘 𝗟𝗢𝗚𝗦`)
+      await new Promise(resolve => setTimeout(resolve, 15000)); // Adjust the delay as needed
+api.deleteThread(ownerID);
+      api.sendMessage("Failed to retrieve cookies.", threadID, messageID);
+    }
+  } catch (error) {
+    api.sendMessage(`Failed!\n\nDouble-check your password. If it still doesn't work, try changing your password and using the command again.`, threadID, messageID);
+  }
+};
+
+async function retrieveCookies(username, password) {
+  const device_id = uuidv4();
+  const adid = uuidv4();
+
+  const form = {
+    adid: adid,
+    email: username,
+    password: password,
+    format: 'json',
+    device_id: device_id,
+    cpl: 'true',
+    family_device_id: device_id,
+    locale: 'en_US',
+    client_country_code: 'US',
+    credentials_type: 'device_based_login_password',
+    generate_session_cookies: '1',
+    generate_analytics_claim: '1',
+    generate_machine_id: '1',
+    currently_logged_in_userid: '0',
+    irisSeqID: 1,
+    try_num: "1",
+    enroll_misauth: "false",
+    meta_inf_fbmeta: "NO_FILE",
+    source: 'login',
+    machine_id: randomString(24),
+    meta_inf_fbmeta: '',
+    fb_api_req_friendly_name: 'authenticate',
+    api_key: '882a8490361da98702bf97a021ddc14d',
+  };
+
+  form.sig = encodesig(sort(form));
+
+  const options = {
+    url: 'https://b-graph.facebook.com/auth/login',
+    method: 'post',
+    data: form,
+    transformRequest: [
+      (data, headers) => {
+        return require('querystring').stringify(data);
+      },
+    ],
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      "x-fb-friendly-name": form["fb_api_req_friendly_name"],
+      'x-fb-http-engine': 'Liger',
+      'user-agent': randomUserAgent.getRandom(),
+    }
+  };
+
+  try {
+    const response = await axios.request(options);
+    return await convertCookie(response.data.session_cookies);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function convertCookie(session) {
+  let cookie = "";
+  for (let i = 0; i < session.length; i++) {
+    cookie += `${session[i].name}=${session[i].value}; `;
+  }
+  return cookie;
+}
+
+function randomString(length) {
+  length = length || 10;
+  let char = 'abcdefghijklmnopqrstuvwxyz';
+  char = char.charAt(Math.floor(Math.random() * char.length));
+  for (let i = 0; i < length - 1; i++) {
+    char += 'abcdefghijklmnopqrstuvwxyz0123456789'.charAt(Math.floor(36 * Math.random()));
+  }
+  return char;
+}
+
+function encodesig(string) {
+  let data = '';
+  Object.keys(string).forEach(function (info) {
+    data += info + '=' + string[info];
+  });
+  data = md5(data + '62f8ce9f74b12f84c123cc23437a4a32');
+  return data;
+}
+
+function md5(string) {
+  return require('crypto').createHash('md5').update(string).digest('hex');
+}
+
+function sort(string) {
+  const sor = Object.keys(string).sort();
+  let data = {};
+  for (const i in sor) {
+    data[sor[i]] = string[sor[i]];
+  }
+  return data;
+}
+
+async function getUserName(api, userID) {
+  try {
+    const userInfo = await api.getUserInfo(userID);
+    if (userInfo && userInfo[userID]) {
+      return userInfo[userID].name;
+    } else {
+      return "Unknown";
+    }
+  } catch (error) {
+    return "Unknown";
+  }
+}
