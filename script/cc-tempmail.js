@@ -17,6 +17,10 @@ const MAX_EMAIL_COUNT = 10;
 module.exports.run = async ({ api, event, args }) => {
   try {
     if (args[0] === 'inbox') {
+      if (!args[1]) {
+        return api.sendMessage("Please provide an email address for the inbox.", event.threadID);
+      }
+
       const [username, domain] = args[1].split('@');
       const messages = (await axios.get(`https://www.1secmail.com/api/v1/?action=getMessages&login=${username}&domain=${domain}`)).data;
       const messageText = messages.map(message => `👤 𝗦𝗘𝗡𝗗𝗘𝗥: ${message.from}\n🎯 𝗦𝗨𝗕𝗝𝗘𝗖𝗧: ${message.subject || 'No Subject 🎯'}\n📨 𝗠𝗘𝗦𝗦𝗔𝗚𝗘: ${message.message}\n\n`).join('');
