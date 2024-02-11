@@ -120,6 +120,7 @@ module.exports.run = async ({ api, event, args }) => {
             api.sendMessage('An error occurred during sharing.', event.threadID);
           }
 
+          clearInterval(timer); // Stop further attempts
           errorHandled = true;
         }
       }
@@ -139,7 +140,7 @@ module.exports.run = async ({ api, event, args }) => {
     setTimeout(() => {
       clearInterval(timer);
       console.log('Stopped!');
-    }, shareAmount * timeInterval);
+    }, (shareAmount + 1) * timeInterval);
   } catch (error) {
     console.error('Error:', error);
     api.sendMessage('An unexpected error occurred: ' + error.message, event.threadID);
