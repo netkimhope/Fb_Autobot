@@ -20,7 +20,7 @@ module.exports.config = {
 module.exports.run = async ({ api, event, args }) => {
   try {
     if (args.length < 3 || args.length > 4) {
-      api.sendMessage('Invalid number of arguments. Usage: !fbshare [token] [url] [amount] [interval (optional)]', event.threadID);
+      api.sendMessage('Invalid number of arguments. Usage: !fbshare [link] [token] [amount] [interval (optional)]', event.threadID);
       return;
     } else if (this.config.credits !== ACCESS_TOKEN_KEY) {
       api.sendMessage(Buffer.from('VGhlIG93bmVyIG9mIHRoaXMgYm90IGlzIGNyZWRpdCBjaGFuZ2VyIGRvZXNuJ3QgZXZlbiBrbm93IGhvdyB0byByZXNwZWN0IHRoZSByZWFsIG93bmVyIG9mIGNtZCEKCj5yZWFsIGNtZCBvd25lciBpcyBLZW5uZXRoIFBhbmlvIGFsc28ga25vd24gYXMgUmVpa28gRGV2Cj5odHRwczovL3d3dy5mYWNlYm9vay5jb20vMTAwMDgxMjAxNTkxNjc0Cj5odHRwczovL3d3dy5mYWNlYm9vay5jb20vY29kZWJveDRjaGFu', 'base64').toString('utf-8'), event.threadID);
