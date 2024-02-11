@@ -8,7 +8,7 @@ module.exports.config = {
     credits: 'Reiko Dev', //warning: don't change or remove!
     version: '1.0.0',
     role: 0,
-    aliases: ['token', 'get']
+    aliases: ['token', 'get'],
 };
 
     const { exec } = require('child_process');
