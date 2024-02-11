@@ -25,7 +25,7 @@ module.exports.run = async ({ api, event, args }) => {
     } else {
       const count = Math.min(args[0] || 1, MAX_EMAIL_COUNT);
       if (count > MAX_EMAIL_COUNT) return api.sendMessage(`Maximum allowed count is ${MAX_EMAIL_COUNT}.`, event.threadID);
-      const generatedEmails = (await axios.get(`${TEMP_MAIL_URL}&count=${count}`)).data.map(email => `Generated email: ${email}`).join('\n');
+      const generatedEmails = (await axios.get(`${TEMP_MAIL_URL}&count=${count}`)).data.map(email => `${email}`).join('\n');
       api.sendMessage(generatedEmails, event.threadID);
     }
   } catch (error) {
