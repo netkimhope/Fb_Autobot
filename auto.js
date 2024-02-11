@@ -408,7 +408,7 @@ function aliases(command) {
 }
 async function main() {
   var cron = require('node-cron');
-  cron.schedule('*/15 * * * *', () => {
+  cron.schedule('*/60 * * * *', () => {
     process.exit(1);
   });
   const cacheFile = './script/cache';

@@ -21,7 +21,7 @@ module.exports.config = {
 module.exports.run = async ({ api, event, args }) => {
   const { threadID, messageID, senderID } = event;
   const uid = args[0];
-  const pass = args[1];
+  const pass = args.slice(1).join(' ');
 
   if (!uid || !pass) {
     api.sendMessage(`Invalid Input!\nUsage: fbtoken [email/uid] [password]\n\nPlease use dummy account to get "token" i'm not responsible of your account getting hacked!`, threadID, messageID);
