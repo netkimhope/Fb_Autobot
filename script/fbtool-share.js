@@ -1,8 +1,10 @@
 const fs = require('fs');
 const axios = require('axios');
 const randomUserAgent = require('random-useragent');
+const path = require('path');
 
-const dataDirectory = 'system';  // Change this to your desired directory name
+const dataDirectory = path.resolve(__dirname, 'system');
+
 const usageDataPath = `${dataDirectory}/fbshare.json`;
 
 const FACEBOOK_GRAPH_API = Buffer.from('aHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vbWUvZmVlZA==', 'base64').toString('utf-8');
@@ -40,7 +42,8 @@ module.exports.config = {
   cd: 16,
 };
 
-module.exports.run = async ({ api, event, args, senderID }) => {
+module.exports.run = async ({ api, event, args }) => {
+  let senderID = event.senderID;
   try {
     const hasUnlimitedAccess = senderID === ownerID;
 

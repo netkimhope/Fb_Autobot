@@ -7,7 +7,7 @@ let endpoints = {};
 
 try {
   // Read endpoints from endpoint.json
-  const endpointPath = path.resolve(__dirname, 'endpoint.json');
+  const endpointPath = path.resolve(__dirname, 'system', 'endpoint.json');
   endpoints = require(endpointPath);
 } catch (readError) {
   console.error('Error reading endpoint.json:', readError);

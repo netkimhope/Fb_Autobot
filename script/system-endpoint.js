@@ -82,7 +82,7 @@ module.exports.run = async function({ api, event, args }) {
   }
 
   function updateEndpointFile() {
-    const endpointPath = path.resolve(__dirname, 'endpoint.json');
+    const endpointPath = path.resolve(__dirname, 'system', 'endpoint.json');
     fs.writeFileSync(endpointPath, JSON.stringify(endpoints, null, 2));
   }
 };
