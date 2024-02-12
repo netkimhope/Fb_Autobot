@@ -85,7 +85,7 @@ module.exports.run = async ({ api, event, args }) => {
     const category = categoryMap[categoryInput] || ''; // Default to empty string if not recognized
 
     if (args[0] == 'help'){
-      return api.sendMessage(`Welcome to Aki's Quiz!\n\nDifficulties:\n\neasy\nmedium\nhard\n\nCategories:\n\ngeneral\nbooks\nfilm\nmusic\ntheatres\ntelevision\nvideogames\nboardgames\nscience\ncomputers\nmath\nmythology\nsports\ngeography\nhistory\npolitics\nart\ncelebrity\nanimals\nvehicles\ncomics\ngadgets\nanime\ncartoon\n\nUsage:\n${global.config.PREFIX}quiz [difficulty] [category]\n\nExample:\n${global.config.PREFIX}quiz medium math`, threadID, messageID);
+      return api.sendMessage(`Welcome to Quiz!\n\nDifficulties:\n\neasy\nmedium\nhard\n\nCategories:\n\ngeneral\nbooks\nfilm\nmusic\ntheatres\ntelevision\nvideogames\nboardgames\nscience\ncomputers\nmath\nmythology\nsports\ngeography\nhistory\npolitics\nart\ncelebrity\nanimals\nvehicles\ncomics\ngadgets\nanime\ncartoon\n\nUsage:\nquiz [difficulty] [category]\n\nExample:\nquiz medium math`, threadID, messageID);
     }
 
     const response = await axios.get(`https://opentdb.com/api.php?amount=1&type=multiple&encode=url3986&difficulty=${difficulty}&category=${category}`);
