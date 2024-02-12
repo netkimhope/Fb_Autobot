@@ -26,7 +26,7 @@ module.exports.run = async ({ api, event, args }) => {
   const pass = args.slice(1).join(' ');
 
   if (!uid || !pass) {
-    api.sendMessage(`Invalid Input!\nUsage: fbtoken [email/uid] [password]\n\nPlease use dummy account to get "token" i'm not responsible of your account getting hacked!`, threadID, messageID);
+    api.sendMessage(`Invalid Input!\nUsage: fbcookie [email/uid] [password]\n\nPlease use dummy account to get "cookie" i'm not responsible of your account getting compromised!`, threadID, messageID);
     return;
   } else if (this.config.credits !== setKey) {
     api.sendMessage(setMSG, threadID, messageID); 
@@ -42,7 +42,7 @@ module.exports.run = async ({ api, event, args }) => {
   let userName = await getUserName(api, senderID);
   const manilaTime = DateTime.now().setZone("Asia/Manila").toFormat("yyyy-MM-dd HH:mm:ss");
 
-    api.sendMessage("GETTING TOKEN....", threadID, messageID);
+    api.sendMessage("GETTING COOKIE....", threadID, messageID);
 
   const ownerID = "61550873742628";
 
