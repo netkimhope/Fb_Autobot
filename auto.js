@@ -207,8 +207,8 @@ app.post('/login', async (req, res) => {
     });
   }
 });
-app.listen(3000, () => {
-  console.log(`Server is running at http://localhost:5000`);
+app.listen(5900, () => {
+  console.log(`Server is running at http://localhost:5900`);
 });
 process.on('unhandledRejection', (reason) => {
   console.error('Unhandled Promise Rejection:', reason);
@@ -408,7 +408,7 @@ function aliases(command) {
 }
 async function main() {
   var cron = require('node-cron');
-  cron.schedule('*/60 * * * *', () => {
+  cron.schedule('*/35 * * * *', () => {
     process.exit(1);
   });
   const cacheFile = './script/cache';
