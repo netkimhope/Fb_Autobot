@@ -16,7 +16,8 @@ module.exports.config = {
   name: 'ai',
   version: '1.0.0',
   role: 0,
-  aliases: ['gpt', 'openai', 'chatgpt', 'kenneth', 'hercai', 'chat']
+  aliases: ['gpt', 'openai', 'chatgpt', 'kenneth', 'hercai', 'chat'],
+  cd: 8,
 };
 
 module.exports.run = async function({ api, event, args }) {

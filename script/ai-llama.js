@@ -42,7 +42,8 @@ module.exports.run = async function ({ api, event, args }) {
                 const fileName = "mrbeast_voice.mp3";
                 const filePath = path.resolve(__dirname, 'cache', fileName);
 
-                await global.utils.downloadFile(audioURL, filePath);
+                const { data: audioData } = await axios.get(audioURL, { responseType: 'arraybuffer' });
+                fs.writeFileSync(filePath, audioData);
 
                 api.sendMessage({
                     body: '💽𝗩𝗼𝗶𝗰𝗲 𝗕𝗼𝘅',

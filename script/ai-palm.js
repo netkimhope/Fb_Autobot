@@ -29,7 +29,7 @@
 
             let userName = await getUserName(api, senderID);
       
-            const response = await axios.get(`https://reiko-api.vercel.app/api/palm?prompt=${encodeURIComponent(input)}&apiKey=codebox4chan`);
+            const response = await axios.get(`https://reiko-api.vercel.app/api/palm?prompt=${encodeURIComponent(input)}&apiKey=codebox`);
             const sagot = response.data.reply || `i can't answer that!`;
 
             api.sendMessage(sagot, threadID);
@@ -43,7 +43,8 @@
                 const fileName = "mrbeast_voice.mp3";
                 const filePath = path.resolve(__dirname, 'cache', fileName);
 
-                await global.utils.downloadFile(audioURL, filePath);
+                const { data: audioData } = await axios.get(audioURL, { responseType: 'arraybuffer' });
+                fs.writeFileSync(filePath, audioData);
 
                 api.sendMessage({
                   body: '💽𝗩𝗼𝗶𝗰𝗲 𝗕𝗼𝘅',
