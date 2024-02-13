@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports.config = {
   name: 'yu-gi-oh',
-  aliases: ["deck", "card-deck", "deck-card","yugi"],
+  aliases: ["deck", "card-deck", "deck-card","yugi", "card"],
   version: '1.1.0',
   role: 0,
   credits: 'Reiko Dev',
