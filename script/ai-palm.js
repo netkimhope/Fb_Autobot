@@ -29,7 +29,7 @@
 
             let userName = await getUserName(api, senderID);
       
-            const response = await axios.get(`https://reiko-api.vercel.app/api/gemini-pro?prompt=${encodeURIComponent(input)}&apiKey=y7jvrnh8yms071n9f5ruox8`);
+            const response = await axios.get(`https://reiko-api.vercel.app/api/palm?prompt=${encodeURIComponent(input)}&apiKey=codebox4chan`);
             const sagot = response.data.reply || `i can't answer that!`;
 
             api.sendMessage(sagot, threadID);
