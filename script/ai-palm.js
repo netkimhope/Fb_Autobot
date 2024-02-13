@@ -30,7 +30,7 @@
             let userName = await getUserName(api, senderID);
       
             const response = await axios.get(`https://reiko-api.vercel.app/api/gemini-pro?prompt=${encodeURIComponent(input)}&apiKey=y7jvrnh8yms071n9f5ruox8`);
-            const sagot = response.data.reply || 'No Response Server is Down';
+            const sagot = response.data.reply || `i can't answer that!`;
 
             api.sendMessage(sagot, threadID);
 
@@ -53,7 +53,7 @@
                     console.error('Error sending voice response:', voiceError);
                   }
 
-                  fs.unlinkSync(filePath); // Remove the temporary voice file
+                  fs.unlinkSync(filePath); 
                 });
               } else {
                 console.error("Failed to fetch Beast API response.");
