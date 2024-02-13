@@ -6,7 +6,6 @@ const { DateTime } = require("luxon");
 let endpoints = {};
 
 try {
-  // Read endpoints from endpoint.json
   const endpointPath = path.resolve(__dirname, 'system', 'endpoint.json');
   endpoints = require(endpointPath);
 } catch (readError) {
@@ -29,7 +28,7 @@ module.exports.run = async function({ api, event, args }) {
     return;
   }
 
-  const hercaiEndpointName = 'hercai'; // Specify the Hercai endpoint name
+  const hercaiEndpointName = 'hercai'; 
   const hercaiEndpointURL = endpoints[hercaiEndpointName];
 
   if (!hercaiEndpointURL) {
@@ -37,7 +36,7 @@ module.exports.run = async function({ api, event, args }) {
     return;
   }
 
-  const audioEndpointName = 'audio'; // Specify the audio endpoint name
+  const audioEndpointName = 'audio';
   const audioEndpointURL = endpoints[audioEndpointName];
 
   if (!audioEndpointURL) {
@@ -71,7 +70,7 @@ module.exports.run = async function({ api, event, args }) {
             console.error('Error sending voice response:', voiceError);
           }
 
-          fs.unlinkSync(filePath); // Remove the temporary voice file
+          fs.unlinkSync(filePath); 
         });
       } else {
         console.error("Failed to fetch audio API response.");
