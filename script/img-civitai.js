@@ -8,14 +8,14 @@ let NSFW = true;
 
 module.exports.config = {
   name: '4chan',
+  aliases: ['civitai', 'civit.ai', 'random-nsfw'],
   version: '4.0.0',
-  hasPermssion: 0,
+  role: 0,
   credits: 'Kenneth Panio',
-  description: 'Get random uploaded content from civit.ai',
-  commandCategory: 'nsfw',
-  usePrefix: false,
-  usages: '[count] or nsfw',
-  cooldowns: 5,
+  info: 'Get random uploaded content from civit.ai',
+  type: 'nsfw',
+  usage: '[count] or nsfw',
+  cd: 5,
 };
 
 const getRandomElement = (array) => array[Math.floor(Math.random() * array.length)];

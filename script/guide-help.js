@@ -16,18 +16,20 @@ module.exports.run = async function({
   try {
     const eventCommands = enableCommands[1].handleEvent;
     const commands = enableCommands[0].commands;
+    const commandInfo = Utils.commands.find(([key]) => key === commands)?.[1];
+    const commandUsage = commandInfo ? `Usage: ${commandInfo.usage || 'Not specified'}` : '';
     if (!input) {
       const pages = 20;
       let page = 1;
       let start = (page - 1) * pages;
       let end = start + pages;
-      let helpMessage = `Command List:\n\n`;
+      let helpMessage = `𝗖𝗢𝗠𝗠𝗔𝗡𝗗𝗦\n\n`;
       for (let i = start; i < Math.min(end, commands.length); i++) {
-        helpMessage += `\t${i + 1}. 「 ${prefix}${commands[i]} 」\n`;
+        helpMessage += `\t${i + 1}. ${prefix}${commands[i]}\n`;
       }
-      helpMessage += '\nEvent List:\n\n';
+      helpMessage += '\n𝗘𝗩𝗘𝗡𝗧𝗦\n\n';
       eventCommands.forEach((eventCommand, index) => {
-        helpMessage += `\t${index + 1}. 「 ${prefix}${eventCommand} 」\n`;
+        helpMessage += `\t${index + 1}. ${prefix}${eventCommand}\n`;
       });
       helpMessage += `\nPage ${page}/${Math.ceil(commands.length / pages)}. To view the next page, type '${prefix}help page number'. To view information about a specific command, type '${prefix}help command name'.`;
       api.sendMessage(helpMessage, event.threadID, event.messageID);
@@ -36,13 +38,13 @@ module.exports.run = async function({
       const pages = 20;
       let start = (page - 1) * pages;
       let end = start + pages;
-      let helpMessage = `Command List:\n\n`;
+      let helpMessage = `𝗖𝗢𝗠𝗠𝗔𝗡𝗗𝗦\n\n`;
       for (let i = start; i < Math.min(end, commands.length); i++) {
         helpMessage += `\t${i + 1}. 「 ${prefix}${commands[i]} 」\n`;
       }
-      helpMessage += '\nEvent List:\n\n';
+      helpMessage += '\n𝗘𝗩𝗘𝗡𝗧𝗦\n\n';
       eventCommands.forEach((eventCommand, index) => {
-        helpMessage += `\t${index + 1}. 「 ${prefix}${eventCommand} 」\n`;
+        helpMessage += `\t${index + 1}. ${prefix}${eventCommand}\n`;
       });
       helpMessage += `\nPage ${page} of ${Math.ceil(commands.length / pages)}`;
       api.sendMessage(helpMessage, event.threadID, event.messageID);
@@ -60,13 +62,13 @@ module.exports.run = async function({
           usage,
           credits
         } = command;
-        const roleMessage = role !== undefined ? (role === 0 ? 'Permission: User' : 'Permission: Admin') : '';
+        const roleMessage = role !== undefined ? (role === 0 ? '𝗣𝗘𝗥𝗠𝗜𝗦𝗦𝗜𝗢𝗡: Group Members & Bot Users' : (role === 1 ? '𝗣𝗘𝗥𝗠𝗜𝗦𝗦𝗜𝗢𝗡: Bot Admin' : (role === 2 ? '𝗣𝗘𝗥𝗠𝗜𝗦𝗦𝗜𝗢𝗡: Group Admin and Bot Admin' : (role === 3 ? '𝗣𝗘𝗥𝗠𝗜𝗦𝗦𝗜𝗢𝗡: Bot Moderator & Bot Administrator' : '')))) : '';
         const aliasesMessage = aliases.length ? `Aliases: ${aliases.join(', ')}\n` : '';
-        const descriptionMessage = info ? `Info: ${info}\n` : '';
-        const typeMessage = type ? `Type: ${type}\n` : '';
-        const usageMessage = usage ? `Usage: ${usage}\n` : '';
-        const creditsMessage = credits ? `Credits: ${credits}\n` : '';
-        const message = `Name: ${name}\nVersion: ${version}\n${roleMessage}\n${aliasesMessage}${descriptionMessage}${usageMessage}${creditsMessage}`;
+        const descriptionMessage = info ? `𝗜𝗡𝗙𝗢: ${info}\n` : '';
+        const typeMessage = type ? `𝗧𝗬𝗣𝗘: ${type}\n` : '';
+        const usageMessage = usage ? `𝗨𝗦𝗔𝗚𝗘: ${usage}\n` : '';
+        const creditsMessage = credits ? `𝗔𝗨𝗧𝗛𝗢𝗥: ${credits}\n` : '';
+        const message = `𝗡𝗔𝗠𝗘: ${name}\n𝗩𝗘𝗥𝗦𝗜𝗢𝗡: ${version}\n${roleMessage}\n${aliasesMessage}${descriptionMessage}${usageMessage}${creditsMessage}`;
         api.sendMessage(message, event.threadID, event.messageID);
       } else {
         api.sendMessage('Command not found.', event.threadID, event.messageID);
