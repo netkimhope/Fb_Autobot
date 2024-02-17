@@ -28,43 +28,44 @@ module.exports.run = async function ({ api, event, args }) {
     api.sendMessage("🕣 | Answering...", event.threadID, event.messageID);
 
     try {
-        let modelName = "DALL-E"; // Default to DALL-E
-        let imageResponse;
+        const modelNameMap = {
+            "anime": "animefy",
+            "lexica": "lexica",
+            "prodia": "prodia",
+            "simurg": "simurg",
+            "raava": "raava",
+            "shonin": "shonin",
+        };
 
-        if (prompt.includes("anime")) {
-            modelName = "animefy";
-        } else if (prompt.includes("lexica")) {
-            modelName = "lexica";
-        } else if (prompt.includes("prodia")) {
-            modelName = "prodia";
-        } else if (prompt.includes("simurg")) {
-            modelName = "simurg";
-        } else if (prompt.includes("raava")) {
-            modelName = "raava";
-        } else if (prompt.includes("shonin")) {
-            modelName = "shonin";
+        let modelName = "DALL-E"; // Default to DALL-E
+        for (const key in modelNameMap) {
+            if (prompt.includes(key)) {
+                modelName = modelNameMap[key];
+                break;
+            }
         }
 
-        imageResponse = await herc.drawImage({ model: modelName, prompt });
+        const imageResponse = await herc.drawImage({ model: modelName, prompt });
 
-        const imageUrl = imageResponse && imageResponse.url;
+        const imageUrl = imageResponse?.url;
 
-        if (imageUrl && (prompt.includes("send pic") || prompt.includes("send a pic") || prompt.includes("draw a") || prompt.includes("genimage") || prompt.includes("drawing") || prompt.includes("picture of") || prompt.includes("image of"))) {
+        if (imageUrl && ["send pic", "send a pic", "draw a", "genimage", "drawing", "picture of", "image of", "send me pic", "send me image", "send me an image", "make a drawing", "illustrate", "sketch", "painting", "wallpaper", "photo of", "generate", "drawing of", "artwork", "artwork of", "visual image", "visual photo", "send me a pic"].some(phrase => prompt.includes(phrase))) {
             const imageStream = await axios.get(imageUrl, { responseType: 'stream' });
             api.sendMessage({
-                body: `🖼️ Here's Image from ${modelName || 'Undefined Model'}`,
+                body: `🖼️Sure!  Here's a drawing in ${modelName || 'Simple'} Artstyle`,
                 attachment: imageStream.data,
             }, event.threadID);
         } else {
             const questionResponse = await herc.question({ model: "v3", content: prompt });
             api.sendMessage(questionResponse.reply, event.threadID);
 
-            // Mrbeast Voice
             const beastUrl = 'https://www.api.vyturex.com/beast';
+
             try {
                 const beastResponse = await axios.get(`${beastUrl}?query=${encodeURIComponent(questionResponse.reply)}`);
-                if (beastResponse.data && beastResponse.data.audio) {
-                    const audioURL = beastResponse.data.audio;
+                const audioURL = beastResponse?.data?.audio;
+
+                if (audioURL) {
                     const fileName = "mrbeast_voice.mp3";
                     const filePath = path.resolve(__dirname, 'cache', fileName);
 
@@ -74,11 +75,8 @@ module.exports.run = async function ({ api, event, args }) {
                     api.sendMessage({
                         body: "💽 𝗩𝗼𝗶𝗰𝗲",
                         attachment: fs.createReadStream(filePath)
-                    }, event.threadID, async (voiceError) => {
-                        if (voiceError) {
-                            console.error('Error sending voice response:', voiceError);
-                        }
-
+                    }, event.threadID, (voiceError) => {
+                        if (voiceError) console.error('Error sending voice response:', voiceError);
                         fs.unlinkSync(filePath);
                     });
                 } else {

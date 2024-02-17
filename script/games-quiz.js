@@ -1,5 +1,5 @@
 module.exports.config = {
-  name: "quiz-lite",
+  name: "quiz-earn",
   version: "1.0.0",
   role: 0,
   credits: "Developer",
