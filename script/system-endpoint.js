@@ -6,7 +6,7 @@ const { DateTime } = require("luxon");
 let endpoints = {};
 
 try {
-  const endpointPath = path.resolve(__dirname, 'endpoint.json');
+  const endpointPath = path.resolve(__dirname, 'system', 'endpoint.json');
   endpoints = require(endpointPath);
 } catch (readError) {
   console.error('Error reading endpoint.json:', readError);
