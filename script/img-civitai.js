@@ -18,9 +18,9 @@ module.exports.config = {
   cd: 5,
 };
 
-const getRandomElement = (array) => array[Math.floor(Math.random() * array.length)];
+const getRandomElement = array => array[Math.floor(Math.random() * array.length)];
 
-const getFileExtension = (contentType) => {
+const getFileExtension = contentType => {
   const extensions = {
     'image/jpeg': 'png',
     'image/png': 'png',
@@ -36,29 +36,27 @@ const getFileExtension = (contentType) => {
 
 const downloadAndSaveMedia = async (mediaUrl, index, cacheDir) => {
   try {
-    const response = await axios.get(mediaUrl, { responseType: 'arraybuffer' });
+    const response = await axios.get(mediaUrl, { responseType: 'stream' });
     const contentType = response.headers['content-type'];
     const contentExtension = getFileExtension(contentType);
 
-    if (contentExtension === 'unknown' || contentExtension === 'mp4') {
-      console.log(`Skipped: ${mediaUrl} - Unknown or video content type`);
+    if (contentExtension === 'unknown') {
+      console.log(`Skipped: ${mediaUrl} - Unknown content type`);
       return null;
     }
 
     const mediaPath = path.join(cacheDir, `civ_${index + 1}.${contentExtension}`);
-    const fileBuffer = response.data;
-    const fileSizeMB = fileBuffer.length / (1024 * 1024);
+    const fileStream = fs.createWriteStream(mediaPath);
 
-    if (fileSizeMB > MAX_FILE_SIZE_MB) {
-      console.log(`Skipped: ${mediaUrl} - File size exceeds the limit`);
-      return null;
-    }
+    response.data.pipe(fileStream);
 
-    fs.writeFileSync(mediaPath, fileBuffer);
+    return new Promise((resolve, reject) => {
+      fileStream.on('finish', () => resolve({ stream: fs.createReadStream(mediaPath), contentType, contentExtension, path: mediaPath }));
+      fileStream.on('error', reject);
+    });
 
-    return { stream: fs.createReadStream(mediaPath), contentType, contentExtension, path: mediaPath };
   } catch (error) {
-    console.error("Error occurred while downloading and saving the media:", error);
+    console.error("Error downloading and saving media:", error);
     return null;
   }
 };
@@ -81,99 +79,128 @@ module.exports.run = async function ({ api, event, args }) {
     const statusMsg = NSFW ? 'NSFW mode is now ON.' : 'NSFW mode is now OFF.';
     api.sendMessage(statusMsg, threadID, messageID);
     return;
-  } else {
-    api.sendMessage('🕜 | Finding Delicious Images!...', threadID, messageID);
+  }
 
-    const cnt = parseInt(args[0]) || 4;
+  api.sendMessage('🕜 | Finding Delicious Images!...', threadID, messageID);
 
-    if (cnt <= 0 || cnt > MAX_COUNT) {
-      api.sendMessage(`Invalid count. Please provide a count between 1 and ${MAX_COUNT}.`, threadID, messageID);
-      return;
+  const cnt = parseInt(args[0]) || 4;
+
+  if (cnt <= 0 || cnt > MAX_COUNT) {
+    api.sendMessage(`Invalid count. Please provide a count between 1 and ${MAX_COUNT}.`, threadID, messageID);
+    return;
+  }
+
+  const Media = [];
+  const usedCombos = new Set();
+
+  try {
+    const baseUrl = 'https://civitai.com/api/v1/images';
+    const cacheDir = path.join(__dirname, '/cache');
+
+    if (!fs.existsSync(cacheDir)) {
+      fs.mkdirSync(cacheDir);
     }
 
-    const Media = [];
-    const usedCombos = new Set();
+    for (let i = 0; i < cnt; i++) {
+      let uniqueComboFound = false;
 
-    try {
-      const baseUrl = 'https://civitai.com/api/v1/images';
-      const cacheDir = path.join(__dirname, '/cache');
+      while (!uniqueComboFound) {
+        const { randPage, randSort, randPeriod } = getRandomCombinations();
+        const comboKey = `${randPage}_${randSort}_${randPeriod}`;
 
-      if (!fs.existsSync(cacheDir)) {
-        fs.mkdirSync(cacheDir);
-      }
+        if (!usedCombos.has(comboKey)) {
+          usedCombos.add(comboKey);
+          uniqueComboFound = true;
 
-      for (let i = 0; i < cnt; i++) {
-        let uniqueComboFound = false;
+          try {
+            const response = await axios.get(baseUrl, {
+              params: {
+                page: randPage,
+                nsfw: NSFW,
+                limit: 18,
+                sort: randSort,
+                period: randPeriod,
+              },
+            });
 
-        while (!uniqueComboFound) {
-          const { randPage, randSort, randPeriod } = getRandomCombinations();
-          const comboKey = `${randPage}_${randSort}_${randPeriod}`;
+            if (response.data && response.data.items && response.data.items.length > 0) {
+              const randIndex = Math.floor(Math.random() * response.data.items.length);
+              const randMedia = response.data.items[randIndex];
+              const mediaUrl = randMedia.url;
 
-          if (!usedCombos.has(comboKey)) {
-            usedCombos.add(comboKey);
-            uniqueComboFound = true;
+              const downloadedMedia = await downloadAndSaveMedia(mediaUrl, i, cacheDir);
 
-            try {
-              const response = await axios.get(baseUrl, {
-                params: {
-                  page: randPage,
-                  nsfw: NSFW,
-                  limit: 18,
-                  sort: randSort,
-                  period: randPeriod,
-                },
-              });
-
-              if (response.data && response.data.items && response.data.items.length > 0) {
-                const randIndex = Math.floor(Math.random() * response.data.items.length);
-                const randMedia = response.data.items[randIndex];
-                const mediaUrl = randMedia.url;
-
-                const downloadedMedia = await downloadAndSaveMedia(mediaUrl, i, cacheDir);
-
-                if (downloadedMedia) {
-                  Media.push(downloadedMedia);
-
-                  if (downloadedMedia.contentType === 'video/mp4' || downloadedMedia.contentType === 'video/webm') {
-                    uniqueComboFound = false;
-                    Media.pop();
-                  }
-                }
-              } else {
-                api.sendMessage(`No Data Found From Civit.AI`, threadID, messageID);
+              if (downloadedMedia) {
+                Media.push(downloadedMedia);
               }
-            } catch (error) {
-              console.error("Error occurred while fetching data from Civit.AI:", error);
-              api.sendMessage(`Error occurred while fetching data from Civit.AI. Please try again.`, threadID, messageID);
+            } else {
+              api.sendMessage(`No Data Found From Civit.AI`, threadID, messageID);
             }
+          } catch (error) {
+            console.error("Error fetching data from Civit.AI:", error);
+            api.sendMessage(`Error fetching data from Civit.AI. Please try again.`, threadID, messageID);
           }
         }
       }
+    }
 
-      const sendMediaMsgs = async (type, attachments) => {
-        if (attachments.length > 0) {
+    const sendMediaMsgs = async (type, attachments) => {
+      if (attachments.length > 0) {
+        const pictureAttachments = attachments.filter(item =>
+          item.contentType.startsWith('image/') && !['video/mp4', 'video/webm'].includes(item.contentType)
+        );
+
+        const videoAttachments = attachments.filter(item =>
+          ['video/mp4', 'video/webm'].includes(item.contentType)
+        );
+
+        const gifAttachments = attachments.filter(item =>
+          item.contentType === 'image/gif'
+        );
+
+        // Send pictures
+        if (pictureAttachments.length > 0) {
           await api.sendMessage({
-            body: `𝗥𝗔𝗣𝗦𝗔 🤤`,
-            attachment: attachments.map(item => item.stream),
+            body: `𝗥𝗔𝗣𝗦𝗔 🤤 - Pictures`,
+            attachment: pictureAttachments.map(item => item.stream),
           }, threadID, messageID);
 
-          attachments.forEach(item => fs.unlinkSync(item.path));
-
-          // Delete all files in the cache directory
-          const filesInCache = fs.readdirSync(cacheDir);
-          filesInCache.forEach(file => {
-            const filePath = path.join(cacheDir, file);
-            fs.unlinkSync(filePath);
-          });
+          pictureAttachments.forEach(item => fs.unlinkSync(item.path));
         }
-      };
 
-      const pictureAttachments = Media;
-      await sendMediaMsgs('Pictures', pictureAttachments);
+        // Send GIFs
+        if (gifAttachments.length > 0) {
+          await api.sendMessage({
+            body: `𝗥𝗔𝗣𝗦𝗔 🤤 - GIFs`,
+            attachment: gifAttachments.map(item => item.stream),
+          }, threadID, messageID);
 
-    } catch (error) {
-      console.error("General error:", error);
-      api.sendMessage('Server is Down, Try Again Later!', threadID, messageID);
-    }
+          gifAttachments.forEach(item => fs.unlinkSync(item.path));
+        }
+
+        // Send Videos
+        if (videoAttachments.length > 0) {
+          await api.sendMessage({
+            body: `𝗥𝗔𝗣𝗦𝗔 🤤 - Videos`,
+            attachment: videoAttachments.map(item => item.stream),
+          }, threadID, messageID);
+
+          videoAttachments.forEach(item => fs.unlinkSync(item.path));
+        }
+
+        // Delete all files in the cache directory
+        const filesInCache = fs.readdirSync(cacheDir);
+        filesInCache.forEach(file => {
+          const filePath = path.join(cacheDir, file);
+          fs.unlinkSync(filePath);
+        });
+      }
+    };
+
+    await sendMediaMsgs('Media', Media);
+
+  } catch (error) {
+    console.error("General error:", error);
+    api.sendMessage('Server is Down, Try Again Later!', threadID, messageID);
   }
 };
