@@ -71,7 +71,7 @@ function capitalizeFirstLetter(str) {
 }
 
 module.exports.run = async ({ api, event, args }) => {
-  const { threadID, messageID } = event;
+  const { threadID, messageID, senderID } = event;
 
   // Clear previous trivia data for this thread
   if (triviaData[threadID]) {
@@ -128,7 +128,7 @@ module.exports.run = async ({ api, event, args }) => {
           getUserName(api, message.senderID)
             .then(senderName => {
               api.sendMessage({
-                body: `${senderName} you are correct! The answer is:\n\n${userAnswer.toUpperCase()}. ${decodeURIComponent(options[correctIndex])}`
+                body: `${senderName} you are correct! The answer is:\n\n${userAnswer.toUpperCase()}. ${decodeURIComponent(options[correctIndex])}\n\nYou've earned it! 500 \nsuccessfully added to your account balance.`
               }, threadID, message.messageID);
             })
             .catch(error => {
