@@ -8,6 +8,7 @@ fs.mkdirSync(cacheDir, { recursive: true });
 
 module.exports.config = {
   name: 'shoticron',
+  aliases: ["shawty", "shoti", "vitamins", "dalaga", "dilag", "vitamin", "dalagita"],
   version: '1.0',
   role: 0,
   credits: '𝙼𝙰𝚁𝙹𝙷𝚄𝙽 𝙱𝙰𝚈𝙻𝙾𝙽',
@@ -22,6 +23,8 @@ const sendRandomAnimeVideo = async (api, threadID) => {
     const response = await axios.post('https://shoti-srv1.onrender.com/api/v1/get', { apikey: "$shoti-1hmr8u21d4bo13buo7g" });
     const videoInfo = response.data;
     const videoUrl = videoInfo.data.url;
+    
+    //api documentation: https://shoti-api.deno.dev
 
     const videoFileName = `video_${Date.now()}.mp4`;
     const videoFilePath = path.join(cacheDir, videoFileName);
