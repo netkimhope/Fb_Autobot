@@ -134,11 +134,11 @@ module.exports.run = async function ({ api, event, args }) {
                 Media.push(downloadedMedia);
               }
             } else {
-              api.sendMessage(`No Data Found From Civit.AI`, threadID, messageID);
+           //   api.sendMessage(`No Data Found From Civit.AI`, threadID, messageID);
             }
           } catch (error) {
             console.error("Error fetching data from Civit.AI:", error);
-            api.sendMessage(`Error fetching data from Civit.AI. Please try again.`, threadID, messageID);
+           // api.sendMessage(`Error fetching data from Civit.AI. Please try again.`, threadID, messageID);
           }
         }
       }
