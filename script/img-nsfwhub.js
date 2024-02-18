@@ -1,6 +1,15 @@
+const axios = require('axios');
 const { NSFW } = require("nsfwhub");
 
 const nsfw = new NSFW();
+const excludedCategories = ["gay", "dick", "pegged", "lesbian"];
+
+const categories = [
+  "ass", "sixtynine", "pussy", "anal", "boobs", "bdsm", "black", "easter", "bottomless", "blowjob", "collared", "cum",
+  "cumsluts", "dp", "dom", "extreme", "feet", "finger", "fuck", "futa",
+  "gif", "group", "hentai", "kiss", "lick", "phgif", "puffies", "real",
+  "suck", "tattoo", "tiny", "toys", "xmas"
+];
 
 module.exports.config = {
   name: "nsfwhub",
@@ -19,32 +28,33 @@ module.exports.run = async function ({ api, event, args }) {
   }
 
   if (args[0] === "help") {
-    const categories = [
-      "ass", "sixtynine", "pussy", "dick", "anal", "boobs", "ass",
-      "bdsm", "black", "easter", "bottomless", "blowjob", "collared", "cum",
-      "cumsluts", "dp", "dom", "extreme", "feet", "finger", "fuck", "futa",
-      "gay", "gif", "group", "hentai", "kiss", "lesbian", "lick", "pegged",
-      "phgif", "puffies", "real", "suck", "tattoo", "tiny", "toys", "xmas"
-    ];
-
     const categoryList = categories.join(', ');
-
     return reply(`NSFWHub Command Usage:\n- To fetch a specific category: \`nsfwhub [category]\`\n- To fetch a random category: \`nsfwhub\`\n- List of available categories: ${categoryList}`);
   }
 
-  const category = args[0] || categories[Math.floor(Math.random() * categories.length)];
+  const selectedCategory = args[0];
+  const isRandom = !selectedCategory;
 
-  if (!categories.includes(category)) {
+  if (isRandom) {
+    const filteredCategories = categories.filter(category => !excludedCategories.includes(category));
+    const category = filteredCategories[Math.floor(Math.random() * filteredCategories.length)];
+    return fetchAndSend(category);
+  }
+
+  if (!categories.includes(selectedCategory)) {
     return reply(`Invalid category. Use \`nsfwhub help\` to see available categories.`);
   }
 
-  try {
-    const data = await nsfw.fetch(category);
+  fetchAndSend(selectedCategory);
 
-    const response = await axios.get(data.image.url, { responseType: 'stream' });
-    api.sendMessage({ attachment: response.data }, event.threadID);
-  } catch (error) {
-    console.error('Error fetching NSFW image:', error.message);
-    reply('Error fetching NSFW image. Please try again later.');
+  async function fetchAndSend(category) {
+    try {
+      const data = await nsfw.fetch(category);
+      const response = await axios.get(data.image.url, { responseType: 'stream' });
+      api.sendMessage({ attachment: response.data }, event.threadID);
+    } catch (error) {
+      console.error('Error fetching NSFW image:', error.message);
+      reply('Error fetching NSFW image. Please try again later.');
+    }
   }
 };
