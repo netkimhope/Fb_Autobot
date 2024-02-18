@@ -2,24 +2,26 @@ const CryptoJS = require('crypto-js');
 
 module.exports.config = {
   name: "aes",
-  version: "1.0.2",
+  version: "1.2.0",
   role: 0,
   credits: "Kenneth Panio",
   info: "AES encryption/decryption",
   type: "tools",
-  usage: "[enc|dec] [text] [level]",
+  usage: "[enc|dec] [iteration] [text]",
   cd: 0
 };
 
 module.exports.run = ({ api, event, args }) => {
+  const allTypes = ["enc", "dec"];
   const command = args[0];
-  const text = args.slice(1).join(" "); // Join text elements starting from index 1
-  const iterations = parseInt(args[args.length - 1]) || 1; // Use the last element as iterations
-  const secretKey = 'mySecretKey';
+  const iterations = parseInt(args[1]);
 
-  if (!command || !text || isNaN(iterations) || iterations <= 0) {
-    return api.sendMessage('Usage: [enc|dec] [text] [iterations]', event.threadID, event.messageID);
+  if (!command || !allTypes.includes(command) || isNaN(iterations) || iterations <= 0 || iterations > 10 || args.length < 3) {
+    return api.sendMessage('Usage: [enc|dec] [1-10] [text]', event.threadID, event.messageID);
   }
+
+  const text = args.slice(2).join(" ");
+  const secretKey = 'mySecretKey';
 
   switch (command) {
     case "enc": {
@@ -38,8 +40,6 @@ module.exports.run = ({ api, event, args }) => {
       api.sendMessage(`${decryptedText}`, event.threadID, event.messageID);
       break;
     }
-    default:
-      api.sendMessage('Invalid command. Usage: [enc|dec] [text] [level]', event.threadID, event.messageID);
   }
 };
 
