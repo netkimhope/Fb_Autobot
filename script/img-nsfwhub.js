@@ -2,12 +2,11 @@ const axios = require('axios');
 const { NSFW } = require("nsfwhub");
 
 const nsfw = new NSFW();
-const excludedCategories = ["gay", "dick", "pegged", "lesbian"];
+const excludedCategories = ["gay", "dick", "pegged", "lesbian", "futa"];
 
 const categories = [
   "ass", "sixtynine", "pussy", "anal", "boobs", "bdsm", "black", "easter", "bottomless", "blowjob", "collared", "cum",
-  "cumsluts", "dp", "dom", "extreme", "feet", "finger", "fuck", "futa",
-  "gif", "group", "hentai", "kiss", "lick", "phgif", "puffies", "real",
+  "cumsluts", "dp", "dom", "extreme", "feet", "finger", "fuck", "gif", "group", "hentai", "kiss", "lick", "phgif", "puffies", "real",
   "suck", "tattoo", "tiny", "toys", "xmas"
 ];
 
