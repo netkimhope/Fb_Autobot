@@ -1,49 +1,75 @@
-const { Hercai } = require('hercai');
-const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
-const { DateTime } = require('luxon');
+const axios = require('axios');
 
-const herc = new Hercai();
+const sysDir = path.join(__dirname, 'system');
+const urlJsonPath = path.join(sysDir, 'url.json');
+const cacheDir = path.join(__dirname, 'cache');
+
+fs.mkdirSync(sysDir, { recursive: true });
+fs.mkdirSync(cacheDir, { recursive: true });
+
+let urls = [];
+
+try {
+  urls = require(urlJsonPath);
+} catch (err) {
+  console.error('Error loading URL JSON:', err.message);
+}
+
+function saveUrls() {
+  fs.writeFileSync(urlJsonPath, JSON.stringify(urls, null, 2));
+}
 
 module.exports.config = {
   name: "cosplay",
-  version: "1.0.1-beta",
-  aliases: ["simp", "hotties"],
+  version: "1.0.0",
   role: 0,
   credits: "Kenneth Panio",
-  info: "Generate images or drawings with different models based on the prompt.",
-  type: "artificial-intelligence",
-  usage: "[prompt]",
-  cd: 5,
+  info: "Generate random cosplay images",
+  usage: "[count]",
+  cd: 0,
+  aliases: ["rcp", "animecosplay", "anime-cosplay"]
 };
 
-module.exports.runCosplay = async function ({ api, event }) {
-  try {
-    // Define an array of cosplay image URLs
-    const cosplayImageUrls = [
-      'https://example.com/cosplay1.jpg',
-      'https://example.com/cosplay2.jpg',
-      'https://example.com/cosplay3.jpg',
-      // Add more cosplay image URLs as needed
-    ];
+module.exports.run = async function ({ api, event, args }) {
+  function sendMsg(msg) {
+    api.sendMessage(msg, event.threadID, event.messageID);
+  }
 
-  
-    function getRandomElement(array) {
-      return array[Math.floor(Math.random() * array.length)];
+  if (args[0] === "add" && args[1]) {
+    const newUrls = args.slice(1).filter(url => url.startsWith('http'));
+
+    if (!newUrls.length) {
+      return sendMsg('Invalid URL. Please provide a valid URL.');
     }
 
-    // Get a random cosplay image URL
-    const randomCosplayImageUrl = getRandomElement(cosplayImageUrls);
+    urls.push(...newUrls);
+    saveUrls();
+    return sendMsg('URLs added successfully!');
+  }
 
-    // Send the cosplay image
-    const imageStream = await axios.get(randomCosplayImageUrl, { responseType: 'stream' });
-    api.sendMessage({
-      body: `👗 Here's a Cosplay Image`,
-      attachment: imageStream.data,
-    }, event.threadID);
-  } catch (error) {
-    console.error('Error sending cosplay image:', error);
-    api.sendMessage("Error sending cosplay image.", event.threadID);
+  const count = parseInt(args[0]) || 1;
+
+  if (count < 1 || count > 5) {
+    return sendMsg('Invalid count value. Please choose a count between 1 and 5.');
+  }
+
+  const sendImg = async (url) => {
+    try {
+      const resp = await axios.get(url, { responseType: 'stream' });
+      api.sendMessage({ attachment: resp.data }, event.threadID);
+    } catch (err) {
+      console.error('Error fetching image:', err.message);
+    }
+  };
+
+  const randUrls = Array.from({ length: count }, () => {
+    const randIdx = Math.floor(Math.random() * urls.length);
+    return urls[randIdx];
+  });
+
+  for (const url of randUrls) {
+    await sendImg(url);
   }
 };
