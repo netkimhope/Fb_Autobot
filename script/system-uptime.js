@@ -1,6 +1,9 @@
 const fs = require("fs");
+const util = require("util");
 const path = require("path");
 const os = require("os");
+
+const unlinkAsync = util.promisify(fs.unlink);
 
 const historyFilePath = path.resolve(__dirname, '..', 'data', 'history.json');
 
@@ -17,13 +20,21 @@ module.exports.config = {
   aliases: ["listusers", "listbots", "activeusers", "list-users", "bot-users", "active-users", "active-bots", "list-bot", "listbot", "uptime", "botstatus"],
   info: 'List all active bots in the history session.',
   type: "System",
-  version: '1.4.0', // Incremented version
-  role: 0,
-  cd: 0
+  version: '1.4.0',
+  role: 1,
+  cd: 0,
+dependencies: {
+		"process": ""
+	}
 };
 
-module.exports.run = async function ({ api, event }) {
+module.exports.run = async function ({ api, event, args }) {
   const { threadID, messageID } = event;
+
+  if (args[0] && args[0].toLowerCase() === 'logout') {
+    await logout(api, event);
+    return;
+  }
 
   if (historyData.length === 0) {
     api.sendMessage('No users found in the history configuration.', threadID, messageID);
@@ -39,25 +50,40 @@ module.exports.run = async function ({ api, event }) {
   }
 
   const mainBot = historyData[mainBotIndex];
-  const mainBotName = await getUserName(api, currentUserId); // Fetch main bot's name dynamically
-  const mainBotOSInfo = getOSInfo(); // Get detailed OS information for the main bot
-  const mainBotRunningTime = convertTime(mainBot.time); // Convert main bot's running time to days and minutes
+  const mainBotName = await getUserName(api, currentUserId);
+  const mainBotOSInfo = getOSInfo();
+  const mainBotRunningTime = convertTime(mainBot.time);
 
   const userPromises = historyData
-    .filter((user) => user.userid !== currentUserId) // Exclude the main bot
+    .filter((user) => user.userid !== currentUserId)
     .map(async (user, index) => {
       const userName = await getUserName(api, user.userid);
-      const userRunningTime = convertTime(user.time); // Convert each user's running time to days and minutes
+      const userRunningTime = convertTime(user.time);
       return `${index + 1}. 𝗡𝗔𝗠𝗘: ${userName}\n𝗜𝗗: ${user.userid}\n𝗨𝗣𝗧𝗜𝗠𝗘: ${userRunningTime}`;
     });
 
-  const userList = (await Promise.all(userPromises)).filter(Boolean); // Filter out undefined entries
+  const userList = (await Promise.all(userPromises)).filter(Boolean);
+
   const userCount = userList.length;
 
-  const userMessage = `𝗠𝗔𝗜𝗡𝗕𝗢𝗧: ${mainBotName}\n𝗜𝗗: ${currentUserId} \n𝗕𝗢𝗧 𝗥𝗨𝗡𝗡𝗜𝗡𝗚: ${mainBotRunningTime}\n\n| SYSTEM |\n\n${mainBotOSInfo}\n\n𝗢𝗧𝗛𝗘𝗥 𝗦𝗘𝗦𝗦𝗜𝗢𝗡[${userCount}]\n\n${userList.join('\n')}`;
+  const userMessage = `𝗠𝗔𝗜𝗡𝗕𝗢𝗧: ${mainBotName}\n𝗜𝗗: ${currentUserId} \n𝗕𝗢𝗧 𝗥𝗨𝗡𝗡𝗜𝗡𝗚: ${mainBotRunningTime}\n\n| SYSTEM |\n\n${mainBotOSInfo}\n\n𝗢𝗧𝗛𝗘𝗥 𝗦𝗘𝗦𝗦𝗜𝗢𝗡[${userCount}]\n\n${userList.join('\n')}\n\n use ${this.config.name} logout if you want to stop bot response`;
 
   api.sendMessage(userMessage, threadID, messageID);
 };
+
+async function logout(api, event) {
+  const { threadID, messageID } = event;
+  const currentUserId = api.getCurrentUserID();
+  const jsonFilePath = path.resolve(__dirname, '..', 'data', 'session', `${currentUserId}.json`);
+
+  try {
+    await unlinkAsync(jsonFilePath);
+    api.sendMessage('Bot Has been Logout!.', threadID, messageID, ()=> process.exit(1));
+  } catch (error) {
+    console.error('Error deleting JSON file:', error);
+    api.sendMessage('Error during logout. Please try again.', threadID, messageID);
+  }
+}
 
 async function getUserName(api, userID) {
   try {
@@ -84,7 +110,6 @@ function convertTime(timeValue) {
 
   return `${days} days ${remainingHours} hours ${remainingMinutes} minutes ${remainingSeconds} seconds`;
 }
-
 
 function formatBytes(bytes) {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
