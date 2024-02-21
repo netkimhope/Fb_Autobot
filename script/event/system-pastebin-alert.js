@@ -1,3 +1,7 @@
+const axios = require('axios');
+const path = require('path');
+const fs = require('fs');
+
 module.exports.config = {
   name: "pastebin-alert",
   version: "69",

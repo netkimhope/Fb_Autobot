@@ -1,5 +1,6 @@
 const request = require("request");
 const fs = require("fs-extra");
+const path = require('path');
 
 module.exports.config = {
   name: "group-notify",
