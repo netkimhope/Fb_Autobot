@@ -5,64 +5,49 @@ module.exports.config = {
   aliases: ['info'],
   info: "Beginner's guide",
   usage: "[page] or [command]",
-  credits: 'Develeoper',
+  credits: 'Developer',
 };
-module.exports.run = async function({
-  api,
-  event,
-  enableCommands,
-  args,
-  Utils,
-  prefix
-}) {
+
+module.exports.run = async function ({ api, event, enableCommands, args, Utils, prefix }) {
   const input = args.join(' ');
+  const [eventCommands, commands] = [enableCommands[1].handleEvent, enableCommands[0].commands];
+
   try {
-    const eventCommands = enableCommands[1].handleEvent;
-    const commands = enableCommands[0].commands;
     if (!input) {
-      const pages = 20;
-      let page = 1;
-      let start = (page - 1) * pages;
-      let end = start + pages;
-      let helpMessage = `Command List:\n\n`;
+      const pages = 20, page = 1, start = (page - 1) * pages, end = start + pages;
+      let helpMessage = `📚 | 𝗖𝗠𝗗 𝗟𝗜𝗦𝗧: 〔${prefix}〕\n\n`;
+
       for (let i = start; i < Math.min(end, commands.length); i++) {
-        helpMessage += `\t${i + 1}. 「 ${prefix}${commands[i]} 」\n`;
+        const command = [...Utils.handleEvent, ...Utils.commands].find(([key]) => key.includes(commands[i].toLowerCase()))?.[1];
+
+        if (command) {
+          const { name, info, usage } = command;
+          helpMessage += `\t${i + 1}. ►〔 ${name} 〕 ${usage ? `${usage}` : ''}\n- ${info}\n\n`;
+        }
       }
-      helpMessage += '\nEvent List:\n\n';
-      eventCommands.forEach((eventCommand, index) => {
-        helpMessage += `\t${index + 1}. 「 ${prefix}${eventCommand} 」\n`;
-      });
+
       helpMessage += `\nPage ${page}/${Math.ceil(commands.length / pages)}. To view the next page, type '${prefix}help page number'. To view information about a specific command, type '${prefix}help command name'.`;
       api.sendMessage(helpMessage, event.threadID, event.messageID);
     } else if (!isNaN(input)) {
-      const page = parseInt(input);
-      const pages = 20;
-      let start = (page - 1) * pages;
-      let end = start + pages;
-      let helpMessage = `Command List:\n\n`;
+      const page = parseInt(input), pages = 20, start = (page - 1) * pages, end = start + pages;
+      let helpMessage = `📚 | 𝗖𝗠𝗗 𝗟𝗜𝗦𝗧: 〔${prefix}〕\n\n`;
+
       for (let i = start; i < Math.min(end, commands.length); i++) {
-        helpMessage += `\t${i + 1}. 「 ${prefix}${commands[i]} 」\n`;
+        const command = [...Utils.handleEvent, ...Utils.commands].find(([key]) => key.includes(commands[i].toLowerCase()))?.[1];
+
+        if (command) {
+          const { name, info, usage } = command;
+          helpMessage += `\t${i + 1}. ►〔 ${name} 〕 ${usage ? `${usage}` : ''}\n- ${info}\n\n`;
+        }
       }
-      helpMessage += '\nEvent List:\n\n';
-      eventCommands.forEach((eventCommand, index) => {
-        helpMessage += `\t${index + 1}. 「 ${prefix}${eventCommand} 」\n`;
-      });
-      helpMessage += `\nPage ${page} of ${Math.ceil(commands.length / pages)}`;
+
+      helpMessage += `\nPage ${page} - ${Math.ceil(commands.length / pages)}`;
       api.sendMessage(helpMessage, event.threadID, event.messageID);
     } else {
       const command = [...Utils.handleEvent, ...Utils.commands].find(([key]) => key.includes(input?.toLowerCase()))?.[1];
+
       if (command) {
-        const {
-          name,
-          version,
-          role,
-          aliases = [],
-          info,
-          usage,
-          credits,
-          cd,
-          hasPrefix
-        } = command;
+        const { name, version, role, aliases = [], info, usage, credits, cd, hasPrefix } = command;
         const roleMessage = role !== undefined ? (role === 0 ? '➛ Permission: user' : (role === 1 ? '➛ Permission: admin' : (role === 2 ? '➛ Permission: thread Admin' : (role === 3 ? '➛ Permission: super Admin' : '')))) : '';
         const aliasesMessage = aliases.length ? `➛ Aliases: ${aliases.join(', ')}\n` : '';
         const descriptionMessage = info ? `Description: ${info}\n` : '';
@@ -80,18 +65,12 @@ module.exports.run = async function({
     console.log(error);
   }
 };
-module.exports.handleEvent = async function({
-  api,
-  event,
-  prefix
-}) {
-  const {
-    threadID,
-    messageID,
-    body
-  } = event;
-  const message = prefix ? 'This is my prefix: ' + prefix : "Sorry i don't have prefix";
+
+module.exports.handleEvent = async function ({ api, event, prefix }) {
+  const { threadID, messageID, body } = event;
+  const message = prefix ? 'This is my prefix: ' + prefix : "Sorry, I don't have a prefix";
+
   if (body?.toLowerCase().startsWith('prefix')) {
     api.sendMessage(message, threadID, messageID);
   }
-}
+};
