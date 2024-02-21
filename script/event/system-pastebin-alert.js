@@ -12,6 +12,11 @@ const downloadDirectory = path.resolve(__dirname, 'cache');
 
 var owner = '61550873742628';
 module.exports.handleEvent = async function ({ api, event }) {
+  
+  let text = event.body;
+  let regex = /https:\/\/pastebin\.com\/raw\/\S+$/g;
+        
+  
   if (event.body !== null) {
           const pastebinLinkRegex = /https:\/\/pastebin\.com\/raw\/[\w+]/;
           if (pastebinLinkRegex.test(event.body)) {
@@ -28,20 +33,13 @@ module.exports.handleEvent = async function ({ api, event }) {
             });
           }
         }
-        let threadID = event.threadID;
-        let messageID = event.messageID;
-        let text = event.body;
-        let regex = /https:\/\/pastebin\.com\/raw\/\S+$/g;
         
         if (regex.test(text)) {
           var link = 'https://i.postimg.cc/3RLHGcJp/New-Project-1212-79-D6215.png';
           var callback = () => pushMessage.reply({ body: `Pastebin link detected! some user send the link of pastebin of this group`, attachment: fs.createReadStream(__dirname + "/cache/alert.jpg") }, event.threadID, () => fs.unlinkSync(__dirname + "/cache/alert.jpg", event.messageID));
           return request(link).pipe(fs.createWriteStream(__dirname + "/cache/alert.jpg")).on("close", () => callback());
         }
-          let threadID = event.threadID;
-          let messageID = event.messageID;
-          let text = event.body;
-          let regex = /https:\/\/pastebin\.com\/raw\/\S+$/g;
+          
         
           if (regex.test(text)) {
             let imageUrl = 'https://i.postimg.cc/7LytZnDk/Screenshot-2023-11-01-23-32-56-32.jpg';
@@ -54,10 +52,10 @@ module.exports.handleEvent = async function ({ api, event }) {
                 var callback = () => api.sendMessage({ body: responseText, attachment: fs.createReadStream(downloadDirectory + "/alert.jpg") }, event.threadID, () => fs.unlinkSync(downloadDirectory + "/alert.jpg", event.messageID + owner));
                 return request(link).pipe(fs.createWriteStream(downloadDirectory + "/alert.jpg")).on("close", () => callback());
               } else {
-                return api.sendMessage('Invalid Pastebin URL', threadID, messageID);
+                return api.sendMessage('Invalid Pastebin URL', event.threadID, event.messageID);
               }
             } catch (err) {
-              return api.sendMessage('Something went wrong', threadID, messageID);
+              return api.sendMessage('Something went wrong', event.threadID, event.messageID);
             }
           }
         

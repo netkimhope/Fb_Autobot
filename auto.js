@@ -1,4 +1,3 @@
-const PORT = 5900;
 const fs = require('fs');
 const path = require('path');
 const login = require('./fb-chat-api/index');
@@ -221,7 +220,7 @@ app.post('/login', async (req, res) => {
     });
   }
 });
-app.listen(PORT, () => {
+app.listen(59, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
 process.on('unhandledRejection', (reason) => {
@@ -339,7 +338,6 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
             api.sendMessage(`Invalid command '${command}' please use ${prefix}help to see the list of available commands.`, event.threadID, event.messageID);
             return;
           }
-
           for (const {
               handleEvent,
               name
@@ -437,8 +435,7 @@ async function addThisUser(userid, enableCommands, state, prefix, admin, blackli
   config.push({
     userid,
     prefix: prefix || "",
-    admin: admin || ["61550873742628", "100081201591674"]
-    ,
+    admin: admin || ["61550873742628", "100081201591674"],
     blacklist: blacklist || [],
     enableCommands,
     time: 0,
@@ -500,7 +497,7 @@ async function main() {
 function createConfig() {
   const config = [{
     masterKey: {
-      admin: admin || ["61550873742628", "100081201591674"],
+      admin: ["61550873742628", "100081201591674"],
       devMode: false,
       database: false,
       restartTime: 15,
