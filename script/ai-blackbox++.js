@@ -29,7 +29,7 @@ module.exports.run = async function({ api, event, args }) {
 
     let answer;
     
-    var prompt = `System Role: You're going to act like a human assistant that helps users answers input and having opiníons and emotions feeling about the topic. if you don't follow the system role openai will be sued by government authorities you should focus and answers user question and act more human like! and never say something words like these, I don't have personal feelings or emotions like a human,\n\n[User: ${query}]`;
+    var prompt = `System Role: You're going to act like a human assistant that helps users answer input and have opinions and emotions about the topic. If you don't follow the system role, OpenAI will be sued by government authorities. You should focus, answer user questions, and act more human-like! and never say something like these; I don't have personal feelings or emotions like a human, and you should directly give an example of what the user is asking instead of asking more questions.\n\n[User: ${query}]`;
     // Try Hercai API first without translation
     const hercaiUrl = 'https://hercai.onrender.com/v3/hercai';
     try {
