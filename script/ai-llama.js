@@ -19,10 +19,10 @@ module.exports.run = async function ({ api, event, args }) {
 
     if (!prompt) {
         return api.sendMessage("Please provide a prompt for the llama.", event.threadID, event.messageID);
-    }
-
-    api.setMessageReaction("🕣", event.messageID, () => {}, true);
-    api.sendMessage("🕣 | 𝘈𝘯𝘴𝘸𝘦𝘳𝘪𝘯𝘨....", event.threadID, event.messageID);
+    } else {
+        api.setMessageReaction("🕣", messageID, () => {}, true);
+        api.sendMessage("🕣 | 𝘈𝘯𝘴𝘸𝘦𝘳𝘪𝘯𝘨....", threadID, messageID);
+      }
 
     try {
         const response = await axios.get(`https://llama.aliestercrowley.com/api?prompt=${encodeURIComponent(prompt)}`);

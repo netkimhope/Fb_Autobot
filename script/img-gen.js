@@ -20,9 +20,9 @@ module.exports.run = async function ({ api, event, args }) {
 
   if (!prompt) {
     return api.sendMessage("Please provide a prompt for image generation.", event.threadID, event.messageID);
-  }
-
-  api.sendMessage("🕣 | Image generation in progress...", event.threadID, event.messageID);
+  } else {
+    api.sendMessage("🕣 | Image generation in progress...", event.threadID, event.messageID);
+}
 
   try {
     const data = {

@@ -79,9 +79,8 @@ module.exports.run = async function ({ api, event, args }) {
     const statusMsg = NSFW ? 'NSFW mode is now ON.' : 'NSFW mode is now OFF.';
     api.sendMessage(statusMsg, threadID, messageID);
     return;
-  }
-
-  api.sendMessage('🕜 | Finding Delicious Images!...', threadID, messageID);
+  } else { api.sendMessage('🕜 | Finding Delicious Images!...', threadID, messageID);
+}
 
   const cnt = parseInt(args[0]) || 4;
 

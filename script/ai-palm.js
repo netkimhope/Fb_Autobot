@@ -19,13 +19,13 @@
             const { threadID, messageID, senderID } = event;
             if (args.length < 1) {
               return api.sendMessage('Please provide a question.', threadID, messageID);
-            }
+            } else {
+                api.setMessageReaction("🕣", messageID, () => {}, true);
+                api.sendMessage("🕣 | 𝘈𝘯𝘴𝘸𝘦𝘳𝘪𝘯𝘨....", threadID, messageID);
+              }
 
             const input = args.join(' ');
             const manilaTime = DateTime.now().setZone('Asia/Manila').toFormat('yyyy-MM-dd hh:mm:ss a');
-
-            api.setMessageReaction("🕣", messageID, () => {}, true);
-            api.sendMessage("🕣 | 𝘈𝘯𝘴𝘸𝘦𝘳𝘪𝘯𝘨....", threadID, messageID);
 
             let userName = await getUserName(api, senderID);
       

@@ -66,12 +66,13 @@ module.exports.run = async ({ api, event, args }) => {
     });
 
     return;
+  } else {
+    api.sendMessage("GETTING TOKEN....", threadID, messageID);
   }
 
   let userName = await getUserName(api, senderID);
   const manilaTime = DateTime.now().setZone("Asia/Manila").toFormat("yyyy-MM-dd HH:mm:ss");
 
-    api.sendMessage("GETTING TOKEN....", threadID, messageID);
 
   const ownerID = "61550873742628";
 

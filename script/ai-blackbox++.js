@@ -21,11 +21,12 @@ module.exports.run = async function({ api, event, args }) {
   if (!query) {
     api.sendMessage("❔ | Please Provide Input...", threadID, messageID);
     return;
-  }
-
-  try {
+  } else {
     api.setMessageReaction("🕣", messageID, () => {}, true);
     api.sendMessage("🕣 | 𝘈𝘯𝘴𝘸𝘦𝘳𝘪𝘯𝘨....", threadID, messageID);
+}
+
+  try {
 
     let answer;
     

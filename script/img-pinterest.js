@@ -13,10 +13,9 @@ module.exports.run = async function ({ api, event, args }) {
   const number = parseInt(args.join(" ").trim().split("-")[1]) || 5;
   if (number > 8) {
     return api.sendMessage("Number of limit exceeds maximum allowed (8)!", event.threadID);
+  } else {
+    api.sendMessage(`Sending ${number} Pinterest Pictures....\nPlease Wait few seconds!`, event.threadID);
   }
-  
-  api.sendMessage(`Sending ${number} Pinterest Pictures....\nPlease Wait few seconds!`, event.threadID);
-  
   
   const headers = {
     'authority': 'www.pinterest.com',

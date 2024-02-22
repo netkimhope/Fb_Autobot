@@ -23,10 +23,11 @@ module.exports.run = async function ({ api, event, args }) {
 
     if (!prompt) {
         return api.sendMessage("Please provide a prompt for prodia.", event.threadID, event.messageID);
-    }
-
-    api.sendMessage("🕣 | Answering...", event.threadID, event.messageID);
-
+    } else {
+    api.setMessageReaction("🕣", messageID, () => {}, true);
+    api.sendMessage("🕣 | 𝘈𝘯𝘴𝘸𝘦𝘳𝘪𝘯𝘨....", threadID, messageID);
+  }
+  
     try {
         const modelNameMap = {
             "anime": "animefy",

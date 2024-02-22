@@ -18,12 +18,12 @@ module.exports.run = async function ({ api, event, args }) {
   if (!query) {
     api.sendMessage("❔ | Please Provide Input...", threadID, messageID);
     return;
+  } else {
+    api.setMessageReaction("🕣", messageID, () => {}, true);
+    api.sendMessage("🕣 | 𝘈𝘯𝘴𝘸𝘦𝘳𝘪𝘯𝘨....", threadID, messageID);
   }
 
   try {
-    api.setMessageReaction("🕣", messageID, () => {}, true);
-    api.sendMessage("🕣 | 𝘈𝘯𝘴𝘸𝘦𝘳𝘪𝘯𝘨....", threadID, messageID);
-
     // Box API for AI responses
     const boxUrl = 'https://useblackbox.io/chat-request-v4';
     const boxData = {
