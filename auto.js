@@ -21,57 +21,52 @@ fs.readdirSync(script).forEach((file) => {
   const stats = fs.statSync(scripts);
   if (stats.isDirectory()) {
     fs.readdirSync(scripts).forEach((file) => {
-      try {
-        const {
-          config,
-          run,
-          handleEvent,
-          handleReply
-        } = require(path.join(scripts, file));
-        if (config) {
+      const filePath = path.join(scripts, file);
+      if (path.extname(filePath).toLowerCase() === '.js') {
+        try {
           const {
-            name = [], role = '0', version = '1.0.0', hasPrefix = true, aliases = [], info = '', usage = '', credits = '',  cd = '5'
-          } = Object.fromEntries(Object.entries(config).map(([key, value]) => [key.toLowerCase(), value]));
-          aliases.push(name);
-          if (run) {
-            Utils.commands.set(aliases, {
-              name,
-              role,
+            config,
+            run,
+            handleEvent,
+            handleReply
+          } = require(filePath);
+          if (config) {
+            Utils.commands.set(config.aliases, {
+              name: config.name,
+              role: config.role,
               run,
-              aliases,
-              info,
-              usage,
-              version,
+              aliases: config.aliases,
+              info: config.info,
+              usage: config.usage,
+              version: config.version,
               hasPrefix: config.hasPrefix,
-              credits,
-               cd
+              credits: config.credits,
+              cd: config.cd
             });
-          }
-          if (handleEvent) {
-            Utils.handleEvent.set(aliases, {
-              name,
+
+            Utils.handleEvent.set(config.aliases, {
+              name: config.name,
               handleEvent,
-              role,
-              info,
-              usage,
-              version,
+              role: config.role,
+              info: config.info,
+              usage: config.usage,
+              version: config.version,
               hasPrefix: config.hasPrefix,
-              credits,
-               cd
+              credits: config.credits,
+              cd: config.cd
             });
-          }
-          if (handleReply) {
-            Utils.ObjectReply.set(aliases, {
-              name,
+
+            Utils.ObjectReply.set(config.aliases, {
+              name: config.name,
               handleReply,
             });
           }
+        } catch (error) {
+          console.error(chalk.red(`Error installing command from file ${file}: ${error.message}`));
         }
-      } catch (error) {
-        console.error(chalk.red(`Error installing command from file ${file}: ${error.message}`));
       }
     });
-  } else {
+  } else if (path.extname(scripts).toLowerCase() === '.js') {
     try {
       const {
         config,
@@ -80,49 +75,42 @@ fs.readdirSync(script).forEach((file) => {
         handleReply
       } = require(scripts);
       if (config) {
-        const {
-          name = [], role = '0', version = '1.0.0', hasPrefix = true, aliases = [], info = '', usage = '', credits = '',  cd = '5'
-        } = Object.fromEntries(Object.entries(config).map(([key, value]) => [key.toLowerCase(), value]));
-        aliases.push(name);
-        if (run) {
-          Utils.commands.set(aliases, {
-            name,
-            role,
-            run,
-            aliases,
-            info,
-            usage,
-            version,
-            hasPrefix: config.hasPrefix,
-            credits,
-             cd
-          });
-        }
-        if (handleEvent) {
-          Utils.handleEvent.set(aliases, {
-            name,
-            handleEvent,
-            role,
-            info,
-            usage,
-            version,
-            hasPrefix: config.hasPrefix,
-            credits,
-             cd
-          });
-        }
-        if (handleReply) {
-          Utils.ObjectReply.set(aliases, {
-            name,
-            handleReply,
-          });
-        }
+        Utils.commands.set(config.aliases, {
+          name: config.name,
+          role: config.role,
+          run,
+          aliases: config.aliases,
+          info: config.info,
+          usage: config.usage,
+          version: config.version,
+          hasPrefix: config.hasPrefix,
+          credits: config.credits,
+          cd: config.cd
+        });
+
+        Utils.handleEvent.set(config.aliases, {
+          name: config.name,
+          handleEvent,
+          role: config.role,
+          info: config.info,
+          usage: config.usage,
+          version: config.version,
+          hasPrefix: config.hasPrefix,
+          credits: config.credits,
+          cd: config.cd
+        });
+
+        Utils.ObjectReply.set(config.aliases, {
+          name: config.name,
+          handleReply,
+        });
       }
     } catch (error) {
       console.error(chalk.red(`Error installing command from file ${file}: ${error.message}`));
     }
   }
 });
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(express.json());
