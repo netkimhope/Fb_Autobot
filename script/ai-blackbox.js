@@ -2,6 +2,7 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 const { DateTime } = require("luxon");
+const randomUseragent = require("random-useragent");
 
 module.exports.config = {
   name: "blackbox",
@@ -42,7 +43,10 @@ module.exports.run = async function ({ api, event, args }) {
     // Mrbeast Voice
     const beastUrl = 'https://www.api.vyturex.com/beast';
     try {
-      const beastResponse = await axios.get(`${beastUrl}?query=${encodeURIComponent(answer)}`);
+      const randomAgent = randomUseragent.getRandom();
+      const beastResponse = await axios.get(`${beastUrl}?query=${encodeURIComponent(answer)}`, {
+        headers: { 'User-Agent': randomAgent }
+      });
       if (beastResponse.data && beastResponse.data.audio) {
         const audioURL = beastResponse.data.audio;
         const fileName = "mrbeast_voice.mp3"; 

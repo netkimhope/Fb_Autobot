@@ -19,9 +19,11 @@ const Utils = new Object({
 fs.readdirSync(script).forEach((file) => {
   const scripts = path.join(script, file);
   const stats = fs.statSync(scripts);
+
   if (stats.isDirectory()) {
     fs.readdirSync(scripts).forEach((file) => {
       const filePath = path.join(scripts, file);
+
       if (path.extname(filePath).toLowerCase() === '.js') {
         try {
           const {
@@ -30,36 +32,49 @@ fs.readdirSync(script).forEach((file) => {
             handleEvent,
             handleReply
           } = require(filePath);
+
           if (config) {
-            Utils.commands.set(config.aliases, {
-              name: config.name,
-              role: config.role,
-              run,
-              aliases: config.aliases,
-              info: config.info,
-              usage: config.usage,
-              version: config.version,
-              hasPrefix: config.hasPrefix,
-              credits: config.credits,
-              cd: config.cd
-            });
+            const {
+              name = [], role = '0', version = '1.0.0', hasPrefix = true, aliases = [], info = '', usage = '', credits = '',  cd = '5'
+            } = Object.fromEntries(Object.entries(config).map(([key, value]) => [key.toLowerCase(), value]));
 
-            Utils.handleEvent.set(config.aliases, {
-              name: config.name,
-              handleEvent,
-              role: config.role,
-              info: config.info,
-              usage: config.usage,
-              version: config.version,
-              hasPrefix: config.hasPrefix,
-              credits: config.credits,
-              cd: config.cd
-            });
+            aliases.push(name);
 
-            Utils.ObjectReply.set(config.aliases, {
-              name: config.name,
-              handleReply,
-            });
+            if (run) {
+              Utils.commands.set(aliases, {
+                name,
+                role,
+                run,
+                aliases,
+                info,
+                usage,
+                version,
+                hasPrefix: config.hasPrefix,
+                credits,
+                cd
+              });
+            }
+
+            if (handleEvent) {
+              Utils.handleEvent.set(aliases, {
+                name,
+                handleEvent,
+                role,
+                info,
+                usage,
+                version,
+                hasPrefix: config.hasPrefix,
+                credits,
+                cd
+              });
+            }
+
+            if (handleReply) {
+              Utils.ObjectReply.set(aliases, {
+                name,
+                handleReply,
+              });
+            }
           }
         } catch (error) {
           console.error(chalk.red(`Error installing command from file ${file}: ${error.message}`));
@@ -74,36 +89,49 @@ fs.readdirSync(script).forEach((file) => {
         handleEvent,
         handleReply
       } = require(scripts);
+
       if (config) {
-        Utils.commands.set(config.aliases, {
-          name: config.name,
-          role: config.role,
-          run,
-          aliases: config.aliases,
-          info: config.info,
-          usage: config.usage,
-          version: config.version,
-          hasPrefix: config.hasPrefix,
-          credits: config.credits,
-          cd: config.cd
-        });
+        const {
+          name = [], role = '0', version = '1.0.0', hasPrefix = true, aliases = [], info = '', usage = '', credits = '',  cd = '5'
+        } = Object.fromEntries(Object.entries(config).map(([key, value]) => [key.toLowerCase(), value]));
 
-        Utils.handleEvent.set(config.aliases, {
-          name: config.name,
-          handleEvent,
-          role: config.role,
-          info: config.info,
-          usage: config.usage,
-          version: config.version,
-          hasPrefix: config.hasPrefix,
-          credits: config.credits,
-          cd: config.cd
-        });
+        aliases.push(name);
 
-        Utils.ObjectReply.set(config.aliases, {
-          name: config.name,
-          handleReply,
-        });
+        if (run) {
+          Utils.commands.set(aliases, {
+            name,
+            role,
+            run,
+            aliases,
+            info,
+            usage,
+            version,
+            hasPrefix: config.hasPrefix,
+            credits,
+            cd
+          });
+        }
+
+        if (handleEvent) {
+          Utils.handleEvent.set(aliases, {
+            name,
+            handleEvent,
+            role,
+            info,
+            usage,
+            version,
+            hasPrefix: config.hasPrefix,
+            credits,
+            cd
+          });
+        }
+
+        if (handleReply) {
+          Utils.ObjectReply.set(aliases, {
+            name,
+            handleReply,
+          });
+        }
       }
     } catch (error) {
       console.error(chalk.red(`Error installing command from file ${file}: ${error.message}`));

@@ -1,6 +1,8 @@
 const axios = require("axios");
 const path = require("path");
 const fs = require("fs");
+const randomUseragent = require("random-useragent");
+const randomAgent = randomUseragent.getRandom();
 
 module.exports.config = {
   name: "box++",
@@ -30,7 +32,9 @@ module.exports.run = async function({ api, event, args }) {
     // Try Hercai API first without translation
     const hercaiUrl = 'https://hercai.onrender.com/v3/hercai';
     try {
-      const hercaiResponse = await axios.get(`${hercaiUrl}?question=${encodeURIComponent(query)}`);
+      const hercaiResponse = await axios.get(`${hercaiUrl}?question=${encodeURIComponent(query)}`, {
+        headers: { 'User-Agent': randomAgent }
+      });
       answer = hercaiResponse.data.reply || 'No Answers Found';
     } catch (hercaiError) {
       console.error('Error during Hercai API request:', hercaiError);
@@ -64,7 +68,9 @@ module.exports.run = async function({ api, event, args }) {
     // Mrbeast Voice
     const beastUrl = 'https://www.api.vyturex.com/beast';
     try {
-      const beastResponse = await axios.get(`${beastUrl}?query=${encodeURIComponent(answer)}`);
+      const beastResponse = await axios.get(`${beastUrl}?query=${encodeURIComponent(answer)}`, {
+        headers: { 'User-Agent': randomAgent }
+      });
       if (beastResponse.data && beastResponse.data.audio) {
         const audioURL = beastResponse.data.audio;
         const fileName = "mrbeast_voice.mp3";
