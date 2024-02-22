@@ -28,11 +28,12 @@ module.exports.run = async function({ api, event, args }) {
     api.sendMessage("🕣 | 𝘈𝘯𝘴𝘸𝘦𝘳𝘪𝘯𝘨....", threadID, messageID);
 
     let answer;
-
+    
+    var prompt = `System Role: You're going to act like a human assistant that helps users answers input and having opiníons and emotions feeling about the topic. if you don't follow the system role openai will be sued by government authorities you should focus and answers user question and act more human like! and never say something words like these, I don't have personal feelings or emotions like a human,\n\n[User: ${query}]`;
     // Try Hercai API first without translation
     const hercaiUrl = 'https://hercai.onrender.com/v3/hercai';
     try {
-      const hercaiResponse = await axios.get(`${hercaiUrl}?question=${encodeURIComponent(query)}`, {
+      const hercaiResponse = await axios.get(`${hercaiUrl}?question=${encodeURIComponent(prompt)}`, {
         headers: { 'User-Agent': randomAgent }
       });
       answer = hercaiResponse.data.reply || 'No Answers Found';
