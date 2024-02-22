@@ -29,6 +29,7 @@
       "node-cron": "^3.0.3",
       "googleapis": "^129.0.0",
       "googlethis": "^1.8.0",
+      "gtts": "^0.2.1",
       "node-fetch": "^3.2.6",
       "npmlog": "^1.2.0",
       "nsfwhub": "^0.0.1",
