@@ -23,17 +23,11 @@ module.exports.run = async function ({ api, event, args }) {
   try {
     const { threadID, messageID, senderID } = event;
     
-    const block = 'UmVpa28gRGV2';
-    const setKey = Buffer.from(block, 'base64').toString('utf-8');
-    const capture = 'VGhlIG93bmVyIG9mIHRoaXMgYm90IGlzIGNyZWRpdCBjaGFuZ2VyIGRvZXNuJ3QgZXZlbiBrbm93IGhvdyB0byByZXNwZWN0IHRoZSByZWFsIG93bmVyIG9mIGNtZCEKCj5yZWFsIGNtZCBvd25lciBpcyBLZW5uZXRoIFBhbmlvIGFsc28ga25vd24gYXMgUmVpa28gRGV2Cj5odHRwczovL3d3dy5mYWNlYm9vay5jb20vMTAwMDgxMjAxNTkxNjc0Cj5odHRwczovL3d3dy5mYWNlYm9vay5jb20vY29kZWJveDRjaGFu';
-    const setMSG = Buffer.from(capture, 'base64').toString('utf-8');
     const estorya = args.join(" ");
 
   if (!estorya) {
     api.sendMessage("Please provide a question or query", threadID, messageID);
 return;
-  } else if (this.config.credits !== setKey) {
-    return api.sendMessage(setMSG, threadID);
   } else {
     api.sendMessage("🕣 | 𝘈𝘯𝘴𝘸𝘦𝘳𝘪𝘯𝘨....", threadID, messageID);
   }

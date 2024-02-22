@@ -10,7 +10,7 @@ module.exports.config = {
   info: 'black box ai remastered by kenneth panio capable of understanding different languages around the world',
   type: 'artificial-intelligence',
   role: 0,
-  aliases: ['box-pro', 'box-remastered', 'ai', 'box-enhance', 'box-advance', 'gemini', 'gojo', 'cid', 'cid-kagenou', 'johan-liebert', 'liebert', 'johan', 'makima', 'john-smith', 'shadow', 'minoru'],
+  aliases: ['box-pro', 'box-remastered', 'ai', 'box-enhance', 'box-advance', 'gojo', 'cid', 'cid-kagenou', 'johan-liebert', 'liebert', 'johan', 'makima', 'john-smith', 'shadow', 'minoru'],
   cd: 5
 };
 
