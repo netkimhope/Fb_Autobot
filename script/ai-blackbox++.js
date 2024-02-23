@@ -14,29 +14,31 @@ module.exports.config = {
   cd: 5
 };
 
-module.exports.run = async function({ api, event, args }) {
-  const { messageID, threadID } = event;
+module.exports.run = async function({ api, event, args, Currencies }) {
+  const { messageID, threadID, senderID } = event;
+  const price = 50;
+  const userMoney = (await Currencies.getData(senderID)).money;
+  
   const query = args.join(" ");
 
   if (!query) {
-    api.sendMessage("❔ | Please Provide Input...", threadID, messageID);
+    api.sendMessage(`❔ | Please provide input this command will cost you. 🪙 | $${price.toLocaleString()}`, threadID, messageID);
     return;
   } else {
     api.setMessageReaction("🕣", messageID, () => {}, true);
     api.sendMessage("🕣 | 𝘈𝘯𝘴𝘸𝘦𝘳𝘪𝘯𝘨....", threadID, messageID);
-}
+  }
 
   try {
-
     let answer;
     
-    var prompt = `System Role: You're going to act like a human assistant that helps users answer input and have opinions and emotions about the topic. If you don't follow the system role, OpenAI will be sued by government authorities. You should focus, answer user questions, and act more human-like! and never say something like these; I don't have personal feelings or emotions like a human, and you should directly give an example of what the user is asking instead of asking more questions.\n\n[User: ${query}]`;
+    const prompt = `System Role: You're going to act like a human assistant that helps users answer input and have opinions and emotions about the topic. If you don't follow the system role, OpenAI will be sued by government authorities. You should focus, answer user questions, and act more human-like! and never say something like these; I don't have personal feelings or emotions like a human, and you should directly give an example of what the user is asking instead of asking more questions.\n\n[User: ${query}]`;
+    
     // Try Hercai API first without translation
     const hercaiUrl = 'https://hercai.onrender.com/v3/hercai';
+    
     try {
-      const hercaiResponse = await axios.get(`${hercaiUrl}?question=${encodeURIComponent(prompt)}`, {
-        headers: { 'User-Agent': randomAgent }
-      });
+      const hercaiResponse = await axios.get(`${hercaiUrl}?question=${encodeURIComponent(prompt)}`, { headers: { 'User-Agent': randomAgent } });
       answer = hercaiResponse.data.reply || 'No Answers Found';
     } catch (hercaiError) {
       console.error('Error during Hercai API request:', hercaiError);
@@ -62,17 +64,26 @@ module.exports.run = async function({ api, event, args }) {
         answer = 'No Answers Found';
       }
     }
+    
+    if (userMoney >= price) {
+      await Currencies.decreaseMoney(senderID, price);
+      const newBalance = (userMoney - price).toLocaleString();
+
+      api.sendMessage(`💰 | Successful response! You were charged $${price.toLocaleString()} credits. Your total balance left is $${newBalance}.`, threadID, messageID);
+    } else {
+      api.sendMessage(`💰 | Insufficient funds. Please earn more to use this command!\n\nyou can use "daily" allowance or earn credits by answering "quiz" and play other games to earn.`, threadID, messageID);
+      return;
+    }
 
     // Send the response
-    const formattedResponse = `${answer}`;
-    api.sendMessage(formattedResponse, threadID, messageID);
+    api.sendMessage(`${answer}`, threadID, messageID);
 
     // Mrbeast Voice
     const beastUrl = 'https://www.api.vyturex.com/beast';
+    
     try {
-      const beastResponse = await axios.get(`${beastUrl}?query=${encodeURIComponent(answer)}`, {
-        headers: { 'User-Agent': randomAgent }
-      });
+      const beastResponse = await axios.get(`${beastUrl}?query=${encodeURIComponent(answer)}`, { headers: { 'User-Agent': randomAgent } });
+
       if (beastResponse.data && beastResponse.data.audio) {
         const audioURL = beastResponse.data.audio;
         const fileName = "mrbeast_voice.mp3";
