@@ -46,7 +46,7 @@ module.exports.run = async function ({ api, event, Currencies }) {
     if (timeSinceLastClaim < cooldown) {
       const remainingTime = cooldown - timeSinceLastClaim;
       const remainingHours = Math.ceil(remainingTime / (60 * 60 * 1000));
-      api.sendMessage(`⏰ | You have already claimed your daily allowance. Please comeback tommorow!`, threadID);
+      api.sendMessage(`⏰ | You already claimed your daily allowance. Please comeback tommorow!`, threadID);
       return;
     }
 
@@ -59,7 +59,7 @@ module.exports.run = async function ({ api, event, Currencies }) {
     const updatedUserData = await Currencies.getData(senderID);
     const totalBalance = updatedUserData.money || 0;
 
-    api.sendMessage(`💰 | You claimed your daily allowance of $${userCurrenciesData.dailyAllowance.toLocaleString()} credits!.\nYour total balance is now $${totalBalance.toLocaleString()} credits.`, threadID);
+    api.sendMessage(`💰 | You claimed your daily allowance of $${userCurrenciesData.dailyAllowance.toLocaleString()}.\nYour total balance is now $${totalBalance.toLocaleString()} credits.`, threadID);
   } catch (error) {
     console.error("Error in daily allowance command:", error);
   }

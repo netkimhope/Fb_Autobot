@@ -1,6 +1,6 @@
 module.exports.config = {
   name: "balance",
-  aliases: ["bal", "moneys", "earnings", "credits", "credit"],
+  aliases: ["bal", "moneys", "earnings", "credits", "credit", "money"],
   version: "1.0.0",
   role: 0,
   info: "Check your current balance.",

@@ -19,7 +19,7 @@ module.exports.run = async function ({ api, event, Currencies }) {
     const updatedUserData = await Currencies.getData(senderID);
     const totalBalance = updatedUserData.money || 0;
 
-    api.sendMessage(`💸 | Hesoyam! You've been granted $${grantAmount.toLocaleString()} credits.\nYour total balance is now $${totalBalance.toLocaleString()} credits.`, threadID);
+    api.sendMessage(`💸 | Hesoyam! You've been granted $${grantAmount.toLocaleString()}.\nYour total balance is now $${totalBalance.toLocaleString()}.`, threadID);
   } catch (error) {
     console.error("Error in hesoyam command:", error);
   }

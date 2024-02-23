@@ -104,34 +104,35 @@ module.exports.run = async ({ api, event, args, Currencies }) => {
 
     triviaData[threadID].timeout = timeout;
 
-    api.listenMqtt((_, message) => {
-      if (message.body && /^[a-d]$/.test(message.body.toLowerCase()) && !triviaData[threadID].answered) {
-        const userAnswer = message.body.toLowerCase();
-        const { correctIndex, options } = triviaData[threadID];
-        const correctLetter = String.fromCharCode(65 + correctIndex).toLowerCase();
+    api.listenMqtt(async (_, message) => {
+  if (message.body && /^[a-d]$/.test(message.body.toLowerCase()) && !triviaData[threadID].answered) {
+    const userAnswer = message.body.toLowerCase();
+    const { correctIndex, options } = triviaData[threadID];
+    const correctLetter = String.fromCharCode(65 + correctIndex).toLowerCase();
 
-        if (userAnswer === correctLetter) {
-          clearTimeout(triviaData[threadID].timeout);
-          const senderName = await getUserName(api, message.senderID);
-          const earningAmount = 500;
-          const userData = await Currencies.getData(senderID);
-    const userBalance = userData.money.toLocaleString() || 0;
-          await Currencies.increaseMoney(senderID, earningAmount);
-          api.sendMessage({
-            body: `${senderName}, you are correct! The answer is:\n\n${userAnswer.toUpperCase()}. ${decodeURIComponent(options[correctIndex])}\n\nYou've earned ${earningAmount}. total balance now is${userBalance}`,
-          }, threadID, message.messageID);
+    clearTimeout(triviaData[threadID].timeout);
+    triviaData[threadID].answered = true; // Set answered to true immediately to avoid further processing
 
-        } else {
-          clearTimeout(triviaData[threadID].timeout);
-          const senderName = await getUserName(api, message.senderID);
-          api.sendMessage({
-            body: `Sorry, ${senderName}! Your answer is wrong. The correct answer is:\n\n${String.fromCharCode(65 + correctIndex)}. ${decodeURIComponent(options[correctIndex])}`,
-          }, threadID, message.messageID);
-        }
+    if (userAnswer === correctLetter) {
+      const senderName = await getUserName(api, message.senderID);
+      const earningAmount = 1000;
+      const userData = await Currencies.getData(senderID);
+      const userBalance = (userData.money + earningAmount).toLocaleString() || 0;
+      await Currencies.increaseMoney(senderID, earningAmount);
+      api.sendMessage({
+        body: `${senderName}, you are correct! The answer is:\n\n${userAnswer.toUpperCase()}. ${decodeURIComponent(options[correctIndex])}\n\nYou've earned $${earningAmount.toLocaleString()}.\nYour total balance now is $${userBalance}`,
+      }, threadID, message.messageID);
+    } else {
+      const lose = 80;
+      await Currencies.increaseMoney(senderID, lose);
+      const senderName = await getUserName(api, message.senderID);    
+      api.sendMessage({
+        body: `Sorry, ${senderName}! Your answer is wrong. The correct answer is:\n\n${String.fromCharCode(65 + correctIndex)}. ${decodeURIComponent(options[correctIndex])}`,
+      }, threadID, message.messageID);
+    }
+  }
+});
 
-        triviaData[threadID].answered = true;
-      }
-    });
 
   } catch (error) {
     console.error("Error fetching trivia question:", error);

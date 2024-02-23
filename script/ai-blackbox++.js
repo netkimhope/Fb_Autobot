@@ -22,7 +22,7 @@ module.exports.run = async function({ api, event, args, Currencies }) {
   const query = args.join(" ");
 
   if (!query) {
-    api.sendMessage(`❔ | Please provide input this command will cost you. 🪙 | $${price.toLocaleString()}`, threadID, messageID);
+    api.sendMessage(`❔ | Please provide input!, this command will cost you. 🪙 | $${price.toLocaleString()}`, threadID, messageID);
     return;
   } else {
     api.setMessageReaction("🕣", messageID, () => {}, true);
@@ -68,15 +68,13 @@ module.exports.run = async function({ api, event, args, Currencies }) {
     if (userMoney >= price) {
       await Currencies.decreaseMoney(senderID, price);
       const newBalance = (userMoney - price).toLocaleString();
-
-      api.sendMessage(`💰 | Successful response! You were charged $${price.toLocaleString()} credits. Your total balance left is $${newBalance}.`, threadID, messageID);
+      api.sendMessage(`💰 | Successful response! You were charged $${price.toLocaleString()}.\nYour total balance left is $${newBalance}.`, threadID, messageID);
+       api.sendMessage(answer, threadID, messageID);
     } else {
-      api.sendMessage(`💰 | Insufficient funds. Please earn more to use this command!\n\nyou can use "daily" allowance or earn credits by answering "quiz" and play other games to earn.`, threadID, messageID);
+      api.sendMessage(`💰 | Insufficient funds. Please earn more money to use this command!,\nyou can use "daily" allowance or earn more moneys by answering "quiz" and play other games.`, threadID, messageID);
       return;
     }
 
-    // Send the response
-    api.sendMessage(`${answer}`, threadID, messageID);
 
     // Mrbeast Voice
     const beastUrl = 'https://www.api.vyturex.com/beast';

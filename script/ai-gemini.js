@@ -25,7 +25,7 @@ module.exports.run = async function ({ api, event, args, Currencies }) {
     const estorya = args.join(" ");
 
     if (!estorya) {
-      api.sendMessage(`❔ | Please provide input; this command will cost you. 💰 | $${price.toLocaleString()}`, threadID, messageID);
+      api.sendMessage(`❔ | Please provide input!, this command will cost you. 💰 | $${price.toLocaleString()}`, threadID, messageID);
       return;
     } else {
       api.sendMessage("🕣 | 𝘈𝘯𝘴𝘸𝘦𝘳𝘪𝘯𝘨....", threadID, messageID);
@@ -96,9 +96,9 @@ module.exports.run = async function ({ api, event, args, Currencies }) {
           await Currencies.decreaseMoney(senderID, price);
           const newBalance = (userMoney - price).toLocaleString();
 
-          api.sendMessage(`💰 | Successful response! You were charged $${price.toLocaleString()} credits. Your total balance left is $${newBalance}.`, threadID, messageID);
+          api.sendMessage(`💰 | Successful response! You were charged $${price.toLocaleString()}.\nYour total balance left is $${newBalance}.`, threadID, messageID);
         } else {
-          api.sendMessage(`💰 | Insufficient funds. Please earn more to use this command!\n\nYou can use "daily" allowance or earn credits by answering "quiz" and playing other games.`, threadID, messageID);
+          api.sendMessage(`💰 | Insufficient funds. Please earn more money to use this command!\nYou can use "daily" allowance or earn credits by answering "quiz" and playing other games.`, threadID, messageID);
           return;
         }
 
