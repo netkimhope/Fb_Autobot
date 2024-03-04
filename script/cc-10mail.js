@@ -1,9 +1,9 @@
 module.exports.config = {
-  name: "temp10",
+  name: "temp-lite",
   version: "1.0.0",
-  role: 2,
+  role: 0,
   credits: "shiki",
-  info: "Get temp mail v2",
+  info: "Get temp mail lite version",
   type: "Accounting",
   usage: "[new/list/more]",
   cd: 2,

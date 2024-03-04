@@ -7,7 +7,7 @@ const randomAgent = randomUseragent.getRandom();
 module.exports.config = {
   name: "box++",
   version: "2.0.0",
-  info: 'black box ai remastered by kenneth panio capable of understanding different languages around the world',
+  info: 'black box ai remastered capable of understanding different languages around the world',
   type: 'artificial-intelligence',
   role: 0,
   aliases: ['box-pro', 'box-remastered', 'ai', 'box-enhance', 'box-advance', 'gojo', 'cid', 'cid-kagenou', 'johan-liebert', 'liebert', 'johan', 'makima', 'john-smith', 'shadow', 'minoru'],
@@ -16,7 +16,7 @@ module.exports.config = {
 
 module.exports.run = async function({ api, event, args, Currencies }) {
   const { messageID, threadID, senderID } = event;
-  const price = 50;
+  const price = 150;
   const userMoney = (await Currencies.getData(senderID)).money;
   
   const query = args.join(" ");
@@ -68,10 +68,9 @@ module.exports.run = async function({ api, event, args, Currencies }) {
     if (userMoney >= price) {
       await Currencies.decreaseMoney(senderID, price);
       const newBalance = (userMoney - price).toLocaleString();
-      api.sendMessage(`💰 | Successful response! You were charged $${price.toLocaleString()}.\nYour total balance left is $${newBalance}.`, threadID, messageID);
-       api.sendMessage(answer, threadID, messageID);
+       api.sendMessage(`${answer}\n\n -$${price.toLocaleString()}`, threadID, messageID);
     } else {
-      api.sendMessage(`💰 | Insufficient funds. Please earn more money to use this command!,\nyou can use "daily" allowance or earn more moneys by answering "quiz" and play other games.`, threadID, messageID);
+      api.sendMessage(`💰 | Insufficient funds. Please earn more money to use this command!,\nyou can use "daily" allowance or earn more money by answering "quiz" and play other games.`, threadID, messageID);
       return;
     }
 

@@ -95,14 +95,12 @@ module.exports.run = async function ({ api, event, args, Currencies }) {
         if (userMoney >= price) {
           await Currencies.decreaseMoney(senderID, price);
           const newBalance = (userMoney - price).toLocaleString();
-
-          api.sendMessage(`💰 | Successful response! You were charged $${price.toLocaleString()}.\nYour total balance left is $${newBalance}.`, threadID, messageID);
         } else {
           api.sendMessage(`💰 | Insufficient funds. Please earn more money to use this command!\nYou can use "daily" allowance or earn credits by answering "quiz" and playing other games.`, threadID, messageID);
           return;
         }
 
-        api.sendMessage(sure, threadID, messageID);
+        api.sendMessage(sure + `\n\n-$${price.toLocaleString()}`, threadID, messageID);
         api.sendMessage({attachment: Pictures},threadID, messageID);
         const gttsInstance = new gtts(result, 'en-us');
         const gttsPath = path.join(__dirname, 'voicebox.mp3');

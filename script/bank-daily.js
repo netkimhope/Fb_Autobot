@@ -23,7 +23,7 @@ module.exports.run = async function ({ api, event, Currencies }) {
     const userDataPath = path.join(systemFolderPath, `${senderID}.json`);
     const initialData = {
       lastClaimTimestamp: 0,
-      dailyAllowance: 1500,
+      dailyAllowance: 1800,
       cooldownHours: 24, 
     };
 
@@ -59,7 +59,7 @@ module.exports.run = async function ({ api, event, Currencies }) {
     const updatedUserData = await Currencies.getData(senderID);
     const totalBalance = updatedUserData.money || 0;
 
-    api.sendMessage(`💰 | You claimed your daily allowance of $${userCurrenciesData.dailyAllowance.toLocaleString()}.\nYour total balance is now $${totalBalance.toLocaleString()} credits.`, threadID);
+    api.sendMessage(`💰 | You claimed your daily allowance of $${userCurrenciesData.dailyAllowance.toLocaleString()}`, threadID);
   } catch (error) {
     console.error("Error in daily allowance command:", error);
   }

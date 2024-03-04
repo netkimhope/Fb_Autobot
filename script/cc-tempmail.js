@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { TempMail } = require("1secmail-api");
 
 module.exports.config = {
   name: "tempmail",
@@ -14,6 +15,21 @@ module.exports.config = {
 const TEMP_MAIL_URL = 'https://www.1secmail.com/api/v1/';
 const MAX_EMAIL_COUNT = 10;
 const DEFAULT_DISPLAY_LIMIT = 5;
+
+function generateRandomId() {
+  var length = 6;
+  var characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  var randomId = '';
+
+  for (var i = 0; i < length; i++) {
+    randomId += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+  return randomId;
+}
+
+
+const mail = new TempMail(generateRandomId());
 
 module.exports.run = async ({ api, event, args }) => {
   try {
@@ -49,9 +65,11 @@ module.exports.run = async ({ api, event, args }) => {
       if (count > MAX_EMAIL_COUNT) return api.sendMessage(`Maximum allowed count is ${MAX_EMAIL_COUNT}.`, event.threadID);
       const generatedEmails = (await axios.get(`${TEMP_MAIL_URL}?action=genRandomMailbox&count=${count}`)).data.map(email => `${email.replace(/\./g, '(.)')}`).join('\n');
       api.sendMessage(generatedEmails, event.threadID);
+      api.sendMessage(mail.address, event.threadID);
     }
   } catch (error) {
     console.error('Error:', error);
     api.sendMessage("Failed to generate or retrieve email, please try again.", event.threadID);
   }
 };
+
