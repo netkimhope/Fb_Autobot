@@ -4,12 +4,12 @@ const path = require("path");
 const randomUserAgent = require('random-useragent');
 
 module.exports.config = {
-  name: 'random-video',
+  name: 'reels',
   role: 0,
   version: '0.1.0',
-  info: 'sends a random video',
+  info: 'sends a random reels video',
   type: 'media',
-  aliases: ['randomvids', 'funvideo', 'tv', 'reels', 'reel', 'random-content'],
+  aliases: ['randomvids', 'funvideo', 'tv', 'random-video', 'reel', 'random-content'],
 };
 
 const systemDir = path.resolve(__dirname, "system");
@@ -112,7 +112,7 @@ const unsentVideos = videos.filter(video => !sentVideoIds.has(video.id));
         const link = randomVideo.source;
         const videoId = randomVideo.id;
         const name = randomVideo.from.name;
-        const caption = randomVideo.description || 'pogi si kenneth panio';
+        const caption = randomVideo.description || 'Pogi ni Kenneth Panio';
 
         const videoResponse = await axios({
   method: "GET",

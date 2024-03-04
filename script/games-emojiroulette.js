@@ -40,10 +40,10 @@ module.exports.run = async ({ api, event, args, Currencies }) => {
 
     if (selectedEmoji === winningEmoji) {
         winnings = amount * 2; 
-        resultMessage = `🎉 Congratulations! ${winningEmoji} is the winning emoji! You won ${winnings} credits.`;
+        resultMessage = `🎉 Congratulations! ${winningEmoji} is the winning emoji! You won $${winnings.toLocaleString()}`;
     } else {
         winnings = -amount; 
-        resultMessage = `😔 Sorry, ${winningEmoji} is the winning emoji. You lost ${amount} credits.`;
+        resultMessage = `😔 Sorry, ${winningEmoji} is the winning emoji. You lost $${amount.toLocaleString()}`;
     }
 
     const newBalance = userMoney + winnings;
@@ -54,5 +54,5 @@ module.exports.run = async ({ api, event, args, Currencies }) => {
         await Currencies.decreaseMoney(senderID, -winnings);
     }
 
-    api.sendMessage(resultMessage + ` Your new balance is ${newBalance}.`, threadID, messageID);
+    api.sendMessage(resultMessage, threadID, messageID);
 };

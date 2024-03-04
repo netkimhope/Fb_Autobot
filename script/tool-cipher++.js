@@ -7,7 +7,7 @@ module.exports.config = {
   credits: "Kenneth Panio",
   info: "Enhanced text encryption",
   type: "tools",
-  usage: "[en|de]",
+  usage: "[enc|dec]",
   cd: 0
 };
 

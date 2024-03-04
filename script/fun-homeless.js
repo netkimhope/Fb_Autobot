@@ -1,6 +1,6 @@
 module.exports.config = {
   name: "homeless",
-  role: 2,
+  role: 0,
   version: "1.0.0",
   info: "Embrace financial challenges throws away your money and start back to zero again",
   type: "currency",
@@ -16,7 +16,7 @@ module.exports.run = async function ({ api, event, Currencies }) {
     const currentBalance = userData.money || 0;
 
     if (currentBalance === 0) {
-      api.sendMessage("You're already broke! Embrace the financial challenge elsewhere.", threadID);
+      api.sendMessage("You're already broke! go somewhere and beg for money!.", threadID);
       return;
     }
 
@@ -24,7 +24,7 @@ module.exports.run = async function ({ api, event, Currencies }) {
 
     await Currencies.decreaseMoney(senderID, reduceAmount);
 
-    api.sendMessage(`💸 | Oops! You've  become broke. Your total balance is now $0 credits. Embrace the financial challenge!`, threadID);
+    api.sendMessage(`💸 | Oops! You've  become broke. Embrace the financial challenge! check your balance and see what happen.🤣😂`, threadID);
   } catch (error) {
     console.error("Error in becomebroke command:", error);
   }

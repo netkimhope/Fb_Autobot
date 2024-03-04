@@ -1,9 +1,9 @@
 const axios = require('axios');
 module.exports.config = {
-  name: 'rankup',
+  name: 'rank',
   version: '1.0.0',
   role: 0,
-  aliases: ['rank'],
+  aliases: ['Exp','rankup', 'rankings', 'experience'],
   info: "Ranking system bot's",
   usage: "Rankup",
   credits: 'Developer',

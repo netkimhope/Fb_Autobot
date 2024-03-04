@@ -1,21 +1,21 @@
 const axios = require('axios');
 
 module.exports.config = {
-  name: "fbgroup-report",
+  name: "fbgc-report",
   aliases: ["groupreport", "reportgroup", "fb-group-report", "zuck", "fuckgroup"],
   version: "1.0",
   role: 3,
   credits: "Kenneth Panio",
   info: "Report a Facebook group as spam",
   type: "tools",
-  usage: "[token] [group_id] [amount]",
+  usage: "[token or cookie] [group_id] [amount]",
   cd: 6
 };
 
 module.exports.run = async ({ api, event, args }) => {
   try {
     if (args.length !== 3) {
-      api.sendMessage('Invalid number of arguments. Usage: !fbgroup-report [token] [group_id] [amount]', event.threadID);
+      api.sendMessage('Invalid number of arguments. Usage: !fbgc-report [token or cookie] [group_id] [amount]', event.threadID);
       return;
     }
 

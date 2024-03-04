@@ -1,9 +1,9 @@
 module.exports.config = {
-	name: "reactivate",
+	name: "reboot",
 	type: "utility",
 	version: "7.0.0",
 	role: 3,
-	aliases: ['restart', 'reboot', 'resetbot'],
+	aliases: ['restart', 'resetbot'],
 	dependencies: {
 		"process": ""
 	}
@@ -11,5 +11,5 @@ module.exports.config = {
 module.exports.run = async function({ api, event, args }) {
   const process = require("process");
   const { threadID, messageID } = event;
-  api.sendMessage(`𝗦𝗬𝗦𝗧𝗘𝗠 𝗥𝗘𝗕𝗢𝗢𝗧𝗜𝗡𝗚...`, threadID, ()=> process.exit(1));
+  api.sendMessage(`restarting bot....`, threadID, ()=> process.exit(1));
 }

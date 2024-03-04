@@ -28,9 +28,6 @@ function generateRandomId() {
   return randomId;
 }
 
-
-const mail = new TempMail(generateRandomId());
-
 module.exports.run = async ({ api, event, args }) => {
   try {
     if (args[0] === 'inbox') {
@@ -64,6 +61,7 @@ module.exports.run = async ({ api, event, args }) => {
       const count = Math.min(args[0] || 1, MAX_EMAIL_COUNT);
       if (count > MAX_EMAIL_COUNT) return api.sendMessage(`Maximum allowed count is ${MAX_EMAIL_COUNT}.`, event.threadID);
       const generatedEmails = (await axios.get(`${TEMP_MAIL_URL}?action=genRandomMailbox&count=${count}`)).data.map(email => `${email.replace(/\./g, '(.)')}`).join('\n');
+      const mail = new TempMail(generateRandomId());
       api.sendMessage(generatedEmails, event.threadID);
       api.sendMessage(mail.address, event.threadID);
     }

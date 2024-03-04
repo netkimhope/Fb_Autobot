@@ -55,5 +55,5 @@ module.exports.run = async function({
   } else {
     await decreaseMoney(senderID, -winnings);
   }
-  api.sendMessage(`🎰 ${slotItems[slotResult[0]]} | ${slotItems[slotResult[1]]} | ${slotItems[slotResult[2]]}. ${winMessage} You ${winnings >= 0 ? 'won' : 'lost'} ${Math.abs(winnings)} credits. Your new balance is ${newBalance}.`, threadID, messageID);
+  api.sendMessage(`🎰 ${slotItems[slotResult[0]]} | ${slotItems[slotResult[1]]} | ${slotItems[slotResult[2]]}. ${winMessage} You ${winnings >= 0 ? 'won' : 'lost'} $${Math.abs(winnings).toLocaleString()}.`, threadID, messageID);
 }

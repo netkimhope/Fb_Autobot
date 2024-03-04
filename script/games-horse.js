@@ -55,10 +55,10 @@ module.exports.run = async ({
     await new Promise(resolve => setTimeout(resolve, 5 * 1000));
     if (selectedColor === args[0]) {
       await Currencies.increaseMoney(senderID, amount * 2);
-      api.sendMessage(`Congratulations! Your chosen horse (${selectedColor}) won, and you received ${amount * 2} money. Your total balance is now ${userMoney + (amount * 2)}.`, threadID, messageID);
+      api.sendMessage(`Congratulations! Your chosen horse (${selectedColor}) won, and you received $${(amount * 2).toLocaleString()} money.`, threadID, messageID);
     } else {
       await Currencies.decreaseMoney(senderID, amount);
-      api.sendMessage(`Unfortunately, your chosen horse (${selectedColor}) didn't win. You lost ${amount} money. Your total balance is now ${userMoney - amount}.`, threadID, messageID);
+      api.sendMessage(`Unfortunately, your chosen horse (${selectedColor}) didn't win. You lost $${amount.toLocaleString()} money.`, threadID, messageID);
     }
   });
 };

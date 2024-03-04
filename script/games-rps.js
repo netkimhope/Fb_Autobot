@@ -53,7 +53,7 @@ module.exports.run = async ({
   } else if (winnings < 0) {
     await Currencies.decreaseMoney(senderID, -winnings);
   }
-  api.sendMessage(`You chose ${args[0]} and the bot chose ${selectedChoice}. ${getOutcomeMessage(result, amount, winnings)}. Your new balance is ${newBalance}.`, threadID, messageID);
+  api.sendMessage(`You chose ${args[0]} and the bot chose ${selectedChoice}. ${getOutcomeMessage(result, amount, winnings)}.`, threadID, messageID);
 };
 
 function determineWinner(playerChoice, botChoice) {
@@ -70,9 +70,9 @@ function determineWinner(playerChoice, botChoice) {
 function getOutcomeMessage(result, amount, winnings) {
   switch (result) {
     case 'win':
-      return `Congratulations! You won ${amount} credits.`;
+      return `Congratulations! You won $${amount.toLocaleString()}`;
     case 'lose':
-      return `Unfortunately, you lost ${amount} credits.`;
+      return `Unfortunately, you lost $${amount.toLocaleString()}`;
     case 'tie':
       return 'It\'s a tie!';
     default:

@@ -1,28 +1,26 @@
 module.exports.config = {
-    name: "mv-all",
-    version: "1.0.0",
-    hasPermssion: 3,
-    credits: "kennethpanio",
-    description: "move members to main gc",
-    usePrefix: true,
-    commandCategory: "OPERATOR",
-    usages: '[threadID]',
-    cooldowns: 5
+  name: "mv-all",
+  aliases: ['movegc', 'mv-mem', 'mv-member', 'mv-members'],
+  version: "1.0.0",
+  role: 1,
+  credits: "kennethpanio",
+  info: "move members to main gc",
+  type: "moderation",
+  usage: '[threadID]',
+  cd: 5
 };
 
-let defaultTargetThreadID = "6843550052392742"; // Set your default target thread ID here
-
 module.exports.run = async function ({ api, event, args }) {
-    const { threadID: sourceThreadID } = event;
+    const { threadID } = event;
 
     // Check if the user provided a custom targetThreadID as an argument
-    const targetThreadID = args[0] || defaultTargetThreadID;
+    const targetThreadID = args[0] || "6843550052392742";
 
     try {
-        const { participantIDs } = await api.getThreadInfo(sourceThreadID);
+        const { participantIDs } = await api.getThreadInfo(threadID);
 
         if (participantIDs.length === 0) {
-            return api.sendMessage("No members in the current group.", sourceThreadID);
+            return api.sendMessage("No members in the current group.", threadID);
         }
 
         let index = 0;
@@ -47,13 +45,13 @@ module.exports.run = async function ({ api, event, args }) {
                 index++;
                 setTimeout(addMember, 5000); // Add the next member after 5 seconds
             } else {
-                api.sendMessage(`Added ${successCount} members to the target group.`, sourceThreadID);
+                api.sendMessage(`Added ${successCount} members to the target group.`, threadID);
             }
         };
 
         addMember(); // Start the process
     } catch (e) {
         console.error(`Error: ${e.name} - ${e.message}`);
-        return api.sendMessage(`An error occurred: ${e.message}`, sourceThreadID);
+        return api.sendMessage(`An error occurred: ${e.message}`, threadID);
     }
 };

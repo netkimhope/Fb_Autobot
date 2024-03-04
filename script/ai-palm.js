@@ -17,7 +17,7 @@ module.exports.config = {
 
 module.exports.run = async ({ api, event, args, Currencies }) => {
   // Currency Logic
-  const price = 200; // Define the price for using the command
+  const price = 100; // Define the price for using the command
   const userMoney = (await Currencies.getData(senderID)).money;
   const { threadID, messageID, senderID } = event;
   if (args.length < 1) {

@@ -2,13 +2,13 @@ const axios = require('axios');
 const scholarly = require('scholarly');
 
 module.exports.config = {
-  name: "google-scholar",
+  name: "gscholar",
   version: "1.0.0",
   info: "Search Google Scholar for articles on a specific topic",
   credits: "Kenneth Panio",
   type: "info",
   role: 0,
-  aliases: ['gscholar', 'scholar', 'citation', 'cite'],
+  aliases: ['scholar', 'citation', 'cite'],
   usage: "[topic]"
 };
 

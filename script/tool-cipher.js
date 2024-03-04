@@ -2,10 +2,9 @@ module.exports.config = {
   name: "cipher",
   version: "1.1.1",
   role: 0,
-  credits: "Kenneth Panio",
-  info: "Text encryption",
+  info: "Simple Text encryption",
   type: "tools",
-  usage: "[en|de]",
+  usage: "[enc|dec]",
   cd: 0
 }
 

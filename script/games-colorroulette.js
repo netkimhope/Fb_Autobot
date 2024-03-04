@@ -40,10 +40,11 @@ module.exports.run = async ({ api, event, args, Currencies }) => {
 
     if (selectedColor === winningColor) {
         winnings = amount * 3; 
-        resultMessage = `🎉 Congratulations! ${winningColor} is the winning color! You won ${winnings} credits.`;
+        resultMessage = `🎉 Congratulations! ${winningColor} is the winning color! You won $${winnings.toLocaleString()
+        }`;
     } else {
         winnings = -amount; 
-        resultMessage = `😔 Sorry, ${winningColor} is the winning color. You lost ${amount} credits.`;
+        resultMessage = `😔 Sorry, ${winningColor} is the winning color. You lost $${amount.toLocaleString()}`;
     }
 
     const newBalance = userMoney + winnings;
@@ -54,5 +55,5 @@ module.exports.run = async ({ api, event, args, Currencies }) => {
         await Currencies.decreaseMoney(senderID, -winnings);
     }
 
-    api.sendMessage(resultMessage + ` Your new balance is ${newBalance}.`, threadID, messageID);
+    api.sendMessage(resultMessage, threadID, messageID);
 };

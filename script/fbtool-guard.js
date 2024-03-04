@@ -6,7 +6,7 @@ module.exports.config = {
   version: '1.0.0',
   role: 0,
   credits: 'reiko dev',
-  info: 'unlock and Turn on avatar guard profile in facebook',
+  info: 'unlock and Turn on avatar guard profile in facebook using token',
   type: 'fbtool',
   usage: '[token]',
   cd: 10,

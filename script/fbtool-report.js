@@ -15,7 +15,7 @@ module.exports.config = {
 module.exports.run = async ({ api, event, args }) => {
   try {
     if (args.length !== 3) {
-      api.sendMessage('Invalid number of arguments. Usage: !fbreport [token] [user_id] [amount]', event.threadID);
+      api.sendMessage('Invalid number of arguments. Usage: !fbreport [token or cookie] [user_id] [amount]', event.threadID);
       return;
     }
 

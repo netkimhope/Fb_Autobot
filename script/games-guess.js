@@ -38,10 +38,10 @@ module.exports.run = async ({ api, event, args, Currencies }) => {
 
     if (guessedNumber === randomNumber) {
         winnings = amount * 10; 
-        resultMessage = `Congratulations! You guessed the correct number (${randomNumber}) and won ${winnings} credits.`;
+        resultMessage = `Congratulations! You guessed the correct number (${randomNumber}) and won ${winnings.toLocaleString()}`;
     } else {
         winnings = -amount; 
-        resultMessage = `Sorry, the correct number was ${randomNumber}. You lost ${amount} credits.`;
+        resultMessage = `Sorry, the correct number was ${randomNumber}. You lost ${amount.toLocaleString()}`;
     }
 
     const newBalance = userMoney + winnings;
@@ -52,5 +52,5 @@ module.exports.run = async ({ api, event, args, Currencies }) => {
         await Currencies.decreaseMoney(senderID, -winnings);
     }
 
-    api.sendMessage(resultMessage + ` Your new balance is ${newBalance}.`, threadID, messageID);
+    api.sendMessage(resultMessage, threadID, messageID);
 };

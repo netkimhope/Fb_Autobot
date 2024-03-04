@@ -3,13 +3,14 @@ module.exports.config = {
   name: "music",
   version: "1.0.0",
   role: 0,
-  aliases: ['play', 'sing', 'song']
+  aliases: ['play', 'sing', 'song', 'lyrics', 'kanta', 'lyric']
 };
 module.exports.run = async function({
   api,
   event,
   args
 }) {
+  const axios = require("axios");
   const fs = require("fs-extra");
   const ytdl = require("ytdl-core");
   const yts = require("yt-search");
@@ -20,10 +21,14 @@ module.exports.run = async function({
   }
   try {
     api.sendMessage(`Searching for "${musicName}"...`, event.threadID, event.messageID);
+    const response = await axios.get(`https://lyrist.vercel.app/api/${encodeURIComponent(musicName)}`);
     const searchResults = await yts(musicName);
     if (!searchResults.videos.length) {
       return api.sendMessage("Can't find the search.", event.threadID, event.messageID);
     } else {
+      const lyrics = response.data.lyrics;
+      const title = response.data.title;
+      const artist = response.data.artist;
       const music = searchResults.videos[0];
       const musicUrl = music.url;
       const stream = ytdl(musicUrl, {
@@ -41,9 +46,10 @@ module.exports.run = async function({
           return api.sendMessage('The file could not be sent because it is larger than 25MB.', event.threadID);
         }
         const message = {
-          body: `${music.title}`,
+          body: `${title}`,
           attachment: fs.createReadStream(filePath)
         };
+        api.sendMessage(`🎵 𝗟𝗬𝗥𝗜𝗖𝗦: ${title}\n\n${lyrics}\n\n👤 𝗦𝗜𝗡𝗚𝗘𝗥: ${artist || 'unknown'}`, event.threadID, event.messageID);
         api.sendMessage(message, event.threadID, () => {
           fs.unlinkSync(filePath);
         }, event.messageID);

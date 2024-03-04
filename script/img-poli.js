@@ -2,10 +2,9 @@ module.exports.config = {
   name: "poli",
   version: "1.0.0",
   role: 0,
-  hasPrefix: true,
   credits: "Developer",
-  info: "generate image from polination.",
-  usages: "[prompt]",
+  info: "fetches random generated image from polination.",
+  usage: "[prompt]",
   cd: 5,
 };
 
