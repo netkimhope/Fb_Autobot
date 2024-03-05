@@ -108,14 +108,18 @@ module.exports.run = async function ({ api, event, args, Currencies }) {
           if (error) {
             console.error("Error saving gTTS:", error);
           } else {
-            api.sendMessage({
-              body: "💽 𝗩𝗼𝗶𝗰𝗲 𝗕𝗼𝘅 𝗔𝗜",
-              attachment: fs.createReadStream(gttsPath)
-            }, threadID);
-            
-            if (fs.existsSync(gttsPath)) {
-          fs.unlinkSync(gttsPath)
-       }
+    api.sendMessage({
+    body: "💽 𝗩𝗼𝗶𝗰𝗲 𝗕𝗼𝘅 𝗔𝗜",
+    attachment: fs.createReadStream(gttsPath)
+}, threadID, (err, info) => {
+    if (err) {
+        console.error("Error sending audio:", err);
+    } else {
+        if (fs.existsSync(gttsPath)) {
+            fs.unlinkSync(gttsPath);
+        }
+    }
+});
           }
         });
       }
