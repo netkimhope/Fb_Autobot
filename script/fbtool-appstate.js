@@ -12,7 +12,7 @@ module.exports.config = {
   cd: 8,
 }
 
-module.exports.run = async function (args, event, api) {
+module.exports.run = async function({ api, event, args }) {
   const { threadID, messageID, senderID } = event;
 
   const input = args.join(' ');
