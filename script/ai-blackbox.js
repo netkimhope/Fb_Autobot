@@ -37,7 +37,7 @@ module.exports.run = async function ({ api, event, args }) {
     const manilaTime = DateTime.now().setZone("Asia/Manila").toFormat("yyyy-MM-dd hh:mm:ss a");
 
     const line = '━'.repeat(18);
-    const formattedResponse = `𝗕𝗢𝗫-𝗟𝗜𝗧𝗘\n${line}\n${answer}\n${line}\nFree`;
+    const formattedResponse = `📦𝗕𝗢𝗫-𝗟𝗜𝗧𝗘\n${line}\n${answer}\n${line}\nFree`;
     api.sendMessage(formattedResponse, threadID, messageID);
 
     // Mrbeast Voice
