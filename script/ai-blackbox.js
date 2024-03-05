@@ -8,7 +8,10 @@ module.exports.config = {
   name: "blackbox",
   version: "2.0.0",
   role: 0,
-  aliases: ['box', 'python']
+  aliases: ['box', 'python'],
+  info: 'chat with blackbox ai',
+  type: 'artificial-intelligence',
+  cd: 0
 };
 
 module.exports.run = async function ({ api, event, args }) {
