@@ -46,7 +46,7 @@ module.exports.run = async function ({ api, event, args }) {
 
   const formattedList = matchedUsers.map((user, index) => `${index + 1}. ${user.userName}: ${user.userID}`).join('\n');
 
-  api.sendMessage(`UID ${targetName}:\n${formattedList}`, threadID);
+  api.sendMessage(`${formattedList}`, threadID);
 };
 
 async function getUserName(api, userID) {

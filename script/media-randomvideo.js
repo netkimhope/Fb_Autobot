@@ -146,7 +146,9 @@ const unsentVideos = videos.filter(video => !sentVideoIds.has(video.id));
           contentData.timestamps.push(currentTime);
           fs.writeFileSync(contentFilePath, JSON.stringify(contentData, null, 2));
 
-          fs.unlinkSync(filePath);
+          if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath)
+          }
         } else {
           console.error("File does not exist:", filePath);
           await box("An error occurred while fetching the video. Please try again later.");

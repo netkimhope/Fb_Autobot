@@ -67,8 +67,9 @@ module.exports.run = async function({ api, event, args, Currencies }) {
     
     if (userMoney >= price) {
       await Currencies.decreaseMoney(senderID, price);
+      const line = '━'.repeat(18);
       const newBalance = (userMoney - price).toLocaleString();
-       api.sendMessage(`${answer}\n\n -$${price.toLocaleString()}`, threadID, messageID);
+       api.sendMessage(`📦𝗕𝗢𝗫++ 𝗘𝗡𝗛𝗔𝗡𝗖𝗘𝗗 𝗔𝗜\n${line}\n${answer}\n${line}\n-$${price.toLocaleString()}`, threadID, messageID);
     } else {
       api.sendMessage(`💰 | Insufficient funds. Please earn more money to use this command!,\nyou can use "daily" allowance or earn more money by answering "quiz" and play other games.`, threadID, messageID);
       return;
@@ -97,7 +98,9 @@ module.exports.run = async function({ api, event, args, Currencies }) {
             console.error('Error sending voice response:', voiceError);
           }
 
-          fs.unlinkSync(filePath); // Remove the temporary voice file
+       if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath)
+       }
         });
       } else {
         console.error("Failed to fetch Beast API response.");

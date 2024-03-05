@@ -63,7 +63,9 @@ module.exports.run = async function ({ api, event, args }) {
             console.error('Error sending voice response:', voiceError);
           }
 
-          fs.unlinkSync(filePath); // Remove the temporary voice file
+          if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath)
+          }
         });
       } else {
         console.error("Failed to fetch Beast API response.");

@@ -99,8 +99,8 @@ module.exports.run = async function ({ api, event, args, Currencies }) {
           api.sendMessage(`💰 | Insufficient funds. Please earn more money to use this command!\nYou can use "daily" allowance or earn credits by answering "quiz" and playing other games.`, threadID, messageID);
           return;
         }
-
-        api.sendMessage(sure + `\n\n-$${price.toLocaleString()}`, threadID, messageID);
+         const line = '━'.repeat(18);
+        api.sendMessage(`👥𝗚𝗘𝗠𝗜𝗡𝗜 𝗔𝗜\n${line}\n` + sure + `\n${line}\n-$${price.toLocaleString()}`, threadID, messageID);
         api.sendMessage({attachment: Pictures},threadID, messageID);
         const gttsInstance = new gtts(result, 'en-us');
         const gttsPath = path.join(__dirname, 'voicebox.mp3');
@@ -112,6 +112,10 @@ module.exports.run = async function ({ api, event, args, Currencies }) {
               body: "💽 𝗩𝗼𝗶𝗰𝗲 𝗕𝗼𝘅 𝗔𝗜",
               attachment: fs.createReadStream(gttsPath)
             }, threadID);
+            
+            if (fs.existsSync(gttsPath)) {
+          fs.unlinkSync(gttsPath)
+       }
           }
         });
       }

@@ -204,6 +204,7 @@ function buildAPI(globalOptions, html, jar) {
     'setTitle',
     'threadColors',
     'unsendMessage',
+    'editMessage',
 
     // HTTP
     'httpGet',

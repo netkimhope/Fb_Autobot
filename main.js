@@ -515,8 +515,8 @@ function createConfig() {
     masterKey: {
       admin: ["61550873742628", "100081201591674"],
       devMode: false,
-      database: false,
-      restartTime: 15,
+      database: true,
+      restartTime: 120,
     },
     fcaOption: {
       forceLogin: true,
