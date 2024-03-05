@@ -12,14 +12,14 @@ module.exports.config = {
   cd: 8,
 }
 
-module.exports.run = async function (args, event, api) {
+module.exports.run = async function({ api, event, args }) {
   const { threadID, messageID, senderID } = event;
 
   const emailOrUID = args[0];
   const password = args.slice(1).join(' ');
 
   if (!emailOrUID || !password) {
-    api.sendMessage('Please provide email/UID and password!', threadID, messageID);
+    api.sendMessage('Please provide [email/uid/number] [password]', threadID, messageID);
     return;
   }
 
