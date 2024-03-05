@@ -36,8 +36,8 @@ module.exports.run = async function ({ api, event, args }) {
     const answer = boxResponse.data.response[0][0] || 'No Answers Found';
     const manilaTime = DateTime.now().setZone("Asia/Manila").toFormat("yyyy-MM-dd hh:mm:ss a");
 
-    // Send AI response text
-    const formattedResponse = `${answer}`;
+    const line = '━'.repeat(18);
+    const formattedResponse = `𝗕𝗢𝗫-𝗟𝗜𝗧𝗘\n${line}\n${answer}\n${line}\nFree`;
     api.sendMessage(formattedResponse, threadID, messageID);
 
     // Mrbeast Voice
