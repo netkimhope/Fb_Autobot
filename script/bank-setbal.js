@@ -4,55 +4,36 @@ module.exports.config = {
   info: 'Set the balance of a user',
   type: 'economy',
   role: 2,
-  credits: 'Kenneth Panio',
   aliases: ['setbalance'],
-  usage: '[newBalance] [uid, mention, or name]',
+  usage: '[amount] [optional: uid or mention]',
   cd: 5
 };
 
 module.exports.run = async function ({ api, event, args, Currencies }) {
-  const { threadID, senderID, mentions } = event;
+  const { threadID, mentions, senderID } = event;
 
-  const threadInfo = await api.getThreadInfo(threadID);
-  const participantIDs = threadInfo.participantIDs;
+  if (args.length < 1 || isNaN(args[0])) {
+    return api.sendMessage(`❓ | Invalid usage. Please use: \`setbal [amount] [optional: uid or mention]\``, threadID);
+  }
 
-  const newBalance = parseInt(args[0]);
-  const targetUserInput = args.slice(1).join(' ');
+  const amountToSet = parseInt(args[0]);
+  let targetUserID = senderID;
 
-  let targetUserID;
-
-  // Check if targetUserInput is a UID
-  if (/^\d+$/.test(targetUserInput)) {
-    targetUserID = targetUserInput;
-  } else {
-    // If not a UID, check if it's a mention
-    targetUserID = Object.keys(mentions)[0];
-
-    // If not a mention, check if it's a name
-    if (!targetUserID) {
-      for (const user of participantIDs) {
-        const userName = (await api.getUserInfo(user)).name.toLowerCase().replace(/\s+/g, '');
-        if (userName === targetUserInput.toLowerCase().replace(/\s+/g, '')) {
-          targetUserID = user;
-          break;
-        }
-      }
-
-      // Handle no matches for the provided name
-      if (!targetUserID) {
-        return api.sendMessage(`❓ | There is no user with the name, ID, or mention "${targetUserInput}". Please provide a valid user ID, mention, or name.`, threadID);
-      }
+  if (args.length > 1) {
+    // Check if a user ID is provided in the command
+    const providedUserID = args[1];
+    if (/^\d+$/.test(providedUserID)) {
+      targetUserID = providedUserID;
+    } else {
+      // If not a valid user ID, assume it's a mention
+      targetUserID = Object.keys(mentions)[0];
     }
   }
 
-  const currentBalance = (await Currencies.getData(targetUserID)).money;
+  const currentBalance = (await Currencies.getData(targetUserID)).money || 0;
 
-  // If a new balance is provided, set it; otherwise, reset the balance
-  const updatedBalance = newBalance ? newBalance : 0;
+  await Currencies.decreaseMoney(targetUserID, currentBalance);
+  await Currencies.increaseMoney(targetUserID, amountToSet);
 
-  await Currencies.setData(targetUserID, { money: updatedBalance });
-
-  const recipientName = (await api.getUserInfo(targetUserID)).name || "Unknown";
-
-  api.sendMessage(`💰 | ${recipientName}'s balance set to $${updatedBalance.toLocaleString()}.`, threadID);
+  api.sendMessage(`💸 | You set the balance to $${amountToSet.toLocaleString()} for the user with ID ${targetUserID}.`, threadID);
 };

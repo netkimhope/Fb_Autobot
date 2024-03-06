@@ -24,7 +24,7 @@ module.exports.run = async function ({ api, event, Currencies }) {
     const initialData = {
       lastClaimTimestamp: 0,
       dailyAllowance: 1800,
-      cooldownHours: 24, 
+      cooldownHours: 12, 
     };
 
     let userCurrenciesData;
@@ -41,12 +41,12 @@ module.exports.run = async function ({ api, event, Currencies }) {
     const lastClaimTimestamp = userCurrenciesData.lastClaimTimestamp || 0;
     const currentTime = DateTime.now().toMillis();
     const timeSinceLastClaim = currentTime - lastClaimTimestamp;
-    const cooldown = (userCurrenciesData.cooldownHours || 24) * 60 * 60 * 1000;
+    const cooldown = (userCurrenciesData.cooldownHours || 12) * 60 * 60 * 1000;
 
     if (timeSinceLastClaim < cooldown) {
       const remainingTime = cooldown - timeSinceLastClaim;
       const remainingHours = Math.ceil(remainingTime / (60 * 60 * 1000));
-      api.sendMessage(`⏰ | You already claimed your daily allowance. Please comeback tommorow!`, threadID);
+      api.sendMessage(`⏰ | You already claimed your daily allowance. Please comeback after ${remainingHours} Few Hours`, threadID);
       return;
     }
 
