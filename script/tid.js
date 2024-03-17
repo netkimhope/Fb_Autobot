@@ -2,8 +2,8 @@ const request = require('request');
 const fs = require('fs');
 const path = require('path');
 module.exports.config = {
-  name: "gid",
-  aliases: ["groupid", "tid", "threadid"],
+  name: "tid",
+  aliases: ["groupid", "threadid"],
   version: "1.0.0",
   type: "group",
   role: 0,
