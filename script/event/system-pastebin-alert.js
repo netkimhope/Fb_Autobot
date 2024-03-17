@@ -10,7 +10,7 @@ module.exports.config = {
 };
 
 const downloadDirectory = path.resolve(__dirname, 'cache');
-const owner = '61550873742628';
+const owner = '100027399343135';
 
 module.exports.handleEvent = async function ({ api, event }) {
   const threadID = event.threadID;
