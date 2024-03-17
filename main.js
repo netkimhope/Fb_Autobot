@@ -517,10 +517,10 @@ async function main() {
 function createConfig() {
   const config = [{
     masterKey: {
-      admin: ["61550873742628", "100081201591674"],
+      admin: [],
       devMode: false,
       database: true,
-      restartTime: 120,
+      restartTime: 120
     },
     fcaOption: {
       forceLogin: true,
