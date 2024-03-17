@@ -1,5 +1,5 @@
 module.exports.config = {
-  name: "briantest",
+  name: "braintest",
   aliases: ['trivia'],
   version: "1.0",
   role: 0,
