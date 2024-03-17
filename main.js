@@ -236,8 +236,12 @@ app.post('/login', async (req, res) => {
     });
   }
 });
-app.listen(5900, () => {
-  console.log(`Server is running at http://localhost: 5900`);
+const port = process.env.PORT || 3000;
+app.listen(port,() => {
+    console.log(`
+\x1b[34mAUTOBOT is online\x1b[0m
+
+apps is listening port ${port}`);
 });
 process.on('unhandledRejection', (reason) => {
   console.error('Unhandled Promise Rejection:', reason);
