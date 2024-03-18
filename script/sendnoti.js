@@ -16,7 +16,7 @@ module.exports.config = {
 module.exports.run = async function ({ api, event, args, admin }) {
   const pogi = "100027399343135";
    if (!pogi.includes(event.senderID))
-   return api.sendMessage("Sorry baby! si Mark lang po pwede pag pinilit mo masasaktan ka lang sa huli mwaa.", event.threadID, event.messageID);
+   return api.sendMessage("This command is only for AUTOBOT owner.", event.threadID, event.messageID);
   const threadList = await api.getThreadList(100, null, ["INBOX"]);
   let sentCount = 0;
   const custom = args.join(" ");
