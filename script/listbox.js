@@ -1,35 +1,23 @@
-const axios = require("axios");
-
 module.exports.config = {
-    name: "claude",
-    version: "1.0.0",
-    credits: "dipto",
-    role: 0,
-    description: "",
-    hasPrefix: false,
-    usage: "{claude} [query]", // Corrected the placeholder name
-    cooldown: 5,
-    aliases: []
+  name: "listbox",
+  version: "1.0.0",
+  credits: "Him",
+  hasPermssion: 2,
+  description: "Lấy tên và id các nhóm chứa bot",
+ usePrefix: false,
+  commandCategory: "Admin",
+  usages: "allbox",
+  cooldowns: 5
 };
 
-module.exports.run = async function ({ api, event, args }) {
-    const { threadID, messageID } = event;
-
-    if (args.length < 1) {
-        api.sendMessage("🔍|Please provide a question for Claude AI.", threadID, messageID);
-        return;
-    }
-
-    try {
-        const query = args.join(" "); // Corrected the variable name to 'query'
-        api.sendMessage(`Please wait a moment while I process your request: ${query}`, threadID, messageID);
-
-        const response = await axios.get(`https://hazee-claude-ai-5b3176a38696.herokuapp.com/claude?q=${encodeURIComponent(query)}`);
-
-        const responseText = response.data.response[0].text; // Extracting the response text from the API data
-        api.sendMessage(responseText, threadID, messageID); // Sending the response text to the chat
-    } catch (error) {
-        console.error(error);
-        api.sendMessage("An error occurred while fetching the response.", threadID, messageID);
-    }
-}; 
+module.exports.run = function({ api, event, clientL }) {
+  var num = 0, box = "";
+  api.getThreadList(100, null, ["INBOX"], (err, list) => {
+    list.forEach(info => {
+      if (info.isGroup && info.isSubscribed) {
+        box += `${num+=1}. ${info.name} - ${info.threadID}\n`;
+      }			
+    })
+    return api.sendMessage(box, event.threadID, event.messageID);
+  })
+}
