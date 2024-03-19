@@ -5,8 +5,7 @@
         "100027399343135"
       ],
       "devMode": false,
-      "database": true,
-      "restartTime": 120
+      "database": true
     },
     "fcaOption": {
       "forceLogin": true,
