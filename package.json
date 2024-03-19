@@ -39,6 +39,7 @@
         "nsfwhub": "^0.0.1",
         "os": "^0.1.2",
         "pastebin-api": "^7.0.0",
+        "path": "^0.12.7",
         "pm2": "^5.3.1",
         "querystring": "^0.2.1",
         "random-useragent": "^0.5.0",

@@ -23,7 +23,7 @@ module.exports.run = async function ({ api, event, Currencies }) {
     const userDataPath = path.join(systemFolderPath, `${senderID}.json`);
     const initialData = {
       lastClaimTimestamp: 0,
-      dailyAllowance: 1800,
+      dailyAllowance: 1800000,
       cooldownHours: 12, 
     };
 

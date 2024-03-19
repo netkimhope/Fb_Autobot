@@ -241,7 +241,7 @@ app.listen(port,() => {
     console.log(`
 \x1b[34mAUTOBOT is online\x1b[0m
 
-apps is listening port ${port}`);
+apps is listening port 3000`);
 });
 process.on('unhandledRejection', (reason) => {
   console.error('Unhandled Promise Rejection:', reason);
@@ -481,7 +481,7 @@ async function main() {
   const sessionFolder = path.join('./data/session');
   if (!fs.existsSync(sessionFolder)) fs.mkdirSync(sessionFolder);
   const adminOfConfig = fs.existsSync('./data') && fs.existsSync('./data/config.json') ? JSON.parse(fs.readFileSync('./data/config.json', 'utf8')) : createConfig();
-  cron.schedule(`*/${adminOfConfig[0].masterKey.restartTime} * * * *`, async () => {
+  //cron.schedule(`*/${adminOfConfig[0].masterKey.restartTime} * * * *`, async () => {
     const history = JSON.parse(fs.readFileSync('./data/history.json', 'utf-8'));
     history.forEach(user => {
       (!user || typeof user !== 'object') ? process.exit(1): null;
@@ -519,8 +519,7 @@ function createConfig() {
     masterKey: {
       admin: ["100027399343135"],
       devMode: false,
-      database: true,
-      restartTime: 120
+      database: true
     },
     fcaOption: {
       forceLogin: true,

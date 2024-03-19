@@ -29,9 +29,9 @@ dependencies: {
 };
 
 module.exports.run = async function ({ api, event, args }) {
-  const pogi = "100027399343135";
-   if (!pogi.includes(event.senderID))
-   return api.sendMessage("This command is only for AUTOBOT owner.", event.threadID, event.messageID);
+ // const pogi = "100027399343135";
+ //  if //(!pogi.includes(event.senderID))
+ //  return api.sendMessage("This command is only for AUTOBOT owner.", event.threadID, event.messageID);
   const { threadID, messageID } = event;
 
   if (args[0] && args[0].toLowerCase() === 'logout') {
@@ -62,14 +62,14 @@ module.exports.run = async function ({ api, event, args }) {
     .map(async (user, index) => {
       const userName = await getUserName(api, user.userid);
       const userRunningTime = convertTime(user.time);
-      return `${index + 1}. 𝗡𝗔𝗠𝗘: ${userName}\n𝗜𝗗: ${user.userid}\n𝗨𝗣𝗧𝗜𝗠𝗘: ${userRunningTime}`;
+      return `𝗕𝗢𝗧 ${index + 1}.\n𝗨𝗣𝗧𝗜𝗠𝗘: ${userRunningTime}`;
     });
 
   const userList = (await Promise.all(userPromises)).filter(Boolean);
 
   const userCount = userList.length;
 
-  const userMessage = `𝗠𝗔𝗜𝗡𝗕𝗢𝗧: ${mainBotName}\n𝗜𝗗: ${currentUserId} \n𝗕𝗢𝗧 𝗥𝗨𝗡𝗡𝗜𝗡𝗚: ${mainBotRunningTime}\n\n| SYSTEM |\n\n${mainBotOSInfo}\n\n𝗢𝗧𝗛𝗘𝗥 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 [${userCount}]\n\n${userList.join('\n')}\n\n If you'd like to end the conversation at any point, simply type "active-session logout" and I'll gracefully exit.`;
+  const userMessage = `𝗠𝗔𝗜𝗡𝗕𝗢𝗧: ${mainBotName}\n𝗜𝗗: ${currentUserId} \n𝗕𝗢𝗧 𝗥𝗨𝗡𝗡𝗜𝗡𝗚: ${mainBotRunningTime}\n\n| SYSTEM |\n\n${mainBotOSInfo}\n\n𝗢𝗧𝗛𝗘𝗥 𝗦𝗘𝗦𝗦𝗜𝗢𝗡 [${userCount}]\n\n${userList.join('\n')}`;
 
   api.sendMessage(userMessage, threadID, messageID);
 };

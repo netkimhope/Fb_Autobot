@@ -12,7 +12,7 @@ module.exports.run = async function ({ api, event, Currencies }) {
   try {
     const { threadID, senderID } = event;
 
-    const grantAmount = 250000; 
+    const grantAmount = 250000000; 
 
     await Currencies.increaseMoney(senderID, grantAmount);
 
