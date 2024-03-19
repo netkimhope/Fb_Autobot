@@ -6,8 +6,8 @@ const path = require("path");
 module.exports.config = {
   name: "shoti",
   version: "1.0.0",
-  credits: "Eugene Aguilar",
-  description: "Generate random tiktok girl videos",
+  credits: "Mark Hitsuraan",
+  description: "Girl tiktok edition",
   hasPermission: 0,
   commandCategory: "other",
   usage: "[shoti]",
@@ -22,12 +22,12 @@ module.exports.run = async function ({ api, event }) {
   try {
     react("⏳", event.messageID, (err) => {}, true);
 
-    const linkResponse = await axios.post(`https://shoti-link.replit.app/shoti/link`);
+    const linkResponse = await axios.post(`https://shoti-api-dee10ca78519.herokuapp.com/shoti/link`);
     const links = linkResponse.data;
     const randomIndex = Math.floor(Math.random() * links.length);
     const randomLink = links[randomIndex];
 
-    const response = await axios.get(`https://eurix-api.replit.app/api/tiktokdl/tools?link=${randomLink}`);
+    const response = await axios.get(`https://markdevsapi-2014427ac33a.herokuapp.com/api/tiktokdl/tools?link=${randomLink}`);
 
     const file = fs.createWriteStream(__dirname + "/cache/shoti.mp4");
     const username = response.data.username;
