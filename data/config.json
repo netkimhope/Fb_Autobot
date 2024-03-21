@@ -6,7 +6,7 @@
       ],
       "devMode": false,
       "database": true,
-      "restartTime": 15
+      "restartTime": 60
     },
     "fcaOption": {
       "forceLogin": true,
