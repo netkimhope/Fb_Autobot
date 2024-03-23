@@ -1,63 +1,34 @@
 module.exports.config = {
   name: "uid",
-  version: "1.2.0",
+  version: "1.0.0",
   role: 0,
-  aliases: ['id', 'userid', 'fbid', 'fb-id']
+  credits: "Hinata",
+  description: "Get User ID.",
+  cooldown: 5,
+  hasPrefix: false,
 };
 
-module.exports.run = async function ({ api, event, args }) {
-  const { threadID, mentions, senderID } = event;
+module.exports.run = async function ({ api, event, args, Users }) {
+  let { threadID, messageID } = event;
+  let uid = event.senderID; // Default to the sender's ID if no specific condition is met
 
-  // Check if a name is provided
-  const targetName = args.join(' ');
-
-  if (!targetName) {
-    api.sendMessage(`Your User ID: ${senderID}`, threadID);
-    return;
-  }
-
-  // If the user is mentioned, extract the user ID
-  if (Object.keys(mentions).length > 0) {
-    for (const mentionID in mentions) {
-      const mentionName = mentions[mentionID].replace('@', '');
-      api.sendMessage(`${mentionName}: ${mentionID}`, threadID);
+  if (args.length === 0) {
+    // If no arguments provided, default to sender's ID
+    uid = event.senderID;
+  } else if (event.type === "message_reply") {
+    // If the message is a reply, get the sender's ID from the replied message
+    uid = event.messageReply.senderID;
+  } else if (args.join(" ").includes("@")) {
+    // If the message contains a mention (@), get the ID of the mentioned user
+    const mention = args.find(arg => arg.startsWith("@"));
+    if (mention) {
+      const mentionedUserID = Object.keys(event.mentions)[0];
+      if (mentionedUserID) {
+        uid = mentionedUserID;
+      }
     }
-    return;
   }
 
-  const threadInfo = await api.getThreadInfo(threadID);
-  const participantIDs = threadInfo.participantIDs;
-
-  const matchedUserIDs = await Promise.all(participantIDs.map(async (participantID) => {
-    const userName = await getUserName(api, participantID);
-    return {
-      userID: participantID,
-      userName: userName.toLowerCase(),
-    };
-  }));
-
-  const matchedUsers = matchedUserIDs.filter(user => user.userName.includes(targetName.toLowerCase()));
-
-  // Handle no matches for the provided name
-  if (matchedUsers.length === 0) {
-    api.sendMessage(`❓ | There is no user with the name "${targetName}" in the group.`, threadID);
-    return;
-  }
-
-  const formattedList = matchedUsers.map((user, index) => `${index + 1}. ${user.userName}: ${user.userID}`).join('\n');
-
-  api.sendMessage(`${formattedList}`, threadID);
+  // Send the user ID as a message
+  await api.sendMessage(`User ID: ${uid}`, threadID, messageID);
 };
-
-async function getUserName(api, userID) {
-  try {
-    const userInfo = await api.getUserInfo(userID);
-    if (userInfo && userInfo[userID]) {
-      return userInfo[userID].name.toLowerCase();
-    } else {
-      return "Unknown";
-    }
-  } catch (error) {
-    return "Unknown";
-  }
-}

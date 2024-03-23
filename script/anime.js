@@ -1,36 +1,42 @@
-const fs = require('fs');
 const axios = require('axios');
-const path = require('path');
-
+const fs = require('fs');
 module.exports.config = {
-  name: "anime",
-  version: "9.0.4",
-  hasPermssion: 0,
-  credits: "Eugene Aguilar",
-  description: "waifu pic nsfw",
-  commandCategory: "anime",
-  usages: "anime <name>",
-  cooldowns: 3,
+  name: 'anime',
+  version: '1.0.0',
+  role: 0,
+  aliases: ['hentai']
 };
-
-module.exports.run = async function ({ api, event, args }) {
+module.exports.run = async function({
+  api,
+  event,
+  args
+}) {
   try {
-    const name = args.join(" ");
-    if (!name) {
-      return api.sendMessage(`Please enter an anime name`, event.threadID, event.messageID);
+    const input = args.join(' ');
+    if (!input) {
+      const message = `Here's the list of anime categories:\n\nCategory: nsfw\nType:\n• waifu\n• neko\n• trap\n• blowjob\n\nCategory: sfw\nType:\n• waifu\n• neko\n• shinobu\n• megumin\n• bully\n• cuddle\n• cry\n• hug\n• awoo\n• kiss\n• lick\n• pat\n• smug\n• bonk\n• yeet\n• blush\n• smile\n• wave\n• highfive\n• handhold\n• nom\n• bite\n• glomp\n• slap\n• kill\n• kick\n• happy\n• wink\n• poke\n• dance\n• cringe\n\nUsage: anime category - type`;
+      api.sendMessage(message, event.threadID, event.messageID);
+    } else {
+      const split = input.split('-').map(item => item.trim());
+      const choice = split[0];
+      const category = split[1];
+      const time = new Date();
+      const timestamp = time.toISOString().replace(/[:.]/g, "-");
+      const pathPic = __dirname + '/cache/' + `${timestamp}_waifu.png`;
+      const {
+        data
+      } = await axios.get(`https://api.waifu.pics/${choice}/${category}`);
+      const picture = data.url;
+      const getPicture = (await axios.get(picture, {
+        responseType: 'arraybuffer'
+      })).data;
+      fs.writeFileSync(pathPic, Buffer.from(getPicture, 'utf-8'));
+      api.sendMessage({
+        body: '',
+        attachment: fs.createReadStream(pathPic)
+      }, event.threadID, () => fs.unlinkSync(pathPic), event.messageID);
     }
-
-    const response = await axios.get(`https://api.waifu.pics/sfw/${name}`);
-    const img = response.data.url;
-
-    let filePath = path.join(__dirname, `cache/${event.senderID}.jpg`);
-
-    const stream = await axios.get(img, { responseType: 'arraybuffer' });
-
-    fs.writeFileSync(filePath, Buffer.from(stream.data, 'binary'));
-
-    await api.sendMessage({ body: "Here's your anime pic", attachment: fs.createReadStream(filePath) }, event.threadID, event.messageID);
   } catch (error) {
-    api.sendMessage(`An error occurred:\n${error}`, event.threadID, event.messageID);
+    api.sendMessage(`Error in the anime command: ${error.message}`);
   }
 };
