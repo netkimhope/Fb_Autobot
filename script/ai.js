@@ -16,7 +16,7 @@ module.exports = {
            async function r(msg){
                  api.sendMessage(msg, event.threadID, event.messageID)
              }
-            if(!prompt) return r("Please provide a question first.\n\nIf you want to reset the conversation with “ai“ you can use “ai clear”");
+            if(!prompt) return r("Please provide a question first.");
             r("Please bear with me while I ponder your request...");
             try {
                 const res = await get(url+"/gpt4?prompt="+prompt+"&uid="+id);

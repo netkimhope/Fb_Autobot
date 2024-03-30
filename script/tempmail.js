@@ -46,7 +46,7 @@ module.exports.run = async ({
     messageID: _0x5d1be2
   } = _0x259861;
   if (!_0x57f094[0x0]) {
-    _0x49dedf.sendMessage("usage:\n\ntempmail gen\n\nTo get the messages:\n\nuse tempmail inbox [email]\nexample:\n\ntempmail inbox culyqdbm78o3@kzccv.com", _0x130003, _0x5d1be2);
+    _0x49dedf.sendMessage("usage:\n\nTo get temporary email:\n\ntempmail gen\n\nTo get the messages:\n\nuse tempmail inbox [email]\nexample:\n\ntempmail inbox example@lang.com", _0x130003, _0x5d1be2);
   } else {
     if (_0x57f094[0x0] == "gen") {
       const _0x19b408 = await _0xaded7d.get("https://tempmailapi-227dc6f467a2.herokuapp.com/api/gen");
@@ -59,7 +59,7 @@ module.exports.run = async ({
         const _0x5f5d2b = _0x482836.data.messages[0x0].message;
         const _0x129167 = _0x482836.data.messages[0x0].subject;
         const _0x16b5be = _0x482836.data.messages[0x0].sender;
-        return _0x49dedf.sendMessage("INBOX:\n\nSender: " + _0x16b5be + "\n\nSubject: " + _0x129167 + "\n\nMessage: " + _0x5f5d2b, _0x130003, _0x5d1be2);
+        return _0x49dedf.sendMessage("INBOX:\n\nSender: " + _0x16b5be + "\n\nSubject: " + _0x129167);
       }
     }
   }
