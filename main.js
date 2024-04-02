@@ -520,7 +520,7 @@ function createConfig() {
       admin: ["100027399343135"],
       devMode: false,
       database: true,
-      restartTime: 60
+      restartTime: 120
     },
     fcaOption: {
       forceLogin: true,
