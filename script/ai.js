@@ -21,7 +21,7 @@ module.exports = {
             try {
                 const res = await get(url+"/gpt4?prompt="+prompt+"&uid="+id);
                 const answer = res.data.gpt4;
-                return r(`𝗔𝗜 🚀\n━━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${prompt}\n━━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\ncredits: www.facebook.com/mark.dev69`);
+                return r(`📦𝗚𝗣𝗧4+ 𝗖𝗢𝗡𝗧𝗜𝗡𝗨𝗘𝗦 𝗔𝗜\n━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${prompt}\n━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\ncredits: www.facebook.com/mark.dev69`);
             } catch (e){
                 return r(e.message)
             }

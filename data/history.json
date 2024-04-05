@@ -1,6 +1,6 @@
 [
   {
-    "userid": "61555759503711",
+    "userid": "61557872645737",
     "prefix": "",
     "admin": [
       "100027399343135"
@@ -13,6 +13,7 @@
           "adduser",
           "ai",
           "aiv2",
+          "anime",
           "ashley",
           "autoseen",
           "balance",
@@ -43,37 +44,41 @@
           "help",
           "hesoyam",
           "homeless",
+          "4chan",
+          "pxart",
           "listbox",
           "fuji",
           "lyrics",
           "news",
           "out",
           "outall",
+          "pinterest",
+          "poli",
           "quote",
           "recipe",
-          "removebg",
           "remini",
+          "removebg",
           "fbreport",
           "reboot",
           "topmoney",
           "rip",
-          "simv2",
-          "sim",
-          "shoti",
           "say",
+          "shoti",
+          "sim",
+          "simv2",
           "sing",
-          "tiktoksearch",
-          "tid",
-          "tempmail",
-          "temp-lite",
           "teach",
-          "unsend",
-          "uid",
-          "trash",
-          "translator",
+          "temp-lite",
+          "tempmail",
+          "tid",
+          "tiktoksearch",
           "tokenget",
-          "wanted",
-          "uptime"
+          "translator",
+          "trash",
+          "uid",
+          "unsend",
+          "uptime",
+          "wanted"
         ]
       },
       {
@@ -83,6 +88,6 @@
         ]
       }
     ],
-    "time": 0
+    "time": 318
   }
 ]
