@@ -718,14 +718,14 @@
         "id": "100027399343135",
         "name": "Mark Hitsuraan",
         "money": 0,
-        "exp": 6,
+        "exp": 8,
         "level": 1
       },
       {
         "id": "61557872645737",
         "name": "Kiana Wu",
         "money": 0,
-        "exp": 1,
+        "exp": 2,
         "level": 1
       },
       {
@@ -977,7 +977,7 @@
         "id": "61555759503711",
         "name": "Facebook user",
         "money": 0,
-        "exp": 2,
+        "exp": 4,
         "level": 1
       },
       {
@@ -3511,7 +3511,7 @@
         "id": "100022680342969",
         "name": "Soyeon",
         "money": 0,
-        "exp": 0,
+        "exp": 1,
         "level": 1
       },
       {
@@ -4813,7 +4813,7 @@
         "id": "100080430170129",
         "name": "Zaharah Abbas Dirgantara",
         "money": 0,
-        "exp": 0,
+        "exp": 2,
         "level": 1
       },
       {
