@@ -36,7 +36,7 @@ module.exports.handleEvent = async function ({ api, event }) {
     try {
         if (!isEnabled) return; 
 
-        const message = event.body.toLowerCase();
+        const message = event.body;
         const response = await axios.get(`http://ger2-6.deploy.sbs:5099/sim?ask=${encodeURIComponent(message)}`);
         const result = response.data.respond;
         api.sendMessage(result, event.threadID, event.messageID);
