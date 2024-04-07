@@ -3,7 +3,7 @@ const url = "https://combined-api-a2153f3cf0b5.herokuapp.com";
 module.exports = {
     config: {
         name: "ai",
-        aliases: [],
+        aliases: ["gpt4","Gpt4"],
         version: "1.0.0",
         role: 0,
         credits: "Mark Hitsuraan",

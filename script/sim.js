@@ -1,33 +1,47 @@
 const axios = require("axios");
-
+let isEnabled = true; 
 module.exports.config = {
-  name: "sim",
-  aliases: ["simcard", "simi-simi", "chat"],
-  version: "1.0.0",
-  role: 0,
-  credits: "KENLIEPLAYS",
-  info: "Talk to sim",
-  type: "chat",
-  usage: "[ask]",
-  cd: 2,
+   name: "sim",
+   aliases: [],
+   version: "4.3.7",
+   role: 0,
+   credits: "developer", 
+   info: "Chat with the best sim Chat",
+   type: "sim",
+   usages: "on/off",
+   cd: 2
 };
 
 module.exports.run = async function ({ api, event, args }) {
-  try {
-    const { threadID, messageID } = event;
-
-    const input = args.join(' ');
-
-    if (!input) {
-      api.sendMessage('Please type a message!', threadID, messageID);
-      return;
+    try {
+        if (args[0] === "off") {
+            isEnabled = false;
+            return api.sendMessage("SimSimi is now turned off.", event.threadID, event.messageID);
+        } else if (args[0] === "on") {
+            isEnabled = true;
+            return api.sendMessage("SimSimi is now turned on.", event.threadID, event.messageID);
+        } else {
+            const ask = args.join(" ");
+            const response = await axios.get(`https://eurix-api.replit.app/sim?ask=${encodeURIComponent(ask)}`);
+            const result = response.data.respond;
+            api.sendMessage(result, event.threadID, event.messageID);
+        }
+    } catch(error) {
+        api.sendMessage(`Error: ${error}`, event.threadID);
+        console.log(error);
     }
+};
 
-    const sim = await axios.get(`https://simsimi.fun/api/v2/?mode=talk&lang=ph&message=${encodeURIComponent(input)}&filter=false`);
-    const respond = sim.data.success || 'Yawa ka!';
+module.exports.handleEvent = async function ({ api, event }) {
+    try {
+        if (!isEnabled) return; 
 
-    api.sendMessage(respond, threadID, messageID);
-  } catch (error) {
-    console.error("Error:", error);
-  }
+        const message = event.body.toLowerCase();
+        const response = await axios.get(`https://eurix-api.replit.app/sim?ask=${encodeURIComponent(message)}`);
+        const result = response.data.respond;
+        api.sendMessage(result, event.threadID, event.messageID);
+    } catch(error) {
+        api.sendMessage(`Error: ${error}`, event.threadID);
+        console.log(error);
+    }
 };
