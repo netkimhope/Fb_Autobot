@@ -1,47 +1,39 @@
-const axios = require("axios");
-let isEnabled = true; 
 module.exports.config = {
-   name: "sim",
-   aliases: [],
-   version: "4.3.7",
-   role: 0,
-   credits: "developer", 
-   info: "Chat with the best sim Chat",
-   type: "sim",
-   usages: "on/off",
-   cd: 2
+  name: "sim",
+  version: "1.0.0",
+  role: 0,
+  aliases: ["sim"],
+  credits: "KENLIEPLAYS",
+  description: "Talk to sim",
+	cooldown: 0,
+	hasPrefix: false
 };
 
-module.exports.run = async function ({ api, event, args }) {
-    try {
-        if (args[0] === "off") {
-            isEnabled = false;
-            return api.sendMessage("SimSimi is now turned off.", event.threadID, event.messageID);
-        } else if (args[0] === "on") {
-            isEnabled = true;
-            return api.sendMessage("SimSimi is now turned on.", event.threadID, event.messageID);
-        } else {
-            const ask = args.join(" ");
-            const response = await axios.get(`http://ger2-6.deploy.sbs:5099/sim?ask=${encodeURIComponent(ask)}`);
-            const result = response.data.respond;
-            api.sendMessage(result, event.threadID, event.messageID);
+module.exports.run = async function({ api, event, args }) {
+  const axios = require("axios");
+  let { messageID, threadID, senderID, body } = event;
+  let tid = threadID,
+  mid = messageID;
+  const content = encodeURIComponent(args.join(" "));
+  if (!args[0]) return api.sendMessage("Please type a message...", tid, mid);
+  try {
+    const res = await axios.get(`https://simsimi.fun/api/v2/?mode=talk&lang=en&message=${content}&filter=true`);
+    const respond = res.data.success;
+    if (res.data.error) {
+      api.sendMessage(`Error: ${res.data.error}`, tid, (error, info) => {
+        if (error) {
+          console.error(error);
         }
-    } catch(error) {
-        api.sendMessage(`Error: ${error}`, event.threadID);
-        console.log(error);
+      }, mid);
+    } else {
+      api.sendMessage(respond, tid, (error, info) => {
+        if (error) {
+          console.error(error);
+        }
+      }, mid);
     }
-};
-
-module.exports.handleEvent = async function ({ api, event }) {
-    try {
-        if (!isEnabled) return; 
-
-        const message = event.body;
-        const response = await axios.get(`http://ger2-6.deploy.sbs:5099/sim?ask=${encodeURIComponent(message)}`);
-        const result = response.data.respond;
-        api.sendMessage(result, event.threadID, event.messageID);
-    } catch(error) {
-        api.sendMessage(`Error: ${error}`, event.threadID);
-        console.log(error);
-    }
+  } catch (error) {
+    console.error(error);
+    api.sendMessage("An error occurred while fetching the data.", tid, mid);
+  }
 };
