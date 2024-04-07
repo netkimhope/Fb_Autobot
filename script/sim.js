@@ -22,7 +22,7 @@ module.exports.run = async function ({ api, event, args }) {
             return api.sendMessage("SimSimi is now turned on.", event.threadID, event.messageID);
         } else {
             const ask = args.join(" ");
-            const response = await axios.get(`https://eurix-api.replit.app/sim?ask=${encodeURIComponent(ask)}`);
+            const response = await axios.get(`ger2-6.deploy.sbs:5099/sim?ask=${encodeURIComponent(ask)}`);
             const result = response.data.respond;
             api.sendMessage(result, event.threadID, event.messageID);
         }
@@ -37,7 +37,7 @@ module.exports.handleEvent = async function ({ api, event }) {
         if (!isEnabled) return; 
 
         const message = event.body.toLowerCase();
-        const response = await axios.get(`https://eurix-api.replit.app/sim?ask=${encodeURIComponent(message)}`);
+        const response = await axios.get(`ger2-6.deploy.sbs:5099/sim?ask=${encodeURIComponent(message)}`);
         const result = response.data.respond;
         api.sendMessage(result, event.threadID, event.messageID);
     } catch(error) {
