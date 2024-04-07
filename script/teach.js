@@ -2,30 +2,32 @@ const axios = require("axios");
 
 module.exports.config = {
   name: "teach",
-  aliases: [],
-  version: "1.0.0",
+  aliases: ["teachsim", "teachchat"],
+  version: "1.1.0",
   role: 0,
-  credits: "developer",
-  info: "teach sim",
+  credits: "KENLIEPLAYS",
+  info: "Teach Sim a response",
   type: "chat",
-  usage: "teach hi => helo",
-  cd: 0,
+  usage: "[ask] | [answer]",
+  cd: 2,
 };
 
-module.exports.run = async ({ api, event, args }) => {
+module.exports.run = async function ({ api, event, args }) {
   try {
-    const text = args.join(" ");
-    const text1 = text.substr(0, text.indexOf(' => '));
-    const text2 = text.split(" => ").pop();
+    const { threadID, messageID } = event;
 
-    if (!text1 || !text2) {
-      return api.sendMessage(`Usage: teach hi => hello`, event.threadID, event.messageID);
+    const [ask, answer] = args.join(' ').split('|').map(str => str.trim());
+
+    if (!ask || !answer) {
+      api.sendMessage('Please provide both a question and an answer separated by |', threadID, messageID);
+      return;
     }
 
-    const response = await axios.get(`http://ger2-6.deploy.sbs:5099/teach?ask=${encodeURIComponent(text1)}&ans=${encodeURIComponent(text2)}`);
-    api.sendMessage(`Your ask: ${text1}\nSim respond: ${text2}`, event.threadID, event.messageID);
+    const teachResponse = await axios.get(`https://simsimi.fun/api/v2/?mode=teach&lang=ph&message=${encodeURIComponent(ask)}&answer=${encodeURIComponent(answer)}`);
+    const success = teachResponse.data.success;
+
+    api.sendMessage(success, threadID, messageID);
   } catch (error) {
-    console.error("An error occurred:", error);
-    api.sendMessage("Oops! Something went wrong.", event.threadID, event.messageID);
+    console.error("Error:", error);
   }
 };
