@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const balanceDataPath = process.cwd() + "/db/balance.json";
 
-const deductionAmount = 200; 
+const deductionAmount = 150; 
 
 module.exports.config = {
   name: "spotify",
@@ -21,7 +21,7 @@ module.exports.run = async function({ api, event, args, message }) {
   const { threadID, messageID, senderID } = event; 
   const songName = args.join(" ");
   if (!songName) {
-    return api.sendMessage("Please provide a song name.", threadID);
+    return api.sendMessage("Please provide a song name. This command cost $150", threadID);
   }
 
   const loadingMessage = await api.sendMessage("downloading your song🕐..", threadID);
@@ -31,7 +31,7 @@ module.exports.run = async function({ api, event, args, message }) {
     let balanceData = JSON.parse(fs.readFileSync(balanceDataPath, 'utf8'));
     if (balanceData[senderID] < deductionAmount) {
       
-      await api.sendMessage("Your balance is not enough to perform this action.", threadID);
+      await api.sendMessage("Your balance is not enough, please use "daily" or play games to earn more coins., threadID);
       return;
     }
     balanceData[senderID] -= deductionAmount;
