@@ -90,5 +90,94 @@
       }
     ],
     "time": 0
+  },
+  {
+    "userid": "61555759503711",
+    "prefix": "",
+    "admin": [
+      "100027399343135"
+    ],
+    "blacklist": [],
+    "enableCommands": [
+      {
+        "commands": [
+          "active-session",
+          "adduser",
+          "ai",
+          "aiv2",
+          "anime",
+          "ashley",
+          "autobot",
+          "autoseen",
+          "balance",
+          "bard",
+          "besh",
+          "blackbox",
+          "braintest",
+          "calculate",
+          "chords",
+          "chrome",
+          "claude",
+          "cmds",
+          "daily",
+          "dalle",
+          "dictionary",
+          "edit",
+          "emojimix",
+          "font",
+          "colorroulette",
+          "dice",
+          "horse",
+          "numberguess",
+          "emojiroulette",
+          "rps",
+          "slot",
+          "give",
+          "fbshield",
+          "help",
+          "homeless",
+          "hesoyam",
+          "listbox",
+          "fuji",
+          "lyrics",
+          "news",
+          "out",
+          "outall",
+          "poli",
+          "quote",
+          "recipe",
+          "remini",
+          "removebg",
+          "fbreport",
+          "reboot",
+          "topmoney",
+          "rip",
+          "shoti",
+          "sim",
+          "say",
+          "simv2",
+          "sing",
+          "temp-lite",
+          "tempmail",
+          "teach",
+          "tid",
+          "tiktoksearch",
+          "tokenget",
+          "translator",
+          "trash",
+          "unsend",
+          "uid",
+          "uptime",
+          "wanted"
+        ]
+      },
+      {
+        "handleEvent": [
+          "auto-downloader",
+          "pastebin-alert"
+        ]
+      }
+    ],
+    "time": 0
   }
 ]
