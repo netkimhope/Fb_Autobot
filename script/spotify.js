@@ -37,7 +37,7 @@ module.exports.run = async function({ api, event, args, message }) {
     balanceData[senderID] -= deductionAmount;
     fs.writeFileSync(balanceDataPath, JSON.stringify(balanceData));
 
-    const spotifyResponse = await axios.get(`https://deku-rest-api.onrender.com/spotify?q=${encodeURIComponent(songName)}`);
+    const spotifyResponse = await axios.get(`https://combined-api-a2153f3cf0b5.herokuapp.com/spotify?q=${encodeURIComponent(songName)}`);
     const trackURL = spotifyResponse.data.result;
     if (!trackURL) {
       throw new Error("No track found for the provided song name.");
