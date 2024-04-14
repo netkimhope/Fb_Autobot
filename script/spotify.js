@@ -9,7 +9,7 @@ module.exports.config = {
   name: "spotify",
   version: "69",
   hasPermission: 0,
-  credits: "Kshitiz api by deku", // kira
+  credits: "unknown", // kira
   description: "play song from spotify",
   usages: "Spotify <title>",
   usePrefix: false,
