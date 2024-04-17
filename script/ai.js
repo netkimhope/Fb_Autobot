@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 module.exports.config = {
-    name: "ai",
+    name: "aiv2",
     version: "1.0.0",
     hasPermssion: 0,
     credits: "Jonell Magallanes", //API BY MARK
