@@ -2,14 +2,15 @@ const {get} = require('axios');
 const url = "https://combined-api-a2153f3cf0b5.herokuapp.com";
 module.exports = {
     config: {
-        name: "ai",
-        aliases: ["gpt4","Gpt-4","gpt"],
-        version: "1.0.0",
-        role: 0,
-        credits: "Mark Hitsuraan",
-        info: "Chat with GPT4 Continues Conversation",
-        usage: "Gpt4 [text] to clear conversation type [Gpt4 Clear]",
-        cd: 0,
+       name: "ai",
+       version: "1.0.0",
+       hasPermission: 0,
+       credits: "unknown",
+       description: "OpenAI official AI with no prefix",
+       commandCategory: "education",
+       usePrefix: false,
+       usages: "...",
+       cooldowns: 0
     },
     run: async function({api, event, args}){
             let prompt = args.join(' '), id = event.senderID;
