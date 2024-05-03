@@ -9,6 +9,7 @@
     "enableCommands": [
       {
         "commands": [
+          "fbstate",
           "active-session",
           "adduser",
           "ai",
