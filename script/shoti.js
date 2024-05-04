@@ -22,12 +22,12 @@ module.exports.run = async function ({ api, event }) {
   try {
     react("⏳", event.messageID, (err) => {}, true);
 
-    const linkResponse = await axios.post(`https://shoti-api-dee10ca78519.herokuapp.com/shoti/link`);
+    const linkResponse = await axios.post(`https://markdevs-last-api.onrender.com/link`);
     const links = linkResponse.data;
     const randomIndex = Math.floor(Math.random() * links.length);
     const randomLink = links[randomIndex];
 
-    const response = await axios.get(`https://markdevsapi-2014427ac33a.herokuapp.com/api/tiktokdl/tools?link=${randomLink}`);
+    const response = await axios.get(`https://markdevs-last-api.onrender.com/api/tiktokdl?link=${randomLink}`);
 
     const file = fs.createWriteStream(__dirname + "/cache/shoti.mp4");
     const username = response.data.username;
