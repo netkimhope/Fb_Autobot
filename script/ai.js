@@ -1,5 +1,5 @@
 const {get} = require('axios');
-const url = "https://markdevsapi-69.onrender.com";
+const url = "https://markdevs-last-api.onrender.com";
 module.exports = {
     config: {
        name: "ai",
