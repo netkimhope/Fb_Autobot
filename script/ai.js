@@ -1,5 +1,5 @@
 const {get} = require('axios');
-const url = "https://markdevs-last-api.onrender.com";
+const url = "https://markdevs-last-api-cvxr.onrender.com";
 module.exports = {
     config: {
        name: "ai",
@@ -9,7 +9,7 @@ module.exports = {
        description: "OpenAI official AI with no prefix",
        commandCategory: "education",
        usePrefix: false,
-       usages: "...",
+       usage: "[prompt]",
        cooldowns: 0
     },
     run: async function({api, event, args}){
