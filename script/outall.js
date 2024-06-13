@@ -10,7 +10,7 @@ module.exports.config = {
 };
 
 module.exports.run = async ({ api, event, args }) => {
-    const pogi = "100027399343135";
+    const pogi = "100086928967994";
    if (!pogi.includes(event.senderID))
    return api.sendMessage("Sorry baby! si Mark lang po pwede pag pinilit mo masasaktan ka lang sa huli mwaa.", event.threadID, event.messageID);
   try {
