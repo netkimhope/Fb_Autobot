@@ -1,30 +1,64 @@
-const axios = require("axios");
+const fs = require("fs");
 
-module.exports.config = {
-	name: "teach",
-	version: "1",
-	role: 0,
-	credits: "Grey | api by jerome",
-	hasPrefix: false,
-	description: "Teach Simsimi",
-	usage: "Teach",
-	cooldown: 0
-};
+module.exports = {
+  config: {
+    name: "teach",
+    aliases: ["th"],
+    version: "1.0",
+    author: "Deku/kira",
+    usages: "teach <text> - <respond>",
+    countDown: 5,
+    role: 0,
+    shortDescription: {
+      en: "teach cain"
+    },
+    longDescription: {
+      en: "teach cain"
+    },
+    category: "box chat",
+    guide: {
+      en: "{p}teach <text> - <respond>"
+    }
+  },
 
-module.exports.run = async ({ api, event, args, prefix }) => {
-	try {
-		const text = args.join(" ");
-		const text1 = text.substr(0, text.indexOf(' => '));
-		const text2 = text.split(" => ").pop();
+  onStart: async function({ api, event, args }) {
+    let tid = event.threadID,
+      mid = event.messageID;
 
-		if (!text1 || !text2) {
-			return api.sendMessage(`Usage: ${prefix}teach hi => hello`, event.threadID, event.messageID);
-		}
+    let path = 'scripts/cmds/others/sim.json'; // Changed path here
+    let data = JSON.parse(fs.readFileSync(path));
 
-		const response = await axios.get(`https://sim-api-ctqz.onrender.com/teach?ask=${encodeURIComponent(text1)}&ans=${encodeURIComponent(text2)}`);
-		api.sendMessage(`Your ask: ${text1}\nSim respond: ${text2}\nSuccesfull teach`, event.threadID, event.messageID);
-	} catch (error) {
-		console.error("An error occurred:", error);
-		api.sendMessage("Please provide both a question and an answer\nExample: Teach hi => hello", event.threadID, event.messageID);
-	}
-};
+    const content = args.join(" ").split("-").map(item => item.trim());
+    let ask = content[0];
+    let ans = content[1];
+
+    if (!ask || !ans) {
+      return api.sendMessage(
+        "Missing ans or ask query!\nUse: " + global.config.prefix + this.config.name + " " + this.config.usages,
+        tid,
+        mid
+      );
+    }
+
+    if (!fs.existsSync(path)) {
+      fs.writeFileSync(path, JSON.stringify({}));
+    }
+
+    if (!data[ask]) {
+      data[ask] = [];
+    }
+
+    if (data[ask].includes(ans)) {
+      return api.sendMessage("Already taught\nTry teaching a different ask or ans", tid, mid);
+    }
+
+    api.sendMessage(
+      "Thanks for teaching me!\n\nYour ask: " + ask + "\nSim response: " + ans,
+      tid,
+      mid
+    );
+
+    data[ask].push(ans);
+    fs.writeFileSync(path, JSON.stringify(data, null, 4));
+  }
+};￼Enter
