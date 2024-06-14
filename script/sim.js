@@ -17,7 +17,7 @@ module.exports .run = async function({ api, event, args }) {
     const content = encodeURIComponent(args.join(" "));
     if (!args[0]) return api.sendMessage("Please type a message...", tid, mid);
     try {
-        const res = await axios.get(`https://sim-api-53e9e45adcb6.herokuapp.com/sim?q=${content}`);
+        const res = await axios.get(`https://eurix-api.replit.app/sim?ask=hi${content}`);
         const respond = res.data.response;
         if (res.data.error) {
             api.sendMessage(`Error: ${res.data.error}`, tid, (error, info) => {
