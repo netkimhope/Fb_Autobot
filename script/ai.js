@@ -1,47 +1,30 @@
-const axios = require("axios");
-
+const {get} = require('axios');
+const url = "https://markdevs-last-api-cvxr.onrender.com";
 module.exports = {
     config: {
-        name: "ai",
-        version: "1.0",
-        author: "Rui",
-        countDown: 5,
-        role: 0,
-        shortDescription: {
-            vi: "Tương tác với trí tuệ nhân tạo để nhận câu trả lời cho câu hỏi của bạn.",
-            en: "Interact with an AI to get responses to your questions."
-        },
-        longDescription: {
-            vi: "Tương tác với trí tuệ nhân tạo để nhận câu trả lời cho câu hỏi của bạn.",
-            en: "Interact with an AI to get responses to your questions."
-        },
-        category: "group",
-        guide: {
-            vi: "Sử dụng: `:ai <câu hỏi>`",
-            en: "Usage: `:ai <question>`"
-        }
+       name: "ai",
+       version: "1.0.0",
+       hasPermission: 0,
+       credits: "unknown",
+       description: "OpenAI official AI with no prefix",
+       commandCategory: "education",
+       usePrefix: false,
+       usage: "[prompt]",
+       cooldowns: 0
     },
-
-    onStart: async function ({ api, args, message, event, threadsData, usersData, dashBoardData, globalData, threadModel, userModel, dashBoardModel, globalModel, role, commandName, getLang }) {
-        const question = args.join(" ").trim();
-        const senderID = event.senderID;
-
-        if (question) {
+    run: async function({api, event, args}){
+            let prompt = args.join(' '), id = event.senderID;
+           async function r(msg){
+                 api.sendMessage(msg, event.threadID, event.messageID)
+             }
+            if(!prompt) return r("Please provide a question first.");
+            r("Please bear with me while I ponder your request...");
             try {
-                const userName = usersData[senderID].name;
-                const botName = module.exports.config.name;
-                const formattedQuestion = `${userName} asked: ${question} (Bot: ${botName})`;
-
-                message.reply("🤖 " + getLang("hello") + ", " + userName + "! " + getLang("helloWithName", senderID));
-                const response = await axios.get(`https://hercai.onrender.com/v2/hercai?question=${encodeURIComponent(formattedQuestion)}`);
-                const aiResponse = response.data.reply;
-                message.reply(`YueAI: ${aiResponse}`);
-            } catch (error) {
-                console.error("Error fetching AI response:", error);
-                message.reply("Failed to get AI response. Please try again later.");
+                const res = await get(url+"/gpt4?prompt="+prompt+"&uid="+id);
+                const answer = res.data.gpt4;
+                return r(`📦𝗚𝗣𝗧4+ 𝗖𝗢𝗡𝗧𝗜𝗡𝗨𝗘𝗦 𝗔𝗜\n━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${prompt}\n━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n`);
+            } catch (e){
+                return r(e.message)
             }
-        } else {
-            message.reply("Please provide a question after the command. For example: `:ai Hello`");
-        }
     }
-};
+    }
