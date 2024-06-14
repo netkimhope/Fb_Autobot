@@ -1,64 +1,39 @@
-const fs = require("fs");
-
-module.exports = {
-  config: {
-    name: "teach",
-    aliases: ["th"],
-    version: "1.0",
-    author: "Deku/kira",
-    usages: "teach <text> - <respond>",
-    countDown: 5,
+module.exports.config = {
+    name: "sim",
+    version: "1.0.0",
     role: 0,
-    shortDescription: {
-      en: "teach cain"
-    },
-    longDescription: {
-      en: "teach cain"
-    },
-    category: "box chat",
-    guide: {
-      en: "{p}teach <text> - <respond>"
+    aliases: ["Sim"],
+    credits: "cliff",//api by mark
+    description: "Talk to sim",
+    cooldown: 0,
+    hasPrefix: false
+};
+
+module.exports .run = async function({ api, event, args }) {
+    const axios = require("axios");
+    let { messageID, threadID, senderID, body } = event;
+    let tid = threadID,
+        mid = messageID;
+    const content = encodeURIComponent(args.join(" "));
+    if (!args[0]) return api.sendMessage("Please type a message...", tid, mid);
+    try {
+        const res = await axios.get(`https://sim-api-53e9e45adcb6.herokuapp.com/sim?q=${content}`);
+        const respond = res.data.response;
+        if (res.data.error) {
+            api.sendMessage(`Error: ${res.data.error}`, tid, (error, info) => {
+                if (error) {
+                    console.error(error);
+                }
+            }, mid);
+        } else {
+            api.sendMessage(respond, tid, (error, info) => {
+                if (error) {
+                    console.error(error);
+                }
+            }, mid);
+        }
+    } catch (error) {
+        console.error(error);
+        api.sendMessage("An error occurred while fetching the data.", tid, mid);
     }
-  },
-
-  onStart: async function({ api, event, args }) {
-    let tid = event.threadID,
-      mid = event.messageID;
-
-    let path = 'scripts/cmds/others/sim.json'; // Changed path here
-    let data = JSON.parse(fs.readFileSync(path));
-
-    const content = args.join(" ").split("-").map(item => item.trim());
-    let ask = content[0];
-    let ans = content[1];
-
-    if (!ask || !ans) {
-      return api.sendMessage(
-        "Missing ans or ask query!\nUse: " + global.config.prefix + this.config.name + " " + this.config.usages,
-        tid,
-        mid
-      );
-    }
-
-    if (!fs.existsSync(path)) {
-      fs.writeFileSync(path, JSON.stringify({}));
-    }
-
-    if (!data[ask]) {
-      data[ask] = [];
-    }
-
-    if (data[ask].includes(ans)) {
-      return api.sendMessage("Already taught\nTry teaching a different ask or ans", tid, mid);
-    }
-
-    api.sendMessage(
-      "Thanks for teaching me!\n\nYour ask: " + ask + "\nSim response: " + ans,
-      tid,
-      mid
-    );
-
-    data[ask].push(ans);
-    fs.writeFileSync(path, JSON.stringify(data, null, 4));
-  }
 };
