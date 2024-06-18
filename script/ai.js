@@ -1,5 +1,5 @@
 const {get} = require('axios');
-const url = "https://markdevs-last-api-cvxr.onrender.com";
+const url = "https://markdevs-api.onrender.com/gpt4?prompt=&uid=";
 module.exports = {
     config: {
        name: "ai",
