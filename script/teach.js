@@ -1,64 +1,33 @@
-const fs = require("fs");
+const axios = require("axios");
 
-module.exports = {
-  config: {
-    name: "teach",
-    aliases: ["th"],
-    version: "1.0",
-    author: "Deku/kira",
-    usages: "teach <text> - <respond>",
-    countDown: 5,
-    role: 0,
-    shortDescription: {
-      en: "teach cain"
-    },
-    longDescription: {
-      en: "teach cain"
-    },
-    category: "box chat",
-    guide: {
-      en: "{p}teach <text> - <respond>"
-    }
-  },
+module.exports.config = {
+  name: "teach",
+  aliases: ["teachsim", "teachchat"],
+  version: "1.1.0",
+  role: 0,
+  credits: "KENLIEPLAYS",
+  info: "Teach Sim a response",
+  type: "chat",
+  usage: "[ask] | [answer]",
+  cd: 2,
+};
 
-  onStart: async function({ api, event, args }) {
-    let tid = event.threadID,
-      mid = event.messageID;
+module.exports.run = async function ({ api, event, args }) {
+  try {
+    const { threadID, messageID } = event;
 
-    let path = 'scripts/cmds/others/sim.json'; // Changed path here
-    let data = JSON.parse(fs.readFileSync(path));
+    const [ask, answer] = args.join(' ').split('|').map(str => str.trim());
 
-    const content = args.join(" ").split("-").map(item => item.trim());
-    let ask = content[0];
-    let ans = content[1];
-
-    if (!ask || !ans) {
-      return api.sendMessage(
-        "Missing ans or ask query!\nUse: " + global.config.prefix + this.config.name + " " + this.config.usages,
-        tid,
-        mid
-      );
+    if (!ask || !answer) {
+      api.sendMessage('Please provide both a question and an answer separated by |', threadID, messageID);
+      return;
     }
 
-    if (!fs.existsSync(path)) {
-      fs.writeFileSync(path, JSON.stringify({}));
-    }
+    const teachResponse = await axios.get(`https://simsimi.fun/api/v2/?mode=teach&lang=ph&message=${encodeURIComponent(ask)}&answer=${encodeURIComponent(answer)}`);
+    const success = teachResponse.data.success;
 
-    if (!data[ask]) {
-      data[ask] = [];
-    }
-
-    if (data[ask].includes(ans)) {
-      return api.sendMessage("Already taught\nTry teaching a different ask or ans", tid, mid);
-    }
-
-    api.sendMessage(
-      "Thanks for teaching me!\n\nYour ask: " + ask + "\nSim response: " + ans,
-      tid,
-      mid
-    );
-
-    data[ask].push(ans);
-    fs.writeFileSync(path, JSON.stringify(data, null, 4));
+    api.sendMessage(success, threadID, messageID);
+  } catch (error) {
+    console.error("Error:", error);
   }
-};￼Enter
+};
