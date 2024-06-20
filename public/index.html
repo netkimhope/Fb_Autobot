@@ -36,6 +36,30 @@
         </ul>
     </div>
 </nav>
+
+<div class="container">
+    <h1 class="col text-center" style="font-size: 20px; padding: 10px; font-family: Arial, sans-serif; font-weight: bold;">Enter Your Appstate</h1>
+
+    <form id="json-form" onsubmit="submitForm(event)">
+        <div class="row">
+            <div class="col-md-12">
+                <textarea id="json-data" class="form-control centered-textarea center-placeholder neon-border" placeholder="" style="background-color: #212121;"></textarea>
+            </div>
+        </div>
+    </form>
+    <p style="margin-top: 10px;"></p>
+</div>
+  
+    <div class="container">
+ 
+   <!-- Container to display appstate -->
+   <div id="result-container">
+     <h2></h2>
+     <div id="appstate"></div>
+   </div>
+   <button id="copy-button">Copy</button>
+    </div>
+
 <div class="container" id="listOfCommands">
     <p style="margin-top: 5px;">Please choose your commands by tapping on the respective options.</p>
     <button class="btn btn-primary" onclick="selectAllCommands()">Select all commands</button>
