@@ -23,7 +23,7 @@ module.exports.run = async function ({ api, event, args }) {
       return;
     }
 
-    const teachResponse = await axios.get(`https://simsimi.fun/api/v2/?mode=teach&lang=ph&message=${encodeURIComponent(ask)}&answer=${encodeURIComponent(answer)}`);
+    const teachResponse = await axios.get(`https://mighty-taiga-33992-6547d84cd219.herokuapp.com/sim?q=${encodeURIComponent(ask)}&answer=${encodeURIComponent(answer)}`);
     const success = teachResponse.data.success;
 
     api.sendMessage(success, threadID, messageID);
