@@ -80,7 +80,7 @@ module.exports.handleEvent = async function ({ api, event }) {
   api.sendMessage("Llama is thinking, please wait...", event.threadID);
 
   try {
-    const response = await axios.get(`https://llama-api-1d3a16eeaf76.herokuapp.com/meta/api?prompt=${inputText}`);
+    const response = await axios.get(`https://markdevs-api.onrender.com/api/llama?inputText=${inputText}`);
     if (response.status === 200) {
       const generatedText = response.data.response;
       api.sendMessage(`𝗟𝗹𝗮𝗺𝗮 𝗔𝗜\n\n${generatedText}`, event.threadID);
