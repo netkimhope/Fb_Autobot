@@ -20,7 +20,7 @@ module['exports']['run'] = async function({ api, event, args }) {
         api.setMessageReaction("🔍", mid, (err) => {}, true);
 
 api.sendMessage("🔍 Searching for the answer please wait...", tid, mid);
-        const url = 'https://useblackbox.io/chat-request-v4';
+        const url = 'https://markdevs-api.onrender.com/api/box?query=';
 
   const data = {
     textInput: q,
