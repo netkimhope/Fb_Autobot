@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 module.exports.config = {
-  name: "fuji",
+  name: "llama",
   version: "3.8",
   permission: 0,
   credits: "Mark Hitsuraan",
@@ -16,7 +16,7 @@ async function convertVoiceToText(audioUrl, api, event) {
   try {
     api.sendMessage("🔊 Converting your audio, please wait...", event.threadID);
 
-    const response = await axios.get(`https://combineapi-7fa2b2874c53.herokuapp.com/api/try/voice2text?url=${encodeURIComponent(audioUrl)}`);
+    const response = await axios.get(`https://markdevs-api.onrender.com/api/box?query=${encodeURIComponent(audioUrl)}`);
     const text = response.data.transcription;
 
     if (text) {
