@@ -14,7 +14,7 @@ module.exports.config = {
 
 module.exports.run = async function ({ api, event, args }) {
     const question = args.join(' ');
-    const apiUrl = `https://markdevs-api.onrender.com/gpt4?prompt=&uid=${encodeURIComponent(question)}`;
+    const apiUrl = `https://markdevs-api.onrender.com/api/gpt4o?q=${encodeURIComponent(question)}`;
 
     if (!question) return api.sendMessage("Please provide a question first.", event.threadID, event.messageID);
 
