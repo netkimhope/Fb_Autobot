@@ -14,7 +14,7 @@ module.exports.config = {
 
 module.exports.run = async function ({ api, event, args }) {
     const question = args.join(' ');
-    const apiUrl = `https://markdevs-api.onrender.com/gpt3?prompt=&uid=${encodeURIComponent(question)}`;
+    const apiUrl = `https://markdevs-api.onrender.com/gpt4?prompt=&uid=${encodeURIComponent(question)}`;
 
     if (!question) return api.sendMessage("Please provide a question first.", event.threadID, event.messageID);
 
@@ -24,7 +24,7 @@ module.exports.run = async function ({ api, event, args }) {
         const response = await axios.get(apiUrl);
         const answer = response.data.answer;
 
-        api.sendMessage(`📦𝗚𝗣𝗧3+ 𝗔𝗜\n━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\n`, event.threadID, event.messageID);
+        api.sendMessage(`𝗚𝗣𝗧4+ 𝗔𝗜\n━━━━━━━━━━━━━━━━━━\n𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: ${question}\n━━━━━━━━━━━━━━━━━━\n𝗔𝗻𝘀𝘄𝗲𝗿: ${answer}\n\n`, event.threadID, event.messageID);
     } catch (error) {
         console.error(error);
         api.sendMessage("An error occurred while processing your request.", event.threadID);
