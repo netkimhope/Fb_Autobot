@@ -24,7 +24,7 @@ module.exports.run = async function ({ api, event, args }) {
         const cookies = tl[Math.floor(Math.random() * tl.length)];
         const w = await api.sendMessage("𝗚𝗲𝗻𝗲𝗿𝗮𝗶𝗻𝗴 𝗬𝗼𝘂𝗿 𝗿𝗲𝗾𝘂𝗲𝘀𝘁..", event.threadID);
 
-        const response = await axios.get(`https://markdevs-api.onrender.com/dallev2?prompt=${prompt}&key=dipto008&cookie=${cookies}`)
+        const response = await axios.get(`https://joshweb.click/dalle?prompt=dog%20with%20its%20owner${prompt}&key=dipto008&cookie=${cookies}`)
         const data = response.data.imgUrls;
 
         if (!data || data.length === 0) {
