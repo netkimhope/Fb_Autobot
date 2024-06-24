@@ -1,7 +1,7 @@
 const { get } = require('axios');
 const fs = require('fs');
 
-let url = "https://combined-api-a2153f3cf0b5.herokuapp.com";
+let url = "https://markdevs-api.onrender.com/sdxl?prompt=dog&styles=7";
 let f = __dirname+'/cache/sdxl.png';
 
 module.exports.config = {
