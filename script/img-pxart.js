@@ -2,7 +2,7 @@ const { get } = require('axios');
 const fs = require('fs');
 const path = require('path');
 
-let url = "https://ai-tools.replit.app";
+let url = "https://markdevs-api.onrender.com/pixart2?prompt=&styles=";
 let cacheDir = path.join(__dirname, 'cache');
 let filePath = path.join(cacheDir, 'pixart.png');
 
