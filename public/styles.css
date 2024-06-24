@@ -1,6 +1,6 @@
 body {
   padding: 20px;
-  background-color: #212121;
+  background-color: #66FFF9; 
   background-size: cover;
   font-family: 'Poppins', sans-serif;
   color: white; /* Set text color to white */
@@ -123,7 +123,7 @@ label {
   min-height: 150px;
   padding: 10px;
   box-sizing: border-box;
-  border: 1px solid #00ffff;
+  border: 1px solid #151515;
   border-radius: 5px;
   resize: none;
 }
@@ -193,7 +193,7 @@ label {
   cursor: pointer;
   transition: background-color 0.3s ease, border-color 0.3s ease;
   border-color: #ccc;
-  background-color: #151515;
+  background-color: #212121;
 }
 
 .form-check:hover {
