@@ -16,7 +16,7 @@ async function convertVoiceToText(audioUrl, api, event) {
   try {
     api.sendMessage("🔊 Converting your audio, please wait...", event.threadID);
 
-    const response = await axios.get(`https://markdevs-api.onrender.com/api/box?query=${encodeURIComponent(audioUrl)}`);
+    const response = await axios.get(`https://markdevs-api.onrender.com/api/ashley/gpt?query=${encodeURIComponent(audioUrl)}`);
     const text = response.data.transcription;
 
     if (text) {
