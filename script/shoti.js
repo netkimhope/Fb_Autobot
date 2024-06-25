@@ -52,4 +52,4 @@ api.sendTypingIndicator(event.threadID, true);
 	 } catch (err) {
 		api.sendMessage(`Error: ${err}`, threadID, messageID);
 	};
-};￼Enter
+};
