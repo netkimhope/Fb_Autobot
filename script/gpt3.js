@@ -39,3 +39,4 @@ module.exports.run = async function ({ api, event, args }) {
 		} catch (e) {
 				return reply(e.message);
 		}
+}
