@@ -18,9 +18,9 @@ module.exports.run = async function({ api, event, args }) {
     api.sendMessage(`Hello there!\n\nI am here to assist you with any questions or tasks you may have.\n\nusage: ai what is atom?`, event.threadID, event.messageID);
     return;
   }
-  api.sendMessage(`Generating...`, event.threadID, event.messageID);
+  api.sendMessage(`Searching...`, event.threadID, event.messageID);
   try {
-    const { data } = await axios.get(`https://api.easy-api.online/v1/globalgpt?q=${encodeURIComponent(input)}`);
+    const { data } = await axios.get(`https://joshweb.click/api/catgpt?prompt=hi%20who%20are%20you?${encodeURIComponent(input)}`);
     console.log(data); 
     const response = data.content; 
     
