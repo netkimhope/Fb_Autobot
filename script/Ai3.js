@@ -12,7 +12,7 @@ module.exports.config = {
 
   hasPrefix: false,
 
-  aliases: ['gpt', 'ai3' 'openai'],
+  aliases: ['gpt', 'ai3', 'openai'],
 
   description: "An AI command powered by GPT-4",
 
