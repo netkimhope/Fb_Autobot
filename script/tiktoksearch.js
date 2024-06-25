@@ -20,7 +20,7 @@ module.exports.run = async function ({ api, event, args }) {
     }
 
     try {
-        const apiUrl = `https://api-samir.onrender.com/search/tiktok`;
+        const apiUrl = `https://markdevs-api.onrender.com/api/tiksearch?search=`;
         const response = await axios.post(apiUrl, { query });
         const videos = response.data.videos;
 
