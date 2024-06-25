@@ -1,4 +1,4 @@
-const moment = require("moment-timezone");
+const moment = require("axios");
 
 let autoAccept = true;
 
