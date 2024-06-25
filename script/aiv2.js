@@ -1,10 +1,10 @@
 const axios = require('axios');
 
 module.exports.config = {
-    name: "aiv2",
+    name: "ai2",
     version: "1.0.0",
     hasPermssion: 0,
-    credits: "Jonell Magallanes", //API BY MARK
+    credits: "Jonell Magallanes", 
     description: "EDUCATIONAL",
     usePrefix: true,
     commandCategory: "AI",
@@ -14,7 +14,7 @@ module.exports.config = {
 
 module.exports.run = async function ({ api, event, args }) {
     const question = args.join(' ');
-    const apiUrl = `https://joshweb.click/api/gpt-4o?q=hi&key=your%20key${encodeURIComponent(question)}`;
+    const apiUrl = `https://joshweb.click/gpt4?prompt=hi&uid=100${encodeURIComponent(question)}`;
 
     if (!question) return api.sendMessage("Please provide a question first.", event.threadID, event.messageID);
 
