@@ -23,9 +23,13 @@ module.exports.run = async function({
     if (!input) {
       const pages = 19;
       let page = 1;
-      let start = (page - 1) * pages;
+      let start = (page - 1 ) * pages;
       let end = start + pages;
-      let helpMessage = `𝗖𝗢𝗠𝗠𝗔𝗡𝗗 𝗟𝗜𝗦𝗧:\n\n`;
+      let helpMessage = `♡   ∩_∩
+     („• ֊ •„)♡
+┏━━━━━∪∪━━━━━━━━┓
+♡   𝑨𝒗𝒂𝒊𝒍𝒂𝒃𝒍𝒆 𝑪𝒐𝒎𝒎𝒂𝒏𝒅𝒔  ♡ 
+┗━━━━━━━━━━━━━━━┛\n\n`;
       for (let i = start; i < Math.min(end, commands.length); i++) {
         helpMessage += `\t${i + 1}.  ${prefix}${commands[i]}\n`;
       }
@@ -41,7 +45,11 @@ module.exports.run = async function({
       const pages = 19;
       let start = (page - 1) * pages;
       let end = start + pages;
-      let helpMessage = `𝗖𝗢𝗠𝗠𝗔𝗡𝗗 𝗟𝗜𝗦𝗧:\n\n`;
+      let helpMessage = `♡   ∩_∩
+     („• ֊ •„)♡
+┏━━━━━∪∪━━━━━━━━┓
+♡   𝑨𝒗𝒂𝒊𝒍𝒂𝒃𝒍𝒆 𝑪𝒐𝒎𝒎𝒂𝒏𝒅𝒔  ♡ 
+┗━━━━━━━━━━━━━━━┛\n\n`;
       for (let i = start; i < Math.min(end, commands.length); i++) {
         helpMessage += `\t${i + 1}.  ${prefix}${commands[i]}\n`;
       }
