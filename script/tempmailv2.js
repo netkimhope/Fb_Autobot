@@ -2,7 +2,7 @@ const axios = require('axios');
 const { TempMail } = require("1secmail-api");
 
 module.exports.config = {
-  name: "tempmail",
+  name: "tempmail2",
   version: "1.0.1",
   info: "Generates random email from www.1secmail.com and fetches message from inbox",
   credits: "Kenneth Panio",
