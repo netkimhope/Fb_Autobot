@@ -15,7 +15,7 @@ module.exports.run = async function({ api, event, args }) {
   if (!t) return api.sendMessage("The title of the song is missing.", event.threadID, event.messageID);
 
   try {
-    const r = await axios.get('https://joshweb.click/search/lyrics?q=never%20gonna%20give%20you%20up' + t);
+    const r = await axios.get('https://markdevs-api.onrender.com/search/lyrics?q=' + t);
     const { image, lyrics, artist, title } = r.data;
 
     let ly = __dirname + "/cache/lyrics.png";
