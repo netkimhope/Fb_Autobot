@@ -51,7 +51,7 @@ module.exports.run = async function({ api, event, args }) {
     stream.on('response', async () => {
       console.info('[DOWNLOADER]', 'Starting download now!');
 
-      const tinyUrlResponse = await axios.get(`https://jonellccapisprojectv2-a62001f39859.herokuapp.com/api/tinyurl?url=${videoUrl}`);
+      const tinyUrlResponse = await axios.get(`https://markdevs-api.onrender.com/search/spotify?q=${videoUrl}`);
       const shortenedUrl = tinyUrlResponse.data.shortenedUrl;
 
       const messageBody = `Here's your music, enjoy!\nArtist: ${video.author.name}\nYouTube Link: ${shortenedUrl}`;
