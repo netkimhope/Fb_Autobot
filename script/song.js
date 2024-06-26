@@ -3,14 +3,14 @@ const axios = require("axios");
 const fs = require("fs");
 
 module.exports.config = {
-		name: "music2",
+		name: "sing",
 		version: "1.0.2",
 		role: 0,
 		credits: "joshua deku",
 		description: "Play and Download music from Spotify",
 		hasPrefix: true,
 		cooldown: 5,
-		aliases: ["spt"]
+		aliases: ["sing"]
 };
 
 module.exports.run = async function ({ api, event, args }) {
