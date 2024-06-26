@@ -30,13 +30,13 @@ haha.includes("group") || haha.includes("kis") || haha.includes("kuta") || haha.
     api.sendMessage("Umay talaga wala kang tatay eh", event.threadID, event.messageID)
   }
   if (haha.includes("bot") || haha.includes("Bot")){
-    api.sendMessage("oo na bot na kinginamo ka", event.threadID, event.messageID)
+    api.sendMessage("", event.threadID, event.messageID)
   }
 if (haha.includes("ralph") || haha.includes("Ralph")){
     api.sendMessage("Ralph pogi malake etits", event.threadID, event.messageID)
 }
   if (haha.includes("kick") || haha.includes("Kick")){
-    api.sendMessage("ikaw dapat kinikick eh wala ka namang dulot sa pinas putanginamo di ka mahal ng magulang mo bobo ka", event.threadID, event.messageID)
+    api.sendMessage("", event.threadID, event.messageID)
       }
 }
         module.exports.run = function({ api, event, client, __GLOBAL }) {
