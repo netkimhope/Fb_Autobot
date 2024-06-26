@@ -1,85 +1,78 @@
-const path = require('path');
 module.exports.config = {
-  name: "music",
-  version: "1.0.0",
-  role: 0,
-  hasPrefix: true,
-  aliases: ['play'],
-  usage: 'Music [prompt]',
-  description: 'Search music on YouTube',
-  credits: 'Developer',
-  cooldown: 5
+ name: "sing",
+ version: "2.0.4",
+ role: 0,
+ credits: "Grey",
+ description: "Play a song",
+ aliases: ["sing","song","music"],
+cooldown: 0,
+hasPrefix: false,
+  usage: "",
 };
 
-module.exports.run = async function({ api, event, args }) {
-  const axios = require("axios");
-  const fs = require("fs-extra");
-  const ytdl = require("ytdl-core");
-  const request = require("request");
-  const yts = require("yt-search");
+module.exports.run = async ({ api, event }) => {
+ const axios = require("axios");
+ const fs = require("fs-extra");
+ const ytdl = require("@distube/ytdl-core");
+ const request = require("request");
+ const yts = require("yt-search");
 
-  const input = event.body;
-  const text = input.substring(12);
-  const data = input.split(" ");
+ const input = event.body;
+ const text = input.substring(12);
+ const data = input.split(" ");
 
-  if (data.length < 2) {
-    return api.sendMessage("Please enter the music title", event.threadID);
+ if (data.length < 2) {
+  return api.sendMessage("Please put a song", event.threadID);
+ }
+
+ data.shift();
+ const song = data.join(" ");
+
+ try {
+  api.sendMessage(`Finding "${song}". Please wait...`, event.threadID);
+
+  const searchResults = await yts(song);
+  if (!searchResults.videos.length) {
+   return api.sendMessage("Error: Invalid request.", event.threadID, event.messageID);
   }
 
-  data.shift();
-  const song = data.join(" ");
+  const video = searchResults.videos[0];
+  const videoUrl = video.url;
 
-  try {
-    const findingMessage = await api.sendMessage(`Finding "${song}". Please wait...`, event.threadID);
+  const stream = ytdl(videoUrl, { filter: "audioonly" });
 
-    const searchResults = await yts(song);
-    if (!searchResults.videos.length) {
-      await api.unsendMessage(findingMessage.messageID);
-      return api.sendMessage("Error: Invalid request.", event.threadID);
-    }
+  const fileName = `${event.senderID}.mp3`;
+  const filePath = __dirname + `/cache/${fileName}`;
 
-    const video = searchResults.videos[0];
-    const videoUrl = video.url;
+  stream.pipe(fs.createWriteStream(filePath));
 
-    const stream = ytdl(videoUrl, { filter: "audioonly" });
+  stream.on('response', () => {
+   console.info('[DOWNLOADER]', 'Starting download now!');
+  });
 
-    const fileName = `${event.senderID}.mp3`;
-    const filePath = path.join(__dirname, "cache", fileName);
+  stream.on('info', (info) => {
+   console.info('[DOWNLOADER]', `Downloading ${info.videoDetails.title} by ${info.videoDetails.author.name}`);
+  });
 
-    stream.pipe(fs.createWriteStream(filePath));
+  stream.on('end', () => {
+   console.info('[DOWNLOADER] Downloaded');
 
-    stream.on('response', async () => {
-      console.info('[DOWNLOADER]', 'Starting download now!');
+   if (fs.statSync(filePath).size > 26214400) {
+    fs.unlinkSync(filePath);
+    return api.sendMessage('[ERR] The file could not be sent because it is larger than 25MB.', event.threadID);
+   }
 
-      const tinyUrlResponse = await axios.get(`https://markdevs-api.onrender.com/search/spotify?q=${videoUrl}`);
-      const shortenedUrl = tinyUrlResponse.data.shortenedUrl;
+   const message = {
+    body: `Here's your music, enjoy!🥰\n\nTitle: ${video.title}\nArtist: ${video.author.name}`,
+    attachment: fs.createReadStream(filePath)
+   };
 
-      const messageBody = `Here's your music, enjoy!\nArtist: ${video.author.name}\nYouTube Link: ${shortenedUrl}`;
-
-      const message = {
-        body: messageBody,
-        attachment: fs.createReadStream(filePath)
-      };
-
-      api.sendMessage(message, event.threadID);
-    });
-
-    stream.on('info', (info) => {
-      console.info('[DOWNLOADER]', `Downloading ${info.videoDetails.title} by ${info.videoDetails.author.name}`);
-    });
-
-    stream.on('end', () => {
-      console.info('[DOWNLOADER] Downloaded');
-
-      if (fs.statSync(filePath).size > 30 * 1024 * 1024) {
-        fs.unlinkSync(filePath);
-        return api.sendMessage('[ERR] The file could not be sent because it is larger than 30MB.', event.threadID);
-      }
-
-      api.unsendMessage(findingMessage.messageID);
-    });
-  } catch (error) {
-    console.error('[ERROR]', error);
-    api.sendMessage('An error occurred while processing the command.', event.threadID);
-  }
+   api.sendMessage(message, event.threadID, () => {
+    fs.unlinkSync(filePath);
+   });
+  });
+ } catch (error) {
+  console.error('[ERROR]', error);
+  api.sendMessage('An error occurred while processing the command.', event.threadID);
+ }
 };
