@@ -17,11 +17,11 @@ module.exports.run = async function({ api, event, args }) {
     const query = args.join(' ');
 
     if (!query) {
-        api.sendMessage('Please provide a question ex:ai what is nigga?.', event.threadID, event.messageID);
+        api.sendMessage('Please provide a question ex:ai what is love?.', event.threadID, event.messageID);
         return;
     }
 
-    api.sendMessage('🖕𝙎𝙚𝙖𝙧𝙘𝙝𝙞𝙣𝙜 𝙥𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩...', event.threadID, event.messageID);
+    api.sendMessage('𝙎𝙚𝙖𝙧𝙘𝙝𝙞𝙣𝙜 𝙥𝙡𝙚𝙖𝙨𝙚 𝙬𝙖𝙞𝙩...', event.threadID, event.messageID);
 
     try {
         
