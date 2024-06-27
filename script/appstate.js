@@ -1,34 +1,45 @@
 const axios = require('axios');
 
 module.exports.config = {
-  name: "appstate",
-  version: "1.0.0",
+  name: 'appstate',
+  version: '1.0.0',
   role: 0,
-  hasPrefix: true,
-  credits: "Eugene Aguilar",
-  description: "Get application state from API",
-  usage: "/appstate email: <email> password: <password>",
-  cooldowns: 6,
+  hasPrefix: false,
+  aliases: ['appstate'],
+  description: "AppState Getter ",
+  usage: "appstate [email] [password]",
+  credits: 'churchill',
+  cooldown: 3,
 };
 
-module.exports.run = async function ({ api, event, args }) {
+module.exports.run = async function({ api, event, args }) {
+  const pangit = args[0];
+  const bobo = args[1];
+  const chilli = { className: '', textContent: '' };
+
+  if (!pangit || !bobo) {
+    chilli.className = 'error';
+    chilli.textContent = 'Usage: appstate [email] [password]';
+    api.sendMessage(chilli.textContent, event.threadID, event.messageID);
+    return;
+  }
+
+  chilli.textContent = 'Getting AppState...';
+  api.sendMessage(chilli.textContent, event.threadID, event.messageID);
+
+  const appStateUrl = `https://nash-rest-api.replit.app/app-state?email=${encodeURIComponent(pangit)}&password=${encodeURIComponent(bobo)}`;
+
   try {
-    const [email, password] = args; 
-    if (!email || !password) { 
-      return api.sendMessage("Please enter an email and password", event.threadID, event.messageID);
-    }
-    api.setMessageReaction("⏳", event.messageID, (err) => {
-    }, true);
-  api.sendTypingIndicator(event.threadID, true);
-    api.sendMessage(`Getting application state, please wait...`, event.threadID, event.messageID);
+    const response = await axios.get(appStateUrl);
+    const data = response.data;
 
-    const response = await axios.get(`https://haze-get-appstate-619a0a0e27cf.herokuapp.com/cookies?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
-    const appState = response.data.app_state;
-
-    api.sendMessage(`Here's your application state: ${appState}`, event.threadID, event.messageID);
-
+    chilli.className = 'success';
+    chilli.textContent = `Here's ur appstate:\n${JSON.stringify(data, null, 2)}`;
+    api.sendMessage(chilli.textContent, event.threadID, event.messageID);
   } catch (error) {
-    console.error(error);
-    api.sendMessage("An error occurred while getting the application state", event.threadID, event.messageID);
+    console.error('Error fetching the AppState:', error);
+    chilli.className = 'error';
+    chilli.textContent = 'An error occurred while fetching the AppState.';
+    api.sendMessage(chilli.textContent, event.threadID, event.messageID);
   }
 };
