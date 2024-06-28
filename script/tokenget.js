@@ -21,7 +21,7 @@ module.exports.run = async function ({ api, event, args }) {
 
     api.sendMessage(`Getting token, please wait...`, event.threadID, event.messageID);
 
-    const response = await axios.get(`https://markdevs-api.onrender.com/fb/token?username=&password=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+    const response = await axios.get(`https://allinoneapis-0isy.onrender.com/api/token?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
     const token = response.data.data.access_token_eaad6v7
 const token2 = response.data.data.access_token
 const cookie = response.data.data.cookies
