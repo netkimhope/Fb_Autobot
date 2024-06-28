@@ -2,9 +2,9 @@ module.exports.config = {
 	name: "setname",
 	version: "1.0.0",
 	hasPermssion: 0,
-	credits: "Zia^Rein",
-	description: "set group nickname",
-	commandCategory: "Group",
+	credits: "Mirai Team",
+	description: "Change the nickname in your group or the person you tag",
+	commandCategory: "Box Chat",
 	usages: "[name]",
 	cooldowns: 3
 };
