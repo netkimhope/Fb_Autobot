@@ -1,88 +1,90 @@
-const handleReply = [];
-
 module.exports.config = {
-	name: "listfriend",
-	version: "1.0.0",
-	role: 2,
-	hasPrefix: false,
-	credits: "cliff",
-	description: "View friends information/Delete friends by replying",
-	usages: "",
-	cooldown: 5
+  name: "listfriend",
+  version: "1.0.0",
+  hasPermssion: 2,
+  credits: "ManhG",
+  description: "View friends information/Delete friends by replying",
+  commandCategory: "System",
+  usages: "",
+  cooldowns: 5
 };
 
-module.exports.handleReply = async function ({ api, args, Users, event }) {
-	const { threadID, messageID, senderID } = event;
-	const reply = handleReply.find(reply => reply.author === senderID);
-	if (!reply) return;
+module.exports.handleReply = async function ({ api, args, Users, handleReply, event, Threads }) {
+  const { threadID, messageID } = event;
+  if (parseInt(event.senderID) !== parseInt(handleReply.author)) return;
 
-	const { nameUser, urlUser, uidUser } = reply;
+  switch (handleReply.type) {
+    case "reply":
+      {
+        var msg ="" , name, urlUser, uidUser;
+        var arrnum = event.body.split(" ");
+        var nums = arrnum.map(n => parseInt(n));
+        for (let num of nums) {
+          name = handleReply.nameUser[num - 1];
+          urlUser = handleReply.urlUser[num - 1];
+          uidUser = handleReply.uidUser[num - 1];
 
-	if (event.type === "message_reply") {
-		const selectedNumbers = event.body.split(" ").map(n => parseInt(n));
-		let msg = "";
-		selectedNumbers.forEach(num => {
-			const index = num - 1;
-			if (index >= 0 && index < nameUser.length) {
-				const name = nameUser[index];
-				const url = urlUser[index];
-				const uid = uidUser[index];
+          api.unfriend(uidUser);
+          msg += '- ' + name + '\n🌐ProfileUrl: ' + urlUser + "\n";
+          //console.log(msg);
+        }
 
-				api.unfriend(uid);
-				msg += `- ${name}\n🌐ProfileUrl: ${url}\n`;
-			}
-		});
-
-		api.sendMessage(`💢Delete Friends💢\n\n${msg}`, threadID, () =>
-			api.unsendMessage(messageID));
-	}
+        api.sendMessage(`💢Delete Friends💢\n\n${msg}`, threadID, () =>
+          api.unsendMessage(handleReply.messageID));
+      }
+      break;
+  }
 };
+
 
 module.exports.run = async function ({ event, api, args }) {
-	const { threadID, messageID, senderID } = event;
-	try {
-		const listFriend = [];
-		const dataFriend = await api.getFriendsList();
-		const countFr = dataFriend.length;
+  const { threadID, messageID, senderID } = event;
+  //var unfriend =  await api.unfriend();
+  try {
+    var listFriend = [];
+    var dataFriend = await api.getFriendsList();
+    var countFr = dataFriend.length;
 
-		for (const friend of dataFriend) {
-			listFriend.push({
-				name: friend.fullName || "Chưa đặt tên",
-				uid: friend.userID,
-				gender: friend.gender,
-				vanity: friend.vanity,
-				profileUrl: friend.profileUrl
-			});
-		}
+    for (var friends of dataFriend) {
+      listFriend.push({
+        name: friends.fullName || "Chưa đặt tên",
+        uid: friends.userID,
+        gender: friends.gender,
+        vanity: friends.vanity,
+        profileUrl: friends.profileUrl
+      });
+    }
+    var nameUser = [], urlUser = [], uidUser = [];
+    var page = 1;
+    page = parseInt(args[0]) || 1;
+    page < -1 ? page = 1 : "";
+    var limit = 10;
+    var msg = `🎭DS INCLUDES ${countFr} FRIENDS🎭\n\n`;
+    var numPage = Math.ceil(listFriend.length / limit);
 
-		const nameUser = [], urlUser = [], uidUser = [];
-		let page = parseInt(args[0]) || 1;
-		page = Math.max(page, 1);
-		const limit = 10;
-		let msg = `🎭DS INCLUDES ${countFr} FRIENDS🎭\n\n`;
-		const numPage = Math.ceil(listFriend.length / limit);
+    for (var i = limit * (page - 1); i < limit * (page - 1) + limit; i++) {
+      if (i >= listFriend.length) break;
+      let infoFriend = listFriend[i];
+      msg += `${i + 1}. ${infoFriend.name}\n🙇‍♂️ID: ${infoFriend.uid}\n🧏‍♂️Gender: ${infoFriend.gender}\n❄️Vanity: ${infoFriend.vanity}\n🌐Profile Url: ${infoFriend.profileUrl}\n\n`;
+      nameUser.push(infoFriend.name);
+      urlUser.push(infoFriend.profileUrl);
+      uidUser.push(infoFriend.uid);
+    }
+    msg += `✎﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏\n--> Page ${page}/${numPage} <--\nUse .friend page number/all\n\n`;
 
-		for (let i = limit * (page - 1); i < limit * page; i++) {
-			if (i >= listFriend.length) break;
-			const infoFriend = listFriend[i];
-			msg += `${i + 1}. ${infoFriend.name}\n🙇‍♂️ID: ${infoFriend.uid}\n🧏‍♂️Gender: ${infoFriend.gender}\n❄️Vanity: ${infoFriend.vanity}\n🌐Profile Url: ${infoFriend.profileUrl}\n\n`;
-			nameUser.push(infoFriend.name);
-			urlUser.push(infoFriend.profileUrl);
-			uidUser.push(infoFriend.uid);
-		}
-
-		msg += `✎﹏﹏﹏﹏﹏﹏﹏﹏﹏﹏\n--> Page ${page}/${numPage} <--\nUse .friend page number/all\n\n`;
-
-		return api.sendMessage(msg + '🎭Reply number in order (from 1->10), can rep multiple numbers, separated by way sign to delete that friend from the list!', threadID, (e, data) =>
-			handleReply.push({
-				author: senderID,
-				messageID: data.messageID,
-				nameUser,
-				urlUser,
-				uidUser
-			})
-		)
-	} catch (e) {
-		console.log(e);
-	}
+    return api.sendMessage(msg + '🎭Reply number in order (from 1->10), can rep multiple numbers, separated by way sign to delete that friend from the list!', event.threadID, (e, data) =>
+      global.client.handleReply.push({
+        name: this.config.name,
+        author: event.senderID,
+        messageID: data.messageID,
+        nameUser,
+        urlUser,
+        uidUser,
+        type: 'reply'
+      })
+    )
+  }
+  catch (e) {
+    return console.log(e)
+  }
 }
