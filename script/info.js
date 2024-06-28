@@ -27,7 +27,7 @@ module.exports.run = async function({ api, event, args, prefix, admin }) {
 		const CREATORLINK = "https://www.facebook.com/h0yg14t4y";
 		const BOTCREATOR = "H0P3";
 		const BOTNAME = "XREO'AN INT.";
-		const FILESOWNER = "mrk";
+		const FILESOWNER = "mrk69";
 		const juswa = moment.tz("Asia/Manila").format("『D/MM/YYYY』 【HH:mm:ss】");
 		const link = ["https://i.imgur.com/9LDVC57.mp4", "https://i.imgur.com/r7IxgiR.mp4", "https://i.imgur.com/J1jWubu.mp4", "https://i.imgur.com/DJylTiy.mp4", "https://i.imgur.com/v4mLGte.mp4", "https://i.imgur.com/uthREbe.mp4", "https://i.imgur.com/ee8fHna.mp4", "https://i.imgur.com/VffzOwS.mp4", "https://i.imgur.com/ci5nztg.mp4", "https://i.imgur.com/qHPeKDV.mp4", "https://i.imgur.com/Rkl5UmH.mp4",
 "https://i.imgur.com/IGXINCB.mp4",
@@ -84,7 +84,7 @@ module.exports.run = async function({ api, event, args, prefix, admin }) {
 				api.sendMessage({
 						body: `➢ Admin and Bot Information
 
-⁂ Bot Name: botbyhope
+⁂ Bot Name: XREO'AN INT.
 ✧ Bot Admin: hoy giatay
 ♛ Bot Admin Link: https://www.facebook.com/h0yg14t4y
 ❂ Bot Prefix: ${prefix}
