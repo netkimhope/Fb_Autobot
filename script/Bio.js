@@ -1,7 +1,7 @@
 module.exports.config = {
 	name: "bio",
 	version: "1.0.0",
-	hasPermssion: 2,
+	hasPermssion: 3,
 	credits: "PSTeam",
 	description: "Change bot's bio",
 	commandCategory: "admin",
