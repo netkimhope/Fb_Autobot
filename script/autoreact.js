@@ -21,7 +21,11 @@ haha.includes("group") || haha.includes("kis") || haha.includes("kuta") || haha.
       return  api.setMessageReaction("😢", event.messageID, (err) => {}, true);
 }
   if (haha.includes("🥵") || haha.includes("umah") || haha.includes("💋") || haha.includes("kiss") || haha.includes("babu") || haha.includes("baby") || haha.includes("wow") || haha.includes("wah") || haha.includes("relationship") || haha.includes("gf") || haha.includes("baby") || haha.includes("omg")){
-    return api.setMessageReaction("😘", event.messageID, (err) => {}, true)
+    return 
+ api.setMessageReaction("🥰", event.messageID, (err) => {}, true);
+}
+  if (haha.includes("❤️") || haha.includes("mwa") || haha.includes("💋") || haha.includes("pa kiss") || haha.includes("babe") || haha.includes("love") || haha.includes("hi") || haha.includes("oums") || haha.includes("uyab") || haha.includes("gf") || haha.includes("baby") || haha.includes("omg")){
+    return            api.setMessageReaction("😘", event.messageID, (err) => {}, true)
   }
   if (haha.includes("tite") || haha.includes("Tite")){
     api.sendMessage("tite ka nang tite lika dito subuin moto.", event.threadID, event.messageID)
@@ -32,8 +36,8 @@ haha.includes("group") || haha.includes("kis") || haha.includes("kuta") || haha.
   if (haha.includes("bot") || haha.includes("Bot")){
     api.sendMessage("", event.threadID, event.messageID)
   }
-if (haha.includes("ralph") || haha.includes("Ralph")){
-    api.sendMessage("Ralph pogi malake etits", event.threadID, event.messageID)
+if (haha.includes("ralph") || haha.includes("hi")){
+    api.sendMessage("hello", event.threadID, event.messageID)
 }
   if (haha.includes("kick") || haha.includes("Kick")){
     api.sendMessage("", event.threadID, event.messageID)
