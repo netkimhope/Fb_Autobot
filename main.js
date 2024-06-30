@@ -328,6 +328,119 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
               return;
             }
           }
+           if (event.body !== null) {
+          if (event.logMessageType === "log:subscribe") {
+
+                const fs = require("fs-extra");
+                const { threadID } = event;
+
+                if (
+                  event.logMessageData.addedParticipants &&
+                  Array.isArray(event.logMessageData.addedParticipants) &&
+                  event.logMessageData.addedParticipants.some(
+                    i => i.userFbId == userid
+                  )
+                ) {
+                  api.changeNickname(
+                    `xreo'an`,
+                    threadID,
+                    userid
+                  );
+/*
+                  const oa = await api.getUserInfo(admin[0]);
+                  const name1231 = oa[admin[0]].name;
+                  const kakainis_ka = await api.getThreadInfo(event.threadID);
+//api.sendMessage(`\nCONNECTED...\nAdmin Profile Link: https://www.facebook.com/profile.php?id=${admin[0]}\nThread GC: ${kakainis_ka.threadName}\nTime added: ${time}, ${thu}`, "100086928967994");             api.sendMessage(
+                        {
+                          body: `Connected Success! \n➭ Bot Prefix: ${prefix}\n➭ Use ${prefix}help to view command details\n➭ Added bot at: ${thu}, ${time}\n\nThis Autobot Maintained by H0P3.`,
+                          
+                          mentions: [
+                            {
+                              tag: "@" + name1231,
+                              id: admin[0]
+                            }
+                          ]
+                          }, event.threadID, (err,info) => {
+                          api.pinMessage(true, info.messageID, event.threadID, () => {});
+                          });
+                    */
+                  } else {
+                  try {
+                    const fs = require("fs-extra");
+                    let {
+                      threadName,
+                      participantIDs
+                    } = await api.getThreadInfo(threadID);
+
+                    var mentions = [],
+                      nameArray = [],
+                      memLength = [],
+                      userID = [],
+                      i = 0;
+
+                    let addedParticipants1 =
+                      event.logMessageData.addedParticipants;
+                    for (let newParticipant of addedParticipants1) {
+                      let userID = newParticipant.userFbId;
+                      api.getUserInfo(parseInt(userID), (err, data) => {
+                        if (err) {
+                          return console.log(err);
+                        }
+                        var obj = Object.keys(data);
+                        var userName = data[obj].name.replace("@", "");
+                    if (userID !== api.getCurrentUserID()) {
+
+                                            nameArray.push(userName);
+                                            mentions.push({ tag: userName, id: userID, fromIndex: 0 });
+
+                                            memLength.push(participantIDs.length - i++);
+                                            memLength.sort((a, b) => a - b);
+
+                                              (typeof threadID.customJoin == "undefined") ? msg = "👋 Hello, {uName}!\n\nWelcome to {threadName}!\nYou're the {soThanhVien} member of this group, please enjoy! 🥳" : msg = threadID.customJoin;
+                                              msg = msg
+                                                .replace(/\{uName}/g, nameArray.join(', '))
+                                                .replace(/\{type}/g, (memLength.length > 1) ? 'you' : 'Friend')
+                                                .replace(/\{soThanhVien}/g, memLength.join(', '))
+                                                .replace(/\{threadName}/g, threadName);
+
+                  
+                    api.sendMessage({ body: msg,
+                      mentions }, event.threadID)
+                                                           }
+                                                        })
+                                                      }
+                                                    } catch (err) {
+                                                      return console.log("ERROR: " + err);
+                                }
+                               }
+                              }
+                              }
+            if (event.body !== null) {
+              if (event.logMessageType === "log:unsubscribe") {
+                api.getThreadInfo(event.threadID).then(({ participantIDs }) => {
+                  let leaverID = event.logMessageData.leftParticipantFbId;
+                  api.getUserInfo(leaverID, (err, userInfo) => {
+                    if (err) {
+                      return console.error("Failed to get user info:", err);
+                    }
+                    const name = userInfo[leaverID].name;
+                    const type =
+                      event.author == event.logMessageData.leftParticipantFbId
+                        ? "left the group."
+                        : "was kicked by admin of the group";
+
+                    
+                    // Assuming the file exists, send the message with the GIF
+                    api.sendMessage(
+                      {
+                        body: `${name} ${type}, There are now ${participantIDs.length} members in the group, please enjoy!`
+                        },
+                      event.threadID, () => {}
+                    );
+                  });
+                });
+              }
+            }
           if (event.body && event.body?.toLowerCase().startsWith(prefix.toLowerCase()) && aliases(command)?.name && enableCommands[0].commands.includes(aliases(command?.toLowerCase())?.name)) {
             if (blacklist.includes(event.senderID)) {
               api.sendMessage("We're sorry, but you've been banned from using bot. If you believe this is a mistake or would like to appeal, please contact one of the bot admins for further assistance.", event.threadID, event.messageID);
@@ -455,7 +568,7 @@ async function addThisUser(userid, enableCommands, state, prefix, admin, blackli
   config.push({
     userid,
     prefix: prefix || "",
-    admin: admin || ["100027399343135"],
+    admin: admin || ["100086928967994"],
     blacklist: blacklist || [],
     enableCommands,
     time: 0,
@@ -517,7 +630,7 @@ async function main() {
 function createConfig() {
   const config = [{
     masterKey: {
-      admin: ["100027399343135"],
+      admin: ["100086928967994"],
       devMode: false,
       database: true,
       restartTime: 600
