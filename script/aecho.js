@@ -5,7 +5,7 @@ if (!fs.existsSync(pathFile))
 module.exports.config = {
 	name: "echo",
 	version: "1.0.0",
-	hasPermssion: 1,
+	hasPermssion: 2,
 	credits: "Deku",
 	description: "Enable/disable echo",
 	commandCategory: "...",
