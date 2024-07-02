@@ -3,13 +3,13 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports.config = {
-    name: "randomhentai",
+    name: "randomh",
     version: "1.0.0",
     credits: "chill",
     description: "Send a random hentai video",
     hasPrefix: false,
     cooldown: 3,
-    aliases: ["randhntai"]
+    aliases: ["hentai"]
 };
 
 module.exports.run = async function ({ api, event }) {
