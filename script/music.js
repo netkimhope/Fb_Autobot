@@ -1,16 +1,17 @@
 module.exports.config = {
- name: "sing",
+ name: "music",
  version: "2.0.4",
  role: 0,
- credits: "Grey",
+ credits: "cliff",
  description: "Play a song",
- aliases: ["sing","song","music"],
+ aliases: ["kanta","music","song"],
+cooldowns: 0,
 cooldown: 0,
 hasPrefix: false,
-  usage: "",
+usage: "{pn} search music",
 };
 
-module.exports.run = async ({ api, event }) => {
+module.exports .run = async ({ api, event }) => {
  const axios = require("axios");
  const fs = require("fs-extra");
  const ytdl = require("@distube/ytdl-core");
