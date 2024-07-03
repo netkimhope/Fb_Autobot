@@ -33,14 +33,14 @@ haha.includes("group") || haha.includes("kis") || haha.includes("kuta") || haha.
   if (haha.includes("Umay") || haha.includes("umay")){
     api.sendMessage("Umay talaga wala kang tatay eh", event.threadID, event.messageID)
   }
-  if (haha.includes("hi") || haha.includes("Hi")){
-    api.sendMessage("hello", event.threadID, event.messageID)
+  if (haha.includes("kuan") || haha.includes("Kuan")){
+    api.sendMessage("unsa?", event.threadID, event.messageID)
   }
 if (haha.includes("hoy") || haha.includes("Hoy")){
     api.sendMessage("ano?", event.threadID, event.messageID)
 }
-  if (haha.includes("hello") || haha.includes("Hello")){
-    api.sendMessage("hello", event.threadID, event.messageID)
+  if (haha.includes("bilat") || haha.includes("belat")){
+    api.sendMessage("nimo baho", event.threadID, event.messageID)
       }
 }
         module.exports.run = function({ api, event, client, __GLOBAL }) {
