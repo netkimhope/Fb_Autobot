@@ -1,5 +1,5 @@
 module.exports.config = {
-  name: "fbcover",
+  name: "fbcoverv2",
   version: "1.0.",
   hasPermssion: 0,
   credits: "James Lim", // api by Kim Joseph DG Bien - kira
